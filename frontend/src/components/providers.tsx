@@ -31,6 +31,8 @@ function CopilotProviders({ children }: { children: ReactNode }) {
 
   return (
     <CopilotKitProvider
+      // [1] CopilotKit provider: connect the app to the runtime
+      // [!code highlight]
       runtimeUrl={RUNTIME_URL}
       {...(LICENSE_KEY ? { publicLicenseKey: LICENSE_KEY } : {})}
       // Mounts the inspector, with its core wired up, on localhost only.

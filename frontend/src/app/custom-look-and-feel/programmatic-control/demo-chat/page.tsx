@@ -17,6 +17,8 @@ function ThemeSelector() {
   const state = agent.state as { user_theme?: string } | undefined;
 
   const updateTheme = (theme: string) => {
+    // [11] programmatic control: update agent state
+    // [!code highlight:4]
     agent.setState({
       ...agent.state,
       user_theme: theme,
@@ -65,6 +67,8 @@ function ThemeSelector() {
 
 
 export default function Page() {
+  // [12] programmatic control: access the agent
+  // [!code highlight]
   const { agent } = useAgent({ agentId: "default" });
   const { copilotkit } = useCopilotKit();
   const [draft, setDraft] = useState("What's the weather in London?");
@@ -75,6 +79,8 @@ export default function Page() {
       role: "user",
       content: draft,
     });
+    // [13] programmatic control: run the agent
+    // [!code highlight]
     await copilotkit.runAgent({ agent });
   };
 
@@ -117,6 +123,8 @@ export default function Page() {
           <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
             agent.state
           </p>
+          {/* [14] programmatic control: read agent state */}
+          {/* [!code highlight] */}
           <pre className="mt-1 max-h-32 overflow-auto rounded-lg bg-slate-950 p-3 text-xs text-slate-100">
             {JSON.stringify(agent.state ?? {}, null, 2)}
           </pre>

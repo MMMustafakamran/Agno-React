@@ -65,6 +65,8 @@ export default function Page() {
 
         <div className="min-h-0 flex-1">
           {level === "classes" && (
+            /* [15] slots: customize chat classes */
+            /* [!code highlight:4] */
             <CopilotChat
               key="classes"
                messageView={{
@@ -94,6 +96,8 @@ export default function Page() {
           )}
 
           {level === "component" && (
+            /* [16] slots: replace a chat slot with a component */
+            /* [!code highlight] */
             <CopilotChat
               key="component"
               messageView={CustomMessageView}

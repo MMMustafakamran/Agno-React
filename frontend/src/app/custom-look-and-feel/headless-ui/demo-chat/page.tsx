@@ -14,9 +14,13 @@ import { DemoFrame } from "@/components/demo-frame";
  * `useCopilotKit` for the run lifecycle.
  */
 export default function Page() {
+  // [8] headless UI: access the agent and run lifecycle
+  // [!code highlight:2]
   const { agent } = useAgent();
   const { copilotkit } = useCopilotKit();
   const [input, setInput] = useState("");
+  // [9] headless UI: send message
+  // [!code highlight:8]
   const sendMessage = useCallback(async () => {
     if (!input.trim()) return;
     agent.addMessage({
@@ -34,6 +38,8 @@ export default function Page() {
       subtitle="hand-built chat over useAgent + useCopilotKit"
     >
       <div className="flex flex-col h-full">
+      {/* [10] headless UI: render messages */}
+      {/* [!code highlight:13] */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 text-black">
         {agent.messages.map((msg) => (
           <div

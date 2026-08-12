@@ -45,6 +45,8 @@ const greetingSchema = z.object({
 });
 
 export default function Page() {
+  // [19] display-only generative UI: register an agent-rendered component
+  // [!code highlight:10]
   useComponent(
     {
       name: "showForecast",

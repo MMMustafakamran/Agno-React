@@ -39,6 +39,8 @@ what you can do, describe your tools rather than invoking them.
 def build_agent() -> Agent:
     """Create the agent. Called once at import time by `main.py`."""
     return Agent(
+        # [5] Agno agent: configure the model and tools
+        # [!code highlight:3]
         name="Agno Test Harness Agent",
         model=OpenAIChat(id=DEFAULT_MODEL),
         tools=ALL_TOOLS,

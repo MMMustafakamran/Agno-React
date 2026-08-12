@@ -13,6 +13,8 @@ import { DemoFrame } from "@/components/demo-frame";
 export default function Page() {
   return (
     <DemoFrame parentPath="/quickstart" subtitle="CopilotChat, default agent">
+      {/* [22] quickstart: mount the prebuilt chat */}
+      {/* [!code highlight] */}
       <CopilotChat
         labels={{
           welcomeMessageText:
