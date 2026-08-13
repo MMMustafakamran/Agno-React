@@ -20,6 +20,8 @@ import { ACCENTS, isAccentName, useHarnessState } from "./harness-state";
 export function GlobalFrontendTools() {
   const { setAccent, setGreeting, addBookmark } = useHarnessState();
 
+  // [7] frontend tool: execute the agent's tool call in the browser
+  // [!code highlight:10]
   useFrontendTool({
     name: "sayHello",
     description: "Say hello to the user with a greeting banner in the UI.",

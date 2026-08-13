@@ -19,6 +19,8 @@ export default function Page() {
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [draftName, setDraftName] = useState("");
 
+  // [17] headless threads: list and manage threads
+  // [!code highlight:10]
   const {
     threads,
     isLoading,
@@ -194,6 +196,8 @@ export default function Page() {
             )}
           </p>
           <div className="min-h-0 flex-1">
+            {/* [18] headless threads: connect the selected thread to chat */}
+            {/* [!code highlight] */}
             <CopilotChat threadId={activeThreadId} />
           </div>
         </div>

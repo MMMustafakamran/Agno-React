@@ -16,6 +16,8 @@ def get_weather(location: str):
     """
     Get the weather for a given location.
     """
+    # [6] server-side tool: render its call in the frontend
+    # [!code highlight]
     return f"The weather for {location} is 70 degrees."
 
 

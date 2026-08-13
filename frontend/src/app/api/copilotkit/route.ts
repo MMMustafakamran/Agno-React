@@ -18,6 +18,8 @@ const serviceAdapter = new ExperimentalEmptyAdapter();
 // no configuration; `agno_agent` is the same agent under an explicit id, which
 // is what the Copilot Runtime route uses to show agent routing working.
 const runtime = new CopilotRuntime({
+  // [2] Copilot Runtime: register the Agno agent
+  // [!code highlight]
   agents: {
     default: new AgnoAgent({ url: AGNO_URL }),
     agno_agent: new AgnoAgent({ url: AGNO_URL }),
@@ -25,6 +27,8 @@ const runtime = new CopilotRuntime({
 });
 
 export const POST = async (req: NextRequest) => {
+  // [3] Copilot Runtime: handle the app-router request
+  // [!code highlight]
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
     serviceAdapter,

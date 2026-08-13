@@ -45,6 +45,8 @@ agent = build_agent()
 agent_os = AgentOS(
     name="CopilotKit Agno Test Harness",
     agents=[agent],
+    # [4] AG-UI: expose the Agno agent to CopilotKit
+    # [!code highlight]
     interfaces=[AGUI(agent=agent)],
     cors_allowed_origins=_ALLOWED_ORIGINS,
     telemetry=False,

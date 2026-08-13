@@ -45,6 +45,8 @@ function Shell({
 export default function Page() {
   // Named renderer. `parameters` is required here and types the `parameters`
   // prop inside render — note the shipped hook does not call this `args`.
+  // [20] tool rendering: custom renderer for get_weather
+  // [!code highlight:13]
   useRenderTool(
     {
       name: "get_weather",
@@ -79,6 +81,8 @@ export default function Page() {
 
   // Catch-all for any tool without a dedicated renderer. With the current
   // agent that means the browser-executed ones — setThemeColor and sayHello.
+  // [21] tool rendering: fallback renderer for other tools
+  // [!code highlight:9]
   useDefaultRenderTool({
     render: ({ name, status, result }) => (
       <div className="my-2 rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
