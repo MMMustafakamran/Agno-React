@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/prebuilt-components
+
 Prebuilt Components
 Drop-in chat components for your Agno agent.
 
@@ -80,3 +82,4 @@ messageView={{
     userMessage: "bg-blue-100 rounded-xl",
   }}
 />
+

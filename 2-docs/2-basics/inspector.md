@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/inspector
+
 # Inspector
 
 > Inspector for debugging actions, readables, agent status, messages, and context.
@@ -108,3 +110,4 @@ By default, the Inspector appears only on `localhost`, `127.0.0.1`, and
 
 Set `enableInspector` to `true` to show it on another host, including in a
 production build. CopilotKit always uses an explicit `true` or `false` value.
+

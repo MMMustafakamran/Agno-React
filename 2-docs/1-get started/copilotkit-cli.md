@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/cli
+
 # CopilotKit CLI
 
 > Use the CopilotKit CLI to create apps, sign in to Cloud-Hosted Enterprise Intelligence, select projects, provision runtime API keys, import historical conversations, and install agent skills.
@@ -170,3 +172,4 @@ Re-running `project select` is safe when you need to move a CLI-created app to a
 - **Add threads:** use the [Threads Drawer](/agno/prebuilt-components/copilot-threads-drawer) for a drop-in thread switcher, or [Headless Threads](/agno/headless-threads) to build your own thread UI
 - **Synchronize thread history:** [Import & Synchronize Thread History](/agno/threads-import) — import existing ADK or LangGraph conversations and keep future CopilotKit runs synchronized
 - **Self-hosting:** [Self-Hosting Enterprise Intelligence](/agno/premium/self-hosting) — run the Enterprise Intelligence Platform in your own Kubernetes cluster
+

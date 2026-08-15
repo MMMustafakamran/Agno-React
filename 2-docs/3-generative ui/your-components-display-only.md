@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only
+
 # Display-only
 
 > Register React components that your agent can render in the chat for Agno.
@@ -87,3 +89,4 @@ useComponent({
   agentId: "support-agent",
 });
 ```
+

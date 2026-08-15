@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/generative-ui/a2ui
+
 # A2UI
 
 > Render declarative UI components using the A2UI specification.
@@ -96,3 +98,4 @@ Check out the [A2UI Composer](https://a2ui-editor.ag-ui.com/gallery) to create a
 - [AG-UI Protocol](/agno/agentic-protocols/ag-ui) - Learn about the protocol that supports A2UI
 - [Open-JSON-UI](/agno/generative-ui/open-json-ui) - OpenAI's alternative approach
 - [MCP Apps](/agno/generative-ui/mcp-apps) - Iframe-based Generative UI extending MCP
+
