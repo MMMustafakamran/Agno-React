@@ -44,7 +44,7 @@ autorecord/
    - Smoothly scrolls through content at human reading cadence and focuses cursor on the code block.
 
 2. **Step 2 — Visual Studio Code IDE View**:
-   - Navigates to `/ide` with a dedicated VS Code dark theme interface (`vs-dark`).
+   - Renders a standalone VS Code dark theme interface (`vs-dark`) generated directly from project source files on disk via `autorecord/recorder/ide/generator.ts`.
    - Renders a clean Explorer sidebar with expanded route folders, file tabs, and exact line numbers.
    - Highlights the exact snippet lines (`startLine` to `endLine`) in the project source file and smoothly glides cursor down the code.
 

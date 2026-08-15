@@ -39,3 +39,18 @@ body {
   width: max-content;
   min-width: 100%;
 }
+
+/* Suppress Next.js dev indicators and overlays */
+nextjs-portal,
+[data-nextjs-toast],
+[data-nextjs-dev-tools],
+#next-dev-tools,
+#nextjs-dev-tools,
+div[data-nextjs-dev-tools-button],
+[data-nextjs-dev-tools-button] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+

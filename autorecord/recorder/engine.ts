@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
 import { executePageAction } from './actions';
+import { generateIdeHtml } from './ide/generator';
 import { humanGlide, humanScrollDown, sleep } from './overlays/cursor';
 import { ensureOverlays } from './overlays/taskbar';
 import { type PageRecordConfig } from './types';
@@ -97,16 +98,19 @@ export class RecordingEngine {
 
       // ----------------------------------------------------
       // STEP 2: SHOW PROJECT CODE IN VS CODE IDE WITH SNIPPET SELECTION
+      // (Pure standalone HTML simulation — zero Next.js/React dependencies)
       // ----------------------------------------------------
       console.log(
         `\n💻 Step 2: Displaying Project Code in VS Code IDE (${config.ideFile}: lines ${config.startLine}-${config.endLine})...`,
       );
-      const ideUrl = `http://localhost:3000/ide?file=${encodeURIComponent(config.ideFile)}&startLine=${config.startLine}&endLine=${config.endLine}`;
       try {
-        await page.goto(ideUrl, {
-          waitUntil: 'commit',
-          timeout: 60000,
-        });
+        const ideHtml = generateIdeHtml(
+          this.rootDir,
+          config.ideFile,
+          config.startLine,
+          config.endLine,
+        );
+        await page.setContent(ideHtml, { waitUntil: 'domcontentloaded' });
         await ensureOverlays(page, 'vscode');
         await sleep(1200);
 
@@ -128,7 +132,7 @@ export class RecordingEngine {
 
         await sleep(3500);
       } catch (e) {
-        console.warn(`⚠️ IDE view notice: Make sure Next.js is running on http://localhost:3000. Error: ${e}`);
+        console.warn(`⚠️ IDE view error: ${e}`);
         await sleep(1500);
       }
 

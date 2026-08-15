@@ -1,6 +1,7 @@
 "use client";
 
 import { CopilotKitProvider } from "@copilotkit/react-core/v2";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { GlobalFrontendTools } from "./global-frontend-tools";
@@ -28,6 +29,8 @@ const LICENSE_KEY = process.env.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY;
 
 function CopilotProviders({ children }: { children: ReactNode }) {
   const { logError } = useHarnessState();
+  const pathname = usePathname();
+  const isIde = pathname === "/ide";
 
   return (
     <CopilotKitProvider
@@ -35,15 +38,8 @@ function CopilotProviders({ children }: { children: ReactNode }) {
       // [!code highlight]
       runtimeUrl={RUNTIME_URL}
       {...(LICENSE_KEY ? { publicLicenseKey: LICENSE_KEY } : {})}
-      // Mounts the inspector, with its core wired up, on localhost only.
-      // Required here: `CopilotKitProvider` defaults `showDevConsole` to false,
-      // so the inspector is off unless asked for. (`<CopilotKit>` is the one
-      // that takes `enableInspector` and defaults to on-for-localhost — the
-      // prop the Inspector doc describes. Picking the provider for its error
-      // handler means opting back in here.) Never render it by hand: the
-      // component takes a `core` prop and passes `core ?? null`, so a bare
-      // <CopilotKitInspector /> reports "CopilotKit core not attached".
-      showDevConsole="auto"
+      // Mounts the inspector, with its core wired up, on localhost only (disabled on /ide).
+      showDevConsole={isIde ? false : "auto"}
       // Feeds the live log on /troubleshooting/error-debugging: every runtime,
       // agent, and tool failure in the app lands there.
       onError={(event) => {
