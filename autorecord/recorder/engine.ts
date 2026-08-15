@@ -8,16 +8,16 @@ import { ensureOverlays } from './overlays/taskbar';
 import { type PageRecordConfig } from './types';
 
 export class RecordingEngine {
-  private readonly recordingsDir: string;
+  private readonly videosDir: string;
   private readonly rootDir: string;
   private readonly tempVideoDir: string;
 
   constructor(rootDir: string) {
     this.rootDir = rootDir;
-    this.recordingsDir = join(rootDir, 'recordings');
-    this.tempVideoDir = join(this.recordingsDir, '.temp_chunks');
-    if (!existsSync(this.recordingsDir)) {
-      mkdirSync(this.recordingsDir, { recursive: true });
+    this.videosDir = join(rootDir, 'autorecord', 'videos');
+    this.tempVideoDir = join(this.videosDir, '.temp_chunks');
+    if (!existsSync(this.videosDir)) {
+      mkdirSync(this.videosDir, { recursive: true });
     }
     if (!existsSync(this.tempVideoDir)) {
       mkdirSync(this.tempVideoDir, { recursive: true });
@@ -159,7 +159,8 @@ export class RecordingEngine {
       await context.close();
 
       if (video) {
-        const finalWebm = join(this.recordingsDir, `${config.id}.webm`);
+        const outputFilename = config.filename ?? config.id;
+        const finalWebm = join(this.videosDir, `${outputFilename}.webm`);
         try {
           if (existsSync(finalWebm)) unlinkSync(finalWebm);
           await video.saveAs(finalWebm);

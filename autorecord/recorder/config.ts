@@ -4,6 +4,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'quickstart',
     name: 'Quickstart',
+    filename: 'AgnoReact-Quickstart',
     docUrl: 'https://docs.copilotkit.ai/agno/quickstart',
     ideFile: 'frontend/src/app/quickstart/demo-chat/page.tsx',
     startLine: 18,
@@ -15,6 +16,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'prebuilt-components',
     name: 'Prebuilt Components',
+    filename: 'AgnoReact-PrebuiltComponents',
     docUrl: 'https://docs.copilotkit.ai/agno/prebuilt-components',
     ideFile: 'frontend/src/app/prebuilt-components/demo-chat/page.tsx',
     startLine: 59,
@@ -26,6 +28,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'threads-overview',
     name: 'Rich Threads - Overview',
+    filename: 'AgnoReact-ThreadsOverview',
     docUrl: 'https://docs.copilotkit.ai/agno/threads',
     ideFile: 'frontend/src/app/threads/page.tsx',
     startLine: 26,
@@ -37,6 +40,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'threads-drawer',
     name: 'Rich Threads - Threads Drawer',
+    filename: 'AgnoReact-ThreadsDrawer',
     docUrl: 'https://docs.copilotkit.ai/agno/prebuilt-components/copilot-threads-drawer',
     ideFile: 'frontend/src/app/threads/drawer/demo-chat/page.tsx',
     startLine: 25,
@@ -48,6 +52,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'threads-headless',
     name: 'Rich Threads - Headless Threads',
+    filename: 'AgnoReact-ThreadsHeadless',
     docUrl: 'https://docs.copilotkit.ai/agno/headless-threads',
     ideFile: 'frontend/src/app/threads/headless/demo-chat/page.tsx',
     startLine: 24,
@@ -59,6 +64,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'threads-lifecycle',
     name: 'Rich Threads - Thread & History Lifecycle',
+    filename: 'AgnoReact-ThreadsLifecycle',
     docUrl: 'https://docs.copilotkit.ai/agno/threads-lifecycle',
     ideFile: 'frontend/src/app/threads/lifecycle/demo-chat/page.tsx',
     startLine: 41,
@@ -70,6 +76,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'threads-import',
     name: 'Rich Threads - Synchronize Thread History',
+    filename: 'AgnoReact-ThreadsImport',
     docUrl: 'https://docs.copilotkit.ai/agno/threads-import',
     ideFile: 'frontend/src/app/threads/import/page.tsx',
     startLine: 36,
@@ -81,6 +88,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'threads-architecture',
     name: 'Rich Threads - Persistence Architecture',
+    filename: 'AgnoReact-ThreadsArchitecture',
     docUrl: 'https://docs.copilotkit.ai/agno/premium/threads-explained',
     ideFile: 'frontend/src/app/threads/architecture/page.tsx',
     startLine: 42,
@@ -92,6 +100,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'programmatic-control',
     name: 'Custom Look and Feel - Programmatic Control',
+    filename: 'AgnoReact-ProgrammaticControl',
     docUrl: 'https://docs.copilotkit.ai/agno/programmatic-control',
     ideFile: 'frontend/src/app/custom-look-and-feel/programmatic-control/demo-chat/page.tsx',
     startLine: 72,
@@ -103,6 +112,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'inspector',
     name: 'Custom Look and Feel - Inspector',
+    filename: 'AgnoReact-Inspector',
     docUrl: 'https://docs.copilotkit.ai/agno/inspector',
     ideFile: 'frontend/src/app/custom-look-and-feel/inspector/demo-chat/page.tsx',
     startLine: 18,
@@ -114,6 +124,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'slots',
     name: 'Custom Look and Feel - Slots',
+    filename: 'AgnoReact-Slots',
     docUrl: 'https://docs.copilotkit.ai/agno/custom-look-and-feel/slots',
     ideFile: 'frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx',
     startLine: 67,
@@ -125,6 +136,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'headless-ui',
     name: 'Custom Look and Feel - Headless UI',
+    filename: 'AgnoReact-HeadlessUI',
     docUrl: 'https://docs.copilotkit.ai/agno/custom-look-and-feel/headless-ui',
     ideFile: 'frontend/src/app/custom-look-and-feel/headless-ui/demo-chat/page.tsx',
     startLine: 19,
@@ -136,6 +148,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'display-only',
     name: 'Generative UI - Display Only Component',
+    filename: 'AgnoReact-DisplayOnly',
     docUrl: 'https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only',
     ideFile: 'frontend/src/app/generative-ui/your-components/display-only/demo-chat/page.tsx',
     startLine: 50,
@@ -147,6 +160,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'interactive',
     name: 'Generative UI - Interactive (Stub)',
+    filename: 'AgnoReact-Interactive',
     docUrl: 'https://docs.copilotkit.ai/agno/generative-ui/your-components/interactive',
     ideFile: 'frontend/src/app/generative-ui/your-components/interactive/page.tsx',
     startLine: 1,
@@ -158,6 +172,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'tool-rendering',
     name: 'Generative UI - Tool Rendering',
+    filename: 'AgnoReact-ToolRendering',
     docUrl: 'https://docs.copilotkit.ai/agno/generative-ui/tool-rendering',
     ideFile: 'frontend/src/app/generative-ui/tool-rendering/demo-chat/page.tsx',
     startLine: 50,
@@ -169,6 +184,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'frontend-tools',
     name: 'App Control - Frontend Tools',
+    filename: 'AgnoReact-FrontendTools',
     docUrl: 'https://docs.copilotkit.ai/agno/frontend-tools',
     ideFile: 'frontend/src/app/frontend-tools/demo-chat/page.tsx',
     startLine: 25,
@@ -180,6 +196,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'human-in-the-loop',
     name: 'App Control - Human in the Loop',
+    filename: 'AgnoReact-HumanInTheLoop',
     docUrl: 'https://docs.copilotkit.ai/agno/human-in-the-loop',
     ideFile: 'frontend/src/components/global-frontend-tools.tsx',
     startLine: 74,
@@ -191,6 +208,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'copilot-runtime',
     name: 'Backend - Copilot Runtime',
+    filename: 'AgnoReact-CopilotRuntime',
     docUrl: 'https://docs.copilotkit.ai/agno/copilot-runtime',
     ideFile: 'frontend/src/app/backend/copilot-runtime/demo-chat/page.tsx',
     startLine: 16,
@@ -202,6 +220,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'ag-ui',
     name: 'Backend - AG-UI Protocol Stream',
+    filename: 'AgnoReact-AgUi',
     docUrl: 'https://docs.copilotkit.ai/agno/ag-ui',
     ideFile: 'frontend/src/app/backend/ag-ui/demo-chat/page.tsx',
     startLine: 70,
@@ -213,6 +232,7 @@ export const PAGES: PageRecordConfig[] = [
   {
     id: 'error-debugging',
     name: 'Troubleshooting - Error Debugging & Observability',
+    filename: 'AgnoReact-ErrorDebugging',
     docUrl: 'https://docs.copilotkit.ai/agno/troubleshooting/error-debugging',
     ideFile: 'frontend/src/app/troubleshooting/error-debugging/demo-chat/page.tsx',
     startLine: 16,

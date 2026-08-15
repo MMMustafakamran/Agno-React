@@ -25,4 +25,4 @@ npx tsx autorecord/record-all-pages.ts --page=human-in-the-loop
 npx tsx autorecord/record-all-pages.ts
 ```
 
-Recorded WebM videos are saved to [`recordings/`](../recordings/). For in-depth architecture details, see [`recorder/README.md`](./recorder/README.md).
+Recorded WebM videos are saved to [`videos/`](./videos/). For in-depth architecture details, see [`recorder/README.md`](./recorder/README.md).

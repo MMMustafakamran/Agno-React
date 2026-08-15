@@ -55,7 +55,7 @@ autorecord/
    - Captures live streaming AI responses from the Agno backend.
 
 4. **Video Export**:
-   - Saves WebM recordings directly to `recordings/<page_id>.webm` (1080p, 60fps).
+   - Saves WebM recordings directly to `autorecord/videos/<filename>.webm` (1080p, 60fps).
 
 ---
 

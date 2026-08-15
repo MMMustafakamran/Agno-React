@@ -3,6 +3,7 @@ import { type Page } from 'playwright';
 export interface PageRecordConfig {
   id: string;
   name: string;
+  filename?: string;
   docUrl: string;
   ideFile: string;
   ideLine?: number;
