@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import { executePageAction } from './actions';
 import { generateIdeHtml } from './ide/generator';
 import { humanGlide, humanScrollDown, sleep } from './overlays/cursor';
-import { ensureOverlays } from './overlays/taskbar';
+import { clickTaskbarApp, ensureOverlays } from './overlays/taskbar';
 import { type PageRecordConfig } from './types';
 
 export class RecordingEngine {
@@ -90,7 +90,11 @@ export class RecordingEngine {
             await humanGlide(page, box.x + box.width / 2, box.y + 40, 22);
           }
         }
-        await sleep(3000);
+        await sleep(2500);
+
+        // Switch to VS Code via Windows 11 Taskbar
+        console.log(`   🖱️ Switching to VS Code via Windows 11 Taskbar...`);
+        await clickTaskbarApp(page, 'vscode');
       } catch (e) {
         console.warn(`⚠️ Doc navigation notice (${config.docUrl}): ${e}`);
         await sleep(1500);
@@ -130,7 +134,11 @@ export class RecordingEngine {
           exec(`code -r -g "${config.ideFile}:${config.startLine}"`);
         } catch {}
 
-        await sleep(3500);
+        await sleep(3000);
+
+        // Switch back to Chrome via Windows 11 Taskbar
+        console.log(`   🖱️ Switching back to Chrome via Windows 11 Taskbar...`);
+        await clickTaskbarApp(page, 'chrome');
       } catch (e) {
         console.warn(`⚠️ IDE view error: ${e}`);
         await sleep(1500);
