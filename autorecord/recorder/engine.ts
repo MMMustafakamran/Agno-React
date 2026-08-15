@@ -53,7 +53,7 @@ export class RecordingEngine {
     // Attach global dialog handler so unexpected alerts don't stall recordings
     page.on('dialog', async (dialog) => {
       console.log(`   [Dialog Event] "${dialog.message()}"`);
-      await sleep(1200);
+      await sleep(800);
       try {
         await dialog.accept();
       } catch {}
@@ -66,38 +66,38 @@ export class RecordingEngine {
       console.log(`\n📖 Step 1: Navigating to Official Doc (${config.docUrl})...`);
       try {
         await page.goto(config.docUrl, {
-          waitUntil: 'commit',
+          waitUntil: 'domcontentloaded',
           timeout: 30000,
         });
-        await page.waitForSelector('body', { timeout: 8000 }).catch(() => {});
+        await page.waitForSelector('body', { timeout: 10000 }).catch(() => {});
         await ensureOverlays(page, 'chrome');
-        await sleep(1500);
+        await sleep(400);
 
         // Move mouse into reading position
-        await humanGlide(page, 960, 450, 25);
-        await sleep(300);
+        await humanGlide(page, 960, 450, 22);
+        await sleep(200);
 
         // Natural smooth scrolling down the doc page
         console.log(`   Human-like scrolling down doc page...`);
-        await humanScrollDown(page, 500, 50);
-        await sleep(500);
+        await humanScrollDown(page, 500, 45);
+        await sleep(300);
 
         // Move mouse over the code snippet
         const hasCode = await page.$('pre, code, div[class*="code"]');
         if (hasCode) {
           const box = await hasCode.boundingBox();
           if (box) {
-            await humanGlide(page, box.x + box.width / 2, box.y + 40, 22);
+            await humanGlide(page, box.x + box.width / 2, box.y + 40, 20);
           }
         }
-        await sleep(2500);
+        await sleep(2000);
 
         // Switch to VS Code via Windows 11 Taskbar
         console.log(`   🖱️ Switching to VS Code via Windows 11 Taskbar...`);
         await clickTaskbarApp(page, 'vscode');
       } catch (e) {
         console.warn(`⚠️ Doc navigation notice (${config.docUrl}): ${e}`);
-        await sleep(1500);
+        await sleep(1000);
       }
 
       // ----------------------------------------------------
@@ -116,15 +116,15 @@ export class RecordingEngine {
         );
         await page.setContent(ideHtml, { waitUntil: 'domcontentloaded' });
         await ensureOverlays(page, 'vscode');
-        await sleep(1200);
+        await sleep(400);
 
         // Move mouse over the Explorer header
         await humanGlide(page, 120, 70, 18);
-        await sleep(300);
+        await sleep(200);
 
         // Glide mouse into the code editor at the start of the snippet
         await humanGlide(page, 520, 380, 22);
-        await sleep(300);
+        await sleep(200);
 
         // Smoothly glide cursor down across the highlighted snippet block
         await humanGlide(page, 720, 540, 25);
@@ -134,14 +134,14 @@ export class RecordingEngine {
           exec(`code -r -g "${config.ideFile}:${config.startLine}"`);
         } catch {}
 
-        await sleep(3000);
+        await sleep(2500);
 
         // Switch back to Chrome via Windows 11 Taskbar
         console.log(`   🖱️ Switching back to Chrome via Windows 11 Taskbar...`);
         await clickTaskbarApp(page, 'chrome');
       } catch (e) {
         console.warn(`⚠️ IDE view error: ${e}`);
-        await sleep(1500);
+        await sleep(1000);
       }
 
       // ----------------------------------------------------
@@ -150,20 +150,20 @@ export class RecordingEngine {
       console.log(`\n🚀 Step 3: Opening Demo (${config.demoUrl})...`);
       try {
         await page.goto(config.demoUrl, {
-          waitUntil: 'commit',
+          waitUntil: 'domcontentloaded',
           timeout: 60000,
         });
         await ensureOverlays(page, 'chrome');
-        await sleep(1500);
+        await sleep(600);
 
         // Dispatch specific demo actions
         await executePageAction(page, config, this.rootDir);
 
         console.log(`✅ Demo execution completed for ${config.id}.`);
-        await sleep(3000);
+        await sleep(2500);
       } catch (e) {
         console.warn(`⚠️ Demo view notice: Make sure frontend (port 3000) and backend (port 8000) are running. Error: ${e}`);
-        await sleep(1500);
+        await sleep(1000);
       }
     } finally {
       const video = page.video();
