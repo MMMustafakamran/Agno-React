@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "record": "tsx ../autorecord/record-all-pages.ts"
   },
   "dependencies": {
     "@ag-ui/agno": "^0.0.5",
