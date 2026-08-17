@@ -1,0 +1,376 @@
+{
+  "schema": 1,
+  "docsRoot": "https://docs.copilotkit.ai/agno",
+  "syncedAt": "2026-08-17T12:29:23.727Z",
+  "pages": {
+    "/agno": {
+      "file": "agno.md",
+      "sha256": "5ce1dc60367a8c54f533a7a892f905e164732cf0c56128bbaaf98110fed0ae4d",
+      "bytes": 2607,
+      "lines": 46,
+      "routes": [
+        "/",
+        "/doc-sync"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/ag-ui": {
+      "file": "agno__ag-ui.md",
+      "sha256": "46233964a89543da4ce6fb06adf8c70b47613aeb1582072892345de83b3a81a3",
+      "bytes": 3933,
+      "lines": 124,
+      "routes": [
+        "/backend/ag-ui"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/copilot-runtime": {
+      "file": "agno__copilot-runtime.md",
+      "sha256": "761725b6abaa22e832e3cb42d4a3ad3aadb96eefb85c179a988b82bd0be56147",
+      "bytes": 6659,
+      "lines": 181,
+      "routes": [
+        "/backend/copilot-runtime"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/custom-look-and-feel/headless-ui": {
+      "file": "agno__custom-look-and-feel__headless-ui.md",
+      "sha256": "16e83023e7c73841f0ac77450c02287be3bdd31b2be81d670dcb601f2e52ada5",
+      "bytes": 4507,
+      "lines": 167,
+      "routes": [
+        "/custom-look-and-feel/headless-ui"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/custom-look-and-feel/slots": {
+      "file": "agno__custom-look-and-feel__slots.md",
+      "sha256": "9ffcf536f6994d6d221b2d25a5a78df35cc082af4386ffebc0b1688d6bd29833",
+      "bytes": 10406,
+      "lines": 315,
+      "routes": [
+        "/custom-look-and-feel/slots"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/frontend-tools": {
+      "file": "agno__frontend-tools.md",
+      "sha256": "40f33d5bee0188b811459696a85333f23414aab2f8fb7d2c79fb2094ed25e3a4",
+      "bytes": 4617,
+      "lines": 120,
+      "routes": [
+        "/frontend-tools"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/generative-ui/tool-rendering": {
+      "file": "agno__generative-ui__tool-rendering.md",
+      "sha256": "b6d26ce3832a5c45e69ac4b68f48d5106449725686a964ef27b100685c860849",
+      "bytes": 5083,
+      "lines": 160,
+      "routes": [
+        "/generative-ui/tool-rendering"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/generative-ui/your-components/display-only": {
+      "file": "agno__generative-ui__your-components__display-only.md",
+      "sha256": "c81490788d4863227943ea6ae8553a831528b666e1d7878749e5132d6753f0db",
+      "bytes": 2484,
+      "lines": 90,
+      "routes": [
+        "/generative-ui/your-components/display-only"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/generative-ui/your-components/interactive": {
+      "file": "agno__generative-ui__your-components__interactive.md",
+      "sha256": "5a8cf1e6258662d185ab582bc055151285e89811e6aa5a81d5b7aef7e19c7f42",
+      "bytes": 131,
+      "lines": 6,
+      "routes": [
+        "/generative-ui/your-components/interactive"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/headless-threads": {
+      "file": "agno__headless-threads.md",
+      "sha256": "f5e27f72c94647b485ad447f13ccfca5581a828937f074fac6df7afa6e3b67da",
+      "bytes": 10542,
+      "lines": 202,
+      "routes": [
+        "/threads/headless"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/human-in-the-loop": {
+      "file": "agno__human-in-the-loop.md",
+      "sha256": "572d2752bd2bc8c7adae79225e54159bd08e7d91a6a3adb5d2da7b0ab9e321da",
+      "bytes": 4696,
+      "lines": 126,
+      "routes": [
+        "/human-in-the-loop"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/inspector": {
+      "file": "agno__inspector.md",
+      "sha256": "9402936383a73adf7d2b381071891796c2b51bd74e3b6822c174590fa950dedc",
+      "bytes": 5148,
+      "lines": 111,
+      "routes": [
+        "/custom-look-and-feel/inspector"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/prebuilt-components": {
+      "file": "agno__prebuilt-components.md",
+      "sha256": "8974c1b4b0d2b71e2429c16397144fb8fb540b7d6b0de0ac51b495a92db3f14c",
+      "bytes": 142,
+      "lines": 7,
+      "routes": [
+        "/prebuilt-components"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/prebuilt-components/copilot-threads-drawer": {
+      "file": "agno__prebuilt-components__copilot-threads-drawer.md",
+      "sha256": "94bfd17c7446a925005205bc32d0b9799b8c5db86fb876b1a1027f160bd7c3f6",
+      "bytes": 6238,
+      "lines": 142,
+      "routes": [
+        "/threads/drawer"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/premium/threads-explained": {
+      "file": "agno__premium__threads-explained.md",
+      "sha256": "c1a0975c832654a43bf87db368ed5b48076bee6505fc567d90284302153b7449",
+      "bytes": 10246,
+      "lines": 159,
+      "routes": [
+        "/threads/architecture"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/programmatic-control": {
+      "file": "agno__programmatic-control.md",
+      "sha256": "70257e81b631cd956eaeca8f20c305e91d8bf95a2d6e673001a531d872f64fb1",
+      "bytes": 13345,
+      "lines": 475,
+      "routes": [
+        "/custom-look-and-feel/programmatic-control"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+    },
+    "/agno/quickstart": {
+      "file": "agno__quickstart.md",
+      "sha256": "a350367bca05082edf93287e9045aa8a62538a40cd4df04d2b7dee047c60f410",
+      "bytes": 12528,
+      "lines": 377,
+      "routes": [
+        "/quickstart"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:25 GMT"
+    },
+    "/agno/threads": {
+      "file": "agno__threads.md",
+      "sha256": "f72c209839a08f5eb4f55c8bd091cc5d48bb07866f7930cd39a92985f797eb27",
+      "bytes": 12444,
+      "lines": 213,
+      "routes": [
+        "/threads"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:25 GMT"
+    },
+    "/agno/threads-import": {
+      "file": "agno__threads-import.md",
+      "sha256": "72862f2e3601413aca6cb215c252864b8322389d764e549115be220879f658d8",
+      "bytes": 6808,
+      "lines": 136,
+      "routes": [
+        "/threads/import"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:25 GMT"
+    },
+    "/agno/threads-lifecycle": {
+      "file": "agno__threads-lifecycle.md",
+      "sha256": "84ed3e263747c1d0a8799e592ab1cb1ac9bb86a8f15384a7fd18d054951980f6",
+      "bytes": 15086,
+      "lines": 244,
+      "routes": [
+        "/threads/lifecycle"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:25 GMT"
+    },
+    "/agno/troubleshooting/error-debugging": {
+      "file": "agno__troubleshooting__error-debugging.md",
+      "sha256": "b032f4446d31212752c702e435813d8a48c6735aed891f50200a50189a6678cd",
+      "bytes": 3239,
+      "lines": 104,
+      "routes": [
+        "/troubleshooting/error-debugging"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 17 Aug 2026 12:29:25 GMT"
+    }
+  },
+  "sitemap": {
+    "fetchedAt": "2026-08-17T12:29:23.727Z",
+    "urlsUnderRoot": 130,
+    "knownUnmapped": [
+      "https://docs.copilotkit.ai/agno/agent-config",
+      "https://docs.copilotkit.ai/agno/agent-spec",
+      "https://docs.copilotkit.ai/agno/agent-spec/human-in-the-loop",
+      "https://docs.copilotkit.ai/agno/agent-spec/langgraph",
+      "https://docs.copilotkit.ai/agno/agent-spec/quickstart",
+      "https://docs.copilotkit.ai/agno/agent-spec/wayflow",
+      "https://docs.copilotkit.ai/agno/agentic-chat-ui",
+      "https://docs.copilotkit.ai/agno/agentic-protocols",
+      "https://docs.copilotkit.ai/agno/agentic-protocols/a2a",
+      "https://docs.copilotkit.ai/agno/agentic-protocols/ag-ui",
+      "https://docs.copilotkit.ai/agno/agentic-protocols/ag-ui-middleware",
+      "https://docs.copilotkit.ai/agno/agentic-protocols/mcp",
+      "https://docs.copilotkit.ai/agno/auth",
+      "https://docs.copilotkit.ai/agno/backend/ag-ui",
+      "https://docs.copilotkit.ai/agno/backend/agent-runner",
+      "https://docs.copilotkit.ai/agno/backend/copilot-runtime",
+      "https://docs.copilotkit.ai/agno/backend/custom-agent",
+      "https://docs.copilotkit.ai/agno/backend/runtime-endpoints",
+      "https://docs.copilotkit.ai/agno/backend/self-managed-agents",
+      "https://docs.copilotkit.ai/agno/build-with-agents",
+      "https://docs.copilotkit.ai/agno/built-in-agent",
+      "https://docs.copilotkit.ai/agno/cli",
+      "https://docs.copilotkit.ai/agno/concepts/architecture",
+      "https://docs.copilotkit.ai/agno/concepts/generative-ui-overview",
+      "https://docs.copilotkit.ai/agno/concepts/oss-vs-enterprise",
+      "https://docs.copilotkit.ai/agno/concepts/which-hook",
+      "https://docs.copilotkit.ai/agno/contributing/code-contributions",
+      "https://docs.copilotkit.ai/agno/contributing/code-contributions/package-linking",
+      "https://docs.copilotkit.ai/agno/contributing/docs-contributions",
+      "https://docs.copilotkit.ai/agno/cookbook",
+      "https://docs.copilotkit.ai/agno/cookbook/angular-adk-agentic-app",
+      "https://docs.copilotkit.ai/agno/cookbook/arcade",
+      "https://docs.copilotkit.ai/agno/cookbook/daytona",
+      "https://docs.copilotkit.ai/agno/cookbook/openbox-governed-copilotkit",
+      "https://docs.copilotkit.ai/agno/cookbook/oracle-agent-spec-memory",
+      "https://docs.copilotkit.ai/agno/custom-look-and-feel/css",
+      "https://docs.copilotkit.ai/agno/custom-look-and-feel/reasoning-messages",
+      "https://docs.copilotkit.ai/agno/deepagents",
+      "https://docs.copilotkit.ai/agno/deploy/agentcore",
+      "https://docs.copilotkit.ai/agno/examples",
+      "https://docs.copilotkit.ai/agno/faq",
+      "https://docs.copilotkit.ai/agno/generative-ui",
+      "https://docs.copilotkit.ai/agno/generative-ui/a2ui",
+      "https://docs.copilotkit.ai/agno/generative-ui/a2ui/dynamic-schema",
+      "https://docs.copilotkit.ai/agno/generative-ui/a2ui/fixed-schema",
+      "https://docs.copilotkit.ai/agno/generative-ui/display",
+      "https://docs.copilotkit.ai/agno/generative-ui/hashbrown",
+      "https://docs.copilotkit.ai/agno/generative-ui/interactive",
+      "https://docs.copilotkit.ai/agno/generative-ui/json-render",
+      "https://docs.copilotkit.ai/agno/generative-ui/mcp-apps",
+      "https://docs.copilotkit.ai/agno/generative-ui/open-generative-ui",
+      "https://docs.copilotkit.ai/agno/generative-ui/open-json-ui",
+      "https://docs.copilotkit.ai/agno/generative-ui/reasoning",
+      "https://docs.copilotkit.ai/agno/generative-ui/state-rendering",
+      "https://docs.copilotkit.ai/agno/generative-ui/tool-based",
+      "https://docs.copilotkit.ai/agno/headless",
+      "https://docs.copilotkit.ai/agno/human-in-the-loop/headless",
+      "https://docs.copilotkit.ai/agno/human-in-the-loop/useInterrupt",
+      "https://docs.copilotkit.ai/agno/migrate/1.10.X",
+      "https://docs.copilotkit.ai/agno/migrate/1.8.2",
+      "https://docs.copilotkit.ai/agno/migrate/v2",
+      "https://docs.copilotkit.ai/agno/multi-agent/subagents",
+      "https://docs.copilotkit.ai/agno/multimodal-attachments",
+      "https://docs.copilotkit.ai/agno/prebuilt-components/chat",
+      "https://docs.copilotkit.ai/agno/prebuilt-components/chat-controls",
+      "https://docs.copilotkit.ai/agno/prebuilt-components/popup",
+      "https://docs.copilotkit.ai/agno/prebuilt-components/sidebar",
+      "https://docs.copilotkit.ai/agno/premium/headless-ui",
+      "https://docs.copilotkit.ai/agno/premium/intelligence-platform",
+      "https://docs.copilotkit.ai/agno/premium/managed-intelligence-platform",
+      "https://docs.copilotkit.ai/agno/premium/overview",
+      "https://docs.copilotkit.ai/agno/premium/self-hosting",
+      "https://docs.copilotkit.ai/agno/reference/v2/hooks/useCapabilities",
+      "https://docs.copilotkit.ai/agno/runtime-server-adapter",
+      "https://docs.copilotkit.ai/agno/shared-state",
+      "https://docs.copilotkit.ai/agno/shared-state/agent-readonly",
+      "https://docs.copilotkit.ai/agno/shared-state/rendering-in-app",
+      "https://docs.copilotkit.ai/agno/shared-state/streaming",
+      "https://docs.copilotkit.ai/agno/telemetry",
+      "https://docs.copilotkit.ai/agno/troubleshooting/common-issues",
+      "https://docs.copilotkit.ai/agno/troubleshooting/debug-mode",
+      "https://docs.copilotkit.ai/agno/troubleshooting/error-reference",
+      "https://docs.copilotkit.ai/agno/troubleshooting/event-inspector",
+      "https://docs.copilotkit.ai/agno/troubleshooting/hook-explorer",
+      "https://docs.copilotkit.ai/agno/troubleshooting/inspector-dev-console",
+      "https://docs.copilotkit.ai/agno/troubleshooting/migrate-to-1.10.X",
+      "https://docs.copilotkit.ai/agno/troubleshooting/migrate-to-1.8.2",
+      "https://docs.copilotkit.ai/agno/troubleshooting/migrate-to-v2",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-powered-textarea/next-steps",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-powered-textarea/overview",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-powered-textarea/step-1-checkout-repo",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-powered-textarea/step-2-setup-copilotkit",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-powered-textarea/step-3-copilot-textarea",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-powered-textarea/step-4-copilot-readable-state",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-todo-app/next-steps",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-todo-app/overview",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-todo-app/step-1-checkout-repo",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-todo-app/step-2-setup-copilotkit",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-todo-app/step-3-copilot-readable-state",
+      "https://docs.copilotkit.ai/agno/tutorials/ai-todo-app/step-4-frontend-tools",
+      "https://docs.copilotkit.ai/agno/tutorials/multi-conversation-chat",
+      "https://docs.copilotkit.ai/agno/voice",
+      "https://docs.copilotkit.ai/agno/vs-code-extension",
+      "https://docs.copilotkit.ai/agno/whats-new",
+      "https://docs.copilotkit.ai/agno/whats-new/a2a-mcp-handshake",
+      "https://docs.copilotkit.ai/agno/whats-new/a2ui-launch",
+      "https://docs.copilotkit.ai/agno/whats-new/generative-ui-spec-support",
+      "https://docs.copilotkit.ai/agno/whats-new/langgraph-deep-agents",
+      "https://docs.copilotkit.ai/agno/whats-new/mcp-apps-support",
+      "https://docs.copilotkit.ai/agno/whats-new/v1-50"
+    ]
+  }
+}
