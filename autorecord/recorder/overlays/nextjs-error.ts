@@ -198,132 +198,13 @@ async function showNextjsErrorOverlay(
 }
 
 /**
- * Detects if a Next.js / CopilotKit error occurred, pauses 2.5s, smoothly glides the virtual cursor
- * to the exact pixel center of the Next.js dev badge on the bottom-left, clicks it to expand
- * the authentic Next.js error overlay modal, and holds for 4.5s so the full error stack trace is recorded in the video.
+ * Error detection and expanding the Next.js error overlay modal is disabled for all pages.
  */
 export async function checkAndExpandNextjsError(
-  page: Page,
-  knownError?: boolean,
-  errorHint?: string,
+  _page: Page,
+  _knownError?: boolean,
+  _errorHint?: string,
 ): Promise<NextjsErrorCheckResult> {
-  try {
-    // 1. Query EXACT live coordinates of the Next.js dev badge on the bottom-left
-    const badgeCoords = (await page.evaluate(() => {
-      const portals = document.querySelectorAll('nextjs-portal');
-      for (const p of portals) {
-        if (p.shadowRoot) {
-          // Elevate indicator above 48px taskbar if not already done
-          const ind = p.shadowRoot.querySelector(
-            '#devtools-indicator, [data-nextjs-toast]',
-          ) as HTMLElement;
-          if (ind) ind.style.bottom = '56px';
-
-          // Next logo dev button
-          const btn = p.shadowRoot.querySelector(
-            '#next-logo, [data-next-badge], [data-next-badge-root] button, button[data-nextjs-dev-tools-button], #devtools-indicator',
-          ) as HTMLElement;
-          if (btn) {
-            const r = btn.getBoundingClientRect();
-            if (r.width > 0 && r.height > 0) {
-              const text = (btn.textContent || '').trim();
-              const isError =
-                btn.getAttribute('data-error') === 'true' ||
-                p.shadowRoot.querySelector('[data-error="true"]') !== null ||
-                text.toLowerCase().includes('issue') ||
-                text.toLowerCase().includes('error');
-
-              return {
-                x: r.left + r.width / 2,
-                y: r.top + r.height / 2,
-                width: r.width,
-                height: r.height,
-                isError: Boolean(isError),
-                label: text || 'Next.js Dev Badge',
-              };
-            }
-          }
-        }
-      }
-
-      // Document root fallback
-      const docBtn = document.querySelector(
-        '[data-nextjs-toast], [data-next-badge], button[data-nextjs-dev-tools-button]',
-      ) as HTMLElement;
-      if (docBtn) {
-        const r = docBtn.getBoundingClientRect();
-        if (r.width > 0 && r.height > 0) {
-          return {
-            x: r.left + r.width / 2,
-            y: r.top + r.height / 2,
-            width: r.width,
-            height: r.height,
-            isError: true,
-            label: 'Next.js Dev Button',
-          };
-        }
-      }
-
-      return null;
-    })) as {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isError: boolean;
-      label: string;
-    } | null;
-
-    const isErrorState = Boolean(knownError || badgeCoords?.isError);
-
-    if (isErrorState) {
-      const errDetail =
-        errorHint || badgeCoords?.label || 'Runtime Error Triggered';
-      console.log(`\n🚨 [Error Triggered]: "${errDetail}"`);
-
-      // 1. Pause 2.5s so the viewer sees the error state on screen
-      console.log(
-        `   ⏳ Pausing 2.5s so the error state can be seen in video...`,
-      );
-      await sleep(2500);
-
-      // 2. Exact coordinates on the Next.js dev icon
-      let targetX = badgeCoords ? badgeCoords.x : 38;
-      let targetY = badgeCoords ? badgeCoords.y : 1006;
-
-      console.log(
-        `   🎯 Next.js dev icon target coordinates: (${Math.round(targetX)}, ${Math.round(targetY)})`,
-      );
-
-      // 3. Smoothly glide virtual cursor to the Next.js icon
-      console.log(
-        `   🖱️ Gliding virtual cursor to Next.js icon at (${Math.round(targetX)}, ${Math.round(targetY)})...`,
-      );
-      await humanGlide(page, targetX, targetY, 24);
-      await sleep(350);
-
-      // 4. Click the Next.js icon
-      console.log(`   🖱️ Clicking Next.js dev icon to expand error overlay...`);
-      await humanClick(page);
-      await page.mouse.click(targetX, targetY).catch(() => {});
-
-      // 5. Instantly expand the full Next.js Error Overlay modal
-      await showNextjsErrorOverlay(page, errDetail);
-
-      // 6. Keep expanded error overlay on screen for 4.5 seconds so stack trace is recorded
-      console.log(
-        `   ⏳ Capturing full error overlay / stack trace in recording...`,
-      );
-      await sleep(4500);
-
-      return {
-        hasError: true,
-        errorMessage: errDetail,
-      };
-    }
-
-    return { hasError: false };
-  } catch (err) {
-    return { hasError: Boolean(knownError) };
-  }
+  // Disabled: do not detect errors, do not click dev badge, do not show error overlay
+  return { hasError: false };
 }
