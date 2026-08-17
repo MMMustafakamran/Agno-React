@@ -8,17 +8,21 @@ Automated, high-fidelity screen demonstration and video recording engine for the
 
 - [Overview](#-overview)
 - [3-Step Video Workflow](#-3-step-video-workflow)
+- [Interactive Taskbar App-Switching](#-interactive-taskbar-app-switching)
+- [Next.js Error Overlay Auto-Expansion & Diagnostics](#-nextjs-error-overlay-auto-expansion--diagnostics)
 - [Directory Structure](#-directory-structure)
 - [Prerequisites & Getting Started](#-prerequisites--getting-started)
 - [Usage & CLI Reference](#-usage--cli-reference)
 - [Configured Pages & Route Mapping](#-configured-pages--route-mapping)
+- [Porting to Other Projects (Agno / LangGraph / SDKs)](PORTING_GUIDE.md)
 - [Architecture & Core Modules](#-architecture--core-modules)
   - [1. Standalone VS Code IDE Simulator](#1-standalone-vs-code-ide-simulator)
-  - [2. Windows 11 Taskbar & Virtual Mouse Overlay](#2-windows-11-taskbar--virtual-mouse-overlay)
-  - [3. Slide-up Notepad Developer Notes](#3-slide-up-notepad-developer-notes)
-  - [4. Tailored Action Handlers](#4-tailored-action-handlers)
-- [Output Videos](#-output-videos)
-- [Troubleshooting & FAQ](#-troubleshooting--faq)
+  - [2. Windows 11 Taskbar & App Switching Overlay](#2-windows-11-taskbar--app-switching-overlay)
+  - [3. Next.js Error Recognition & Modal Expander](#3-nextjs-error-recognition--modal-expander)
+  - [4. Slide-up Notepad Developer Notes](#4-slide-up-notepad-developer-notes)
+  - [5. Tailored Action Handlers](#5-tailored-action-handlers)
+- [Output Videos & Filename Conventions](#-output-videos--filename-conventions)
+- [Troubleshooting & Diagnostics](#-troubleshooting--diagnostics)
 
 ---
 
@@ -27,10 +31,13 @@ Automated, high-fidelity screen demonstration and video recording engine for the
 The **Autorecord Suite** is a Playwright-powered recording pipeline designed to produce professional, human-like demonstration videos for documentation features, generative UI components, human-in-the-loop flows, agent routing, and runtime error debugging.
 
 ### Key Highlights:
-- **100% Pure VS Code Simulation**: Step 2 renders code directly via a standalone HTML/CSS generator—completely isolated from Next.js, eliminating dev badges, portals, or floating inspectors.
+- **Zero Black Screen & Instant Paint**: Starts immediately on the rendered doc page using `domcontentloaded` without dead delay frames.
+- **Interactive App-Switching Realism**: Glides the cursor to click Windows 11 Taskbar icons (illuminating active blue glow bars) between Doc, IDE, and Demo steps.
+- **100% Pure VS Code Simulation**: Step 2 renders code directly via a standalone HTML/CSS generator—completely isolated from Next.js, eliminating dev badges or floating inspectors.
+- **Elevated Next.js Dev Badge**: The Next.js dev indicator is automatically positioned at `bottom: 56px` to sit cleanly 8px above the Windows 11 Taskbar in full view.
+- **Automated Next.js Error Recognition & Overlay Window**: When an error occurs (stream drop, API 404/500, or component exception), the engine pauses 2.5s, glides to the Next.js dev icon on the bottom-left, clicks it, turns the badge red, expands the full **Next.js 15 Error Overlay Window** (with error title, origin endpoint, and call stack), and captures it for 4.5s.
+- **Pre-flight Service Diagnostics**: Verifies that both Next.js (`http://localhost:3000`) and Agno AgentOS (`http://localhost:8000`) are online before starting.
 - **Natural Human Physics**: Virtual mouse cursor with cubic Bézier curves, Fitts's law acceleration, micro-overshoots, realistic typing jitter, and smooth document scrolling.
-- **Tailored Interactions**: Automatically interacts with custom UI elements (e.g. clicking HITL buttons, toggling Dark Mode in agent state, switching prebuilt tabs, and inspecting live AG-UI SSE streams).
-- **Export Standards**: Produces 1080p, 60fps WebM videos directly in `autorecord/videos/` with standardized naming (`AgnoReact-<FeatureName>.webm`).
 
 ---
 
@@ -40,24 +47,54 @@ Every recorded video follows a consistent, high-production 3-step sequence:
 
 ```mermaid
 graph LR
-    A[Step 1: Official Doc Page] --> B[Step 2: VS Code IDE View]
-    B --> C[Step 3: Live Interactive Demo]
+    A[Step 1: Official Doc Page] -- Click Taskbar: VS Code --> B[Step 2: VS Code IDE View]
+    B -- Click Taskbar: Chrome --> C[Step 3: Live Interactive Demo]
     C --> D[Video Export: autorecord/videos/*.webm]
 ```
 
 1. **Step 1 — Official Documentation View**:
    - Opens the official CopilotKit Agno doc URL (`https://docs.copilotkit.ai/agno/...`).
-   - Glides mouse to reading position, smoothly scrolls at human reading cadence, and hovers over the main code snippet.
+   - Glides mouse to reading position, smoothly scrolls down at human reading cadence, and hovers over the code snippet.
+   - Glides cursor down to the simulated Windows 11 Taskbar, clicks the **VS Code** icon, and illuminates the blue active glow bar (`#60a5fa`).
 
 2. **Step 2 — Visual Studio Code IDE View**:
    - Renders a standalone VS Code Dark+ interface (`vs-dark`) directly from project source files on disk.
    - Highlights the exact snippet lines (`startLine` to `endLine`) with `#264f78` background and `#007acc` accent border.
    - Smoothly glides the virtual cursor down across the highlighted lines.
+   - Glides cursor down to the Taskbar and clicks the **Chrome** icon (illuminating its blue glow bar).
 
 3. **Step 3 — Live Interactive Demo**:
    - Navigates directly to the isolated demo endpoint (`http://localhost:3000/<route>/demo-chat`).
    - Injects the simulated Windows 11 Taskbar with live clock, start menu, and active app indicators.
    - Types test prompts with natural keystrokes and executes custom action handlers (e.g., clicking options, toggling state, waiting for streaming AI tokens or tool execution).
+   - Monitors for runtime errors and auto-expands the authentic Next.js error overlay window if an error occurs.
+
+---
+
+## 🖥️ Interactive Taskbar App-Switching
+
+Rather than abrupt URL jumps, transitions between steps simulate natural desktop multitasking:
+
+- **Switching from Doc $\rightarrow$ VS Code**: The virtual mouse glides down to `#win11-taskbar-vscode`, hovers with a translucent highlight (`rgba(255,255,255,0.08)`), clicks the icon, illuminates the blue active glow bar underneath VS Code, and transitions to the IDE.
+- **Switching from VS Code $\rightarrow$ Live Demo**: The cursor glides down to `#win11-taskbar-chrome`, clicks the Chrome icon, illuminates the blue active glow bar underneath Chrome, and transitions to the live demo.
+
+---
+
+## 🚨 Next.js Error Overlay Auto-Expansion & Diagnostics
+
+When an error occurs during Step 3 (runtime failure, compilation issue, or CopilotKit stream disconnect):
+
+1. **Error Detection**: The engine catches the error via browser console listeners, network failure intercepts, or CopilotKit stream events.
+2. **2.5-Second Visual Pause**: Deliberately pauses for 2.5s so the video viewer clearly sees the error state in the chat.
+3. **Cursor Glide to Next.js Icon**: The virtual mouse glides directly to the exact live pixel center of the Next.js dev badge on the bottom left (`x: 79, y: 1006`).
+4. **Click & Expand Next.js Error Window**: Clicks the icon, turns the Next.js badge red (`#ca2a30`), and expands the **Next.js 15 Error Overlay Window**:
+   - 🔴 **Red Header Badge**: `Runtime Error` + Current Route Path
+   - 📝 **Error Title**: Full error message
+   - 🌐 **Origin Endpoint**: Full route URL
+   - 💻 **Diagnostic Call Stack**: Stack trace detailing `@copilotkit/core`, `@ag-ui/client`, and source files
+   - 🔗 **Documentation Link**: Footer link to CopilotKit + Agno error docs
+5. **4.5-Second Stack Trace Capture**: Holds the error modal on screen for 4.5s so the complete diagnostic trace is recorded in the video.
+6. **Filename Tagging**: Saves the video as `AgnoReact-<Page>_[ERROR].webm` and reports `❌ [FAIL]` in the suite summary table.
 
 ---
 
@@ -65,21 +102,24 @@ graph LR
 
 ```
 autorecord/
-├── record-all-pages.ts        # CLI entrypoint & batch runner
-├── README.md                  # Complete autorecord guide (this file)
+├── record-all-pages.ts        # CLI entrypoint & batch runner with summary report
+├── README.md                  # Comprehensive root guide (this file)
 ├── package.json               # Node.js dependencies (Playwright, TSX)
 ├── videos/                    # Output directory for exported WebM videos
-│   └── AgnoReact-Quickstart.webm
+│   ├── AgnoReact-Quickstart.webm
+│   └── AgnoReact-Quickstart_[ERROR].webm
 └── recorder/
     ├── README.md              # Recorder module architecture reference
     ├── types.ts               # TypeScript interfaces & configuration schemas
     ├── config.ts              # Page registry with 21 Agno routes, file paths & line numbers
     ├── engine.ts              # Playwright browser lifecycle manager & recording coordinator
+    ├── diagnostics.ts         # Pre-flight service health checks & error pattern matcher
     ├── ide/
     │   └── generator.ts       # Standalone pure HTML/CSS VS Code Dark+ simulator
     ├── overlays/
-    │   ├── taskbar.ts         # Windows 11 Taskbar simulation overlay
+    │   ├── taskbar.ts         # Windows 11 Taskbar simulation overlay & app switching
     │   ├── cursor.ts          # Virtual mouse physics, Bézier easing & typing helpers
+    │   ├── nextjs-error.ts    # Next.js error badge detection, click & modal expander
     │   └── notepad.ts         # Slide-up Notepad developer note simulator
     └── actions/
         ├── prebuilt.action.ts       # Tab switching: CopilotChat -> CopilotSidebar -> CopilotPopup
@@ -133,26 +173,38 @@ Pass the `--page=<id>` flag to record any specific route:
 
 ```bash
 # Quickstart demo
-npx tsx autorecord/record-all-pages.ts --page=quickstart
+npm run record -- --page=quickstart
 
 # Generative UI - Weather Card
-npx tsx autorecord/record-all-pages.ts --page=display-only
+npm run record -- --page=display-only
 
 # Human in the Loop (offerOptions choice selection)
-npx tsx autorecord/record-all-pages.ts --page=human-in-the-loop
+npm run record -- --page=human-in-the-loop
 
 # Custom Look and Feel - Programmatic Control (State toggles)
-npx tsx autorecord/record-all-pages.ts --page=programmatic-control
+npm run record -- --page=programmatic-control
 
 # Frontend Tools (theme, greetings, bookmarks)
-npx tsx autorecord/record-all-pages.ts --page=frontend-tools
+npm run record -- --page=frontend-tools
 ```
 
 ### Record All Pages Sequentially
-Run the script without arguments to record all 21 configured pages in batch mode:
+Run without arguments to record all 21 configured pages in batch mode:
 
 ```bash
-npx tsx autorecord/record-all-pages.ts
+npm run record
+```
+
+### Batch Summary Table Example:
+```
+======================================================
+📊 RECORDING SUITE SUMMARY
+======================================================
+   ✅ [PASS] Quickstart -> AgnoReact-Quickstart.webm
+   ✅ [PASS] Human In The Loop -> AgnoReact-HumanInTheLoop.webm
+   ❌ [FAIL] Error Debugging -> AgnoReact-ErrorDebugging_[ERROR].webm (Next.js Error Overlay expanded)
+======================================================
+📁 Video files saved to: autorecord/videos
 ```
 
 ---
@@ -190,39 +242,36 @@ All 21 routes in `frontend/src/lib/nav-config.ts` are mapped with accurate sourc
 
 ### 1. Standalone VS Code IDE Simulator
 - **Location**: [`autorecord/recorder/ide/generator.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/ide/generator.ts)
-- **Design Principle**: Generates an isolated HTML/CSS page from the repository's files on disk and renders it with `page.setContent()`.
-- **Advantages**:
-  - Zero Next.js / React hydration overhead.
-  - Zero risk of Next.js dev indicators, dev overlays, or CopilotKit Inspector icons appearing.
-  - Pixel-perfect reproduction of VS Code Dark+ (tabs, Explorer, breadcrumbs, line numbers, line highlight).
+- Generates an isolated HTML/CSS page from local project files and renders it with `page.setContent()`.
+- Completely decouples the IDE view from Next.js, guaranteeing zero dev badges or floating inspectors on Step 2.
 
-### 2. Windows 11 Taskbar & Virtual Mouse Overlay
-- **Location**: [`autorecord/recorder/overlays/taskbar.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/overlays/taskbar.ts), [`autorecord/recorder/overlays/cursor.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/overlays/cursor.ts)
-- Injects a simulated Windows 11 Taskbar with live clock, system tray, and active app glow indicators.
-- Emulates authentic mouse physics:
-  - Quadratic/Cubic Bézier trajectory interpolation.
-  - Fitts's law deceleration near target elements.
-  - Jitter and micro-overshoot corrections.
-  - Visual click ripple indicators.
+### 2. Windows 11 Taskbar & App Switching Overlay
+- **Location**: [`autorecord/recorder/overlays/taskbar.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/overlays/taskbar.ts)
+- Injects the simulated Windows 11 Taskbar and coordinates animated icon clicks (`clickTaskbarApp`) to transition between Step 1 (Doc) $\rightarrow$ Step 2 (VS Code) $\rightarrow$ Step 3 (Chrome).
+- Automatically elevates the Next.js dev portal above the 48px taskbar.
 
-### 3. Slide-up Notepad Developer Notes
+### 3. Next.js Error Recognition & Modal Expander
+- **Location**: [`autorecord/recorder/overlays/nextjs-error.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/overlays/nextjs-error.ts), [`autorecord/recorder/diagnostics.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/diagnostics.ts)
+- Automatically spots errors, pauses 2.5s, glides the mouse cursor directly to the Next.js dev badge on the bottom left (`x: 79, y: 1006`), clicks it to expand the authentic Next.js 15 Error Overlay Window, and holds for 4.5s.
+
+### 4. Slide-up Notepad Developer Notes
 - **Location**: [`autorecord/recorder/overlays/notepad.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/overlays/notepad.ts)
-- For architectural, conceptual, or stub pages (`threads-overview`, `threads-architecture`, `threads-import`, `interactive`), slides up a Windows 11 Notepad modal and types developer notes character by character with realistic typing cadence.
+- For architectural or reference stub pages (`threads-overview`, `threads-architecture`, `threads-import`, `interactive`), slides up a Windows 11 Notepad modal and types developer notes with natural keystroke timing.
 
-### 4. Tailored Action Handlers
+### 5. Tailored Action Handlers
 - **Location**: [`autorecord/recorder/actions/`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/actions/)
-- Handlers specialize in unique page requirements:
-  - `hitl.action.ts`: Waits for the `offerOptions` choice component in the chat stream, moves cursor over Option 1, and clicks it.
+- Handlers specialize in unique page interactions:
+  - `hitl.action.ts`: Waits for `offerOptions` choice buttons in the stream, glides cursor over Option 1, and clicks it.
   - `programmatic.action.ts`: Clicks "Dark Mode" to update `agent.state`, writes a draft message, and triggers `runAgent`.
   - `slots.action.ts`: Cycles through Level 1 (Tailwind), Level 2 (Props override), and Level 3 (Custom components).
   - `runtime.action.ts`: Tests `default` agent routing then switches to `agno_agent`.
-  - `ag-ui.action.ts`: Sends a query and hovers over the live SSE event log (RunStarted, TextMessageContent, ToolCall, RunFinished).
+  - `ag-ui.action.ts`: Sends a query and hovers over live SSE event logs (`RunStarted`, `TextMessageContent`, `ToolCall`, `RunFinished`).
 
 ---
 
-## 🎥 Output Videos
+## 🎥 Output Videos & Filename Conventions
 
-All recorded videos are saved directly to:
+All recorded videos are saved to:
 ```
 autorecord/videos/
 ```
@@ -230,18 +279,20 @@ autorecord/videos/
 - Resolution: **1920 × 1080 (1080p Full HD)**
 - Framerate: **60 FPS**
 - Format: **WebM** (`VP8` / `VP9` codec)
-- Naming: `AgnoReact-<FeatureName>.webm`
+- **Successful / Clean Runs**: `AgnoReact-<FeatureName>.webm`
+- **Error Captured Runs**: `AgnoReact-<FeatureName>_[ERROR].webm`
 
 ---
 
-## ❓ Troubleshooting & FAQ
+## ❓ Troubleshooting & Diagnostics
 
-### 1. `TimeoutError: page.goto: Timeout 60000ms exceeded`
-- **Cause**: The Next.js frontend (`localhost:3000`) or Python backend (`localhost:8000`) is not running.
-- **Fix**: Verify both servers are running in separate terminal windows before starting recordings.
+### 1. `Pre-flight Service Diagnostics: Agno Backend is unreachable`
+- **Cause**: The Python FastAPI AgentOS server on port 8000 is not running.
+- **Fix**: Run `cd backend && uv run main.py`.
 
-### 2. AI response does not finish streaming before video ends
-- **Fix**: Increase `waitAfterPromptMs` in [`autorecord/recorder/config.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/config.ts) for that specific page config (e.g. set `waitAfterPromptMs: 12000`).
+### 2. `Pre-flight Service Diagnostics: Next.js Frontend is unreachable`
+- **Cause**: The Next.js dev server on port 3000 is not running.
+- **Fix**: Run `cd frontend && npm run dev`.
 
-### 3. Browser window closes unexpectedly
-- **Fix**: Check `autorecord/recorder/engine.ts` console output for specific Playwright selector errors. Ensure the prompt or button text matches the current UI labels.
+### 3. AI response streaming takes longer than default timeout
+- **Fix**: Increase `waitAfterPromptMs` in [`autorecord/recorder/config.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/config.ts) for that page (e.g. `waitAfterPromptMs: 12000`).

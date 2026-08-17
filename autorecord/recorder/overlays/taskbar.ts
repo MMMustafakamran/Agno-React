@@ -11,21 +11,20 @@ export async function ensureOverlays(
 
   const code = `
     (function() {
-      // 0. Remove Next.js dev overlays & CopilotKit Inspector on VS Code IDE screen
-      if (${activeApp === 'vscode'}) {
-        var devOverlays = document.querySelectorAll('nextjs-portal, [data-nextjs-toast], [data-nextjs-dev-tools], #next-dev-tools, #nextjs-dev-tools, div[data-nextjs-dev-tools-button], [data-nextjs-dev-tools-button], [class*="copilotKitDevConsole"], [class*="copilotKitInspector"], [aria-label*="Inspector"], [aria-label*="CopilotKit Dev Console"], [class*="devConsole"], .copilotKitDevConsole, .copilotkit-dev-console, button[aria-label*="Open CopilotKit Dev Console"], button[aria-label*="Inspector"]');
-        devOverlays.forEach(function(el) {
-          try { el.remove(); } catch(e) {}
-        });
-
-        var hideStyle = document.getElementById('hide-dev-tools-overlay-style');
-        if (!hideStyle) {
-          hideStyle = document.createElement('style');
-          hideStyle.id = 'hide-dev-tools-overlay-style';
-          hideStyle.textContent = 'nextjs-portal, [data-nextjs-toast], [data-nextjs-dev-tools], #next-dev-tools, #nextjs-dev-tools, div[data-nextjs-dev-tools-button], [data-nextjs-dev-tools-button], [class*="copilotKitDevConsole"], [class*="copilotKitInspector"], [aria-label*="Inspector"], [aria-label*="CopilotKit Dev Console"], [class*="devConsole"], .copilotKitDevConsole, .copilotkit-dev-console, button[aria-label*="Open CopilotKit Dev Console"], button[aria-label*="Inspector"] { display: none !important; opacity: 0 !important; pointer-events: none !important; visibility: hidden !important; }';
-          document.documentElement.appendChild(hideStyle);
+      // 0. Ensure Next.js dev indicator sits cleanly above the 48px Windows 11 taskbar
+      var elevateBadges = function() {
+        var portals = document.querySelectorAll('nextjs-portal');
+        for (var i = 0; i < portals.length; i++) {
+          var p = portals[i];
+          if (p.shadowRoot) {
+            var ind = p.shadowRoot.querySelector('#devtools-indicator, [data-nextjs-toast]');
+            if (ind) ind.style.bottom = '56px';
+          }
         }
-      }
+      };
+      elevateBadges();
+      setTimeout(elevateBadges, 500);
+      setTimeout(elevateBadges, 1500);
 
       // 1. Windows 11 Taskbar
       var bar = document.getElementById('win11-taskbar-overlay');

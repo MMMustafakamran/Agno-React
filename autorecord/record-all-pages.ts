@@ -10,6 +10,14 @@ import { RecordingEngine } from './recorder/engine';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const ROOT = join(__dirname, '..');
 
+interface PageResult {
+  id: string;
+  name: string;
+  filename: string;
+  success: boolean;
+  error?: string;
+}
+
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const pageArg = args.find((a) => a.startsWith('--page='))?.split('=')[1];
@@ -31,14 +39,33 @@ async function main(): Promise<void> {
   console.log(`======================================================\n`);
 
   const engine = new RecordingEngine(ROOT);
+  const results: PageResult[] = [];
 
   for (const pageConfig of targetPages) {
-    await engine.recordPage(pageConfig);
+    const res = await engine.recordPage(pageConfig);
+    results.push({
+      id: pageConfig.id,
+      name: pageConfig.name,
+      filename: res.filename,
+      success: res.success,
+      error: res.error,
+    });
   }
 
-  console.log(
-    `\n🎉 ALL RECORDINGS FINISHED! Output files in: ${join(ROOT, 'autorecord', 'videos')}`,
-  );
+  console.log(`\n======================================================`);
+  console.log(`📊 RECORDING SUITE SUMMARY`);
+  console.log(`======================================================`);
+  for (const r of results) {
+    if (r.success) {
+      console.log(`   ✅ [PASS] ${r.name} -> ${r.filename}`);
+    } else {
+      console.log(
+        `   ❌ [FAIL] ${r.name} -> ${r.filename} (${r.error || 'Error captured'})`,
+      );
+    }
+  }
+  console.log(`======================================================`);
+  console.log(`📁 Video files saved to: ${join(ROOT, 'autorecord', 'videos')}\n`);
 }
 
 main().catch((err) => {
