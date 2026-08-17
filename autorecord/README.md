@@ -183,50 +183,35 @@ Pass the `--page=<id>` flag to record any specific route.
 npm run record -- --page=quickstart
 # 2. Prebuilt Components
 npm run record -- --page=prebuilt-components
-# 3. Rich Threads - Overview
-npm run record -- --page=threads-overview
-# 4. Rich Threads - Threads Drawer
-npm run record -- --page=threads-drawer
-# 5. Rich Threads - Headless Threads
-npm run record -- --page=threads-headless
-
-# 6. Rich Threads - Thread & History Lifecycle
-npm run record -- --page=threads-lifecycle
-
-# 7. Rich Threads - Synchronize Thread History
-npm run record -- --page=threads-import
-
-# 8. Rich Threads - Persistence Architecture
-npm run record -- --page=threads-architecture
-# 9. Custom Look and Feel - Programmatic Control
+# 3. Custom Look and Feel - Programmatic Control
 npm run record -- --page=programmatic-control
-# 10. Custom Look and Feel - Inspector
+# 4. Custom Look and Feel - Inspector
 npm run record -- --page=inspector
-# 11. Custom Look and Feel - Slots
+# 5. Custom Look and Feel - Slots
 npm run record -- --page=slots
-# 12. Custom Look and Feel - Headless UI
+# 6. Custom Look and Feel - Headless UI
 npm run record -- --page=headless-ui
-# 13. Generative UI - Display Only Component
+# 7. Generative UI - Display Only Component
 npm run record -- --page=display-only
-# 14. Generative UI - Interactive (Stub)
+# 8. Generative UI - Interactive (Stub)
 npm run record -- --page=interactive
-# 15. Generative UI - Tool Rendering
+# 9. Generative UI - Tool Rendering
 npm run record -- --page=tool-rendering
-# 16. App Control - Frontend Tools
+# 10. App Control - Frontend Tools
 npm run record -- --page=frontend-tools
-# 17. App Control - Human in the Loops
+# 11. App Control - Human in the Loop
 npm run record -- --page=human-in-the-loop
-# 18. Backend - Copilot Runtime
+# 12. Backend - Copilot Runtime
 npm run record -- --page=copilot-runtime
-# 19. Backend - AG-UI Protocol Stream
+# 13. Backend - AG-UI Protocol Stream
 npm run record -- --page=ag-ui
-# 20. Troubleshooting - Error Debugging & Observability
+# 14. Troubleshooting - Error Debugging & Observability
 npm run record -- --page=error-debugging
 ```
 
 ### Record All Pages Sequentially
 
-Run without arguments to record all 21 configured pages in batch mode:
+Run without arguments to record all 14 configured pages in batch mode:
 
 ```bash
 npm run record
@@ -240,7 +225,7 @@ npm run record
 ======================================================
    ✅ [PASS] Quickstart -> AgnoReact-Quickstart.webm
    ✅ [PASS] Human In The Loop -> AgnoReact-HumanInTheLoop.webm
-   ❌ [FAIL] Error Debugging -> AgnoReact-ErrorDebugging_[ERROR].webm (Next.js Error Overlay expanded)
+   ✅ [PASS] Tool Rendering -> AgnoReact-ToolRendering.webm
 ======================================================
 📁 Video files saved to: autorecord/videos
 ```
@@ -249,18 +234,12 @@ npm run record
 
 ## 📋 Configured Pages & Route Mapping
 
-All 21 routes in `frontend/src/lib/nav-config.ts` are mapped with accurate source files and line ranges:
+All 14 active recording routes in `frontend/src/lib/nav-config.ts` are mapped with accurate source files and line ranges:
 
 | Page ID                | Video Output Filename                | Route URL                                               | Target Source File                                                               | Highlighted Lines |
 | ---------------------- | ------------------------------------ | ------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
-| `quickstart`           | `AgnoReact-Quickstart.webm`          | `/quickstart/demo-chat`                                 | `frontend/src/app/quickstart/demo-chat/page.tsx`                                 | 18–24             |
+| `quickstart`           | `AgnoReact-Quickstart.webm`          | `/quickstart/demo-chat`                                 | `frontend/package.json`                                                          | 12–24             |
 | `prebuilt-components`  | `AgnoReact-PrebuiltComponents.webm`  | `/prebuilt-components/demo-chat`                        | `frontend/src/app/prebuilt-components/demo-chat/page.tsx`                        | 59–94             |
-| `threads-overview`     | `AgnoReact-ThreadsOverview.webm`     | `/threads`                                              | `frontend/src/app/threads/page.tsx`                                              | 26–67             |
-| `threads-drawer`       | `AgnoReact-ThreadsDrawer.webm`       | `/threads/drawer/demo-chat`                             | `frontend/src/app/threads/drawer/demo-chat/page.tsx`                             | 25–33             |
-| `threads-headless`     | `AgnoReact-ThreadsHeadless.webm`     | `/threads/headless/demo-chat`                           | `frontend/src/app/threads/headless/demo-chat/page.tsx`                           | 24–36             |
-| `threads-lifecycle`    | `AgnoReact-ThreadsLifecycle.webm`    | `/threads/lifecycle/demo-chat`                          | `frontend/src/app/threads/lifecycle/demo-chat/page.tsx`                          | 41–68             |
-| `threads-import`       | `AgnoReact-ThreadsImport.webm`       | `/threads/import`                                       | `frontend/src/app/threads/import/page.tsx`                                       | 36–43             |
-| `threads-architecture` | `AgnoReact-ThreadsArchitecture.webm` | `/threads/architecture`                                 | `frontend/src/app/threads/architecture/page.tsx`                                 | 42–79             |
 | `programmatic-control` | `AgnoReact-ProgrammaticControl.webm` | `/custom-look-and-feel/programmatic-control/demo-chat`  | `frontend/src/app/custom-look-and-feel/programmatic-control/demo-chat/page.tsx`  | 72–85             |
 | `inspector`            | `AgnoReact-Inspector.webm`           | `/custom-look-and-feel/inspector/demo-chat`             | `frontend/src/app/custom-look-and-feel/inspector/demo-chat/page.tsx`             | 18–30             |
 | `slots`                | `AgnoReact-Slots.webm`               | `/custom-look-and-feel/slots/demo-chat`                 | `frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx`                 | 67–112            |

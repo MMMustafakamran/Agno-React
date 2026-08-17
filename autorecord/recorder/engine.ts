@@ -214,11 +214,21 @@ export class RecordingEngine {
       console.log(`\n🚀 Step 3: Opening Demo (${config.demoUrl})...`);
       try {
         await page.goto(config.demoUrl, {
-          waitUntil: 'domcontentloaded',
+          waitUntil: 'load',
           timeout: 60000,
         });
         await ensureOverlays(page, 'chrome');
-        await sleep(600);
+
+        // Wait for Next.js hydration, React tree stability, and input element readiness
+        console.log(`   ⏳ Waiting for Next.js compilation & React hydration to settle...`);
+        await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
+        await page
+          .waitForSelector(
+            'textarea, input[type="text"], input, [contenteditable="true"], .copilotKitChat, [class*="copilotKit"]',
+            { state: 'visible', timeout: 12000 },
+          )
+          .catch(() => {});
+        await sleep(1800);
 
         // Dispatch specific demo actions
         await executePageAction(page, config, this.rootDir);

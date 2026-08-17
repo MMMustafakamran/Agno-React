@@ -1,5 +1,6 @@
 import { type Page } from 'playwright';
 import { humanClick, humanGlide, sleep } from '../overlays/cursor';
+import { showNotepadNote } from '../overlays/notepad';
 import { type PageActionHandler, type PageRecordConfig } from '../types';
 
 export const runDisplayOnlyAction: PageActionHandler = async (
@@ -33,6 +34,12 @@ export const runDisplayOnlyAction: PageActionHandler = async (
     }
   }
 
+  await showNotepadNote(page, 'display_only_notes.txt', [
+    'useComponent registers React components as display-only tools in AG-UI run input.',
+    'The Agno agent invokes the tool with structured parameters (city, temp, condition).',
+    'No backend database modifications are needed for frontend generative components.',
+  ]);
+
   await humanGlide(page, 960, 500, 25);
-  await sleep(config.waitAfterPromptMs ?? 6000);
+  await sleep(config.waitAfterPromptMs ?? 3000);
 };
