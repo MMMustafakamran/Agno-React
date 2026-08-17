@@ -35,8 +35,10 @@ The **Autorecord Suite** is a Playwright-powered recording pipeline designed to 
 - **Zero Black Screen & Instant Paint**: Starts immediately on the rendered doc page using `domcontentloaded` without dead delay frames.
 - **Interactive App-Switching Realism**: Glides the cursor to click Windows 11 Taskbar icons (illuminating active blue glow bars) between Doc, IDE, and Demo steps.
 - **100% Pure VS Code Simulation**: Step 2 renders code directly via a standalone HTML/CSS generator—completely isolated from Next.js, eliminating dev badges or floating inspectors.
-- **Elevated Next.js Dev Badge**: The Next.js dev indicator is automatically positioned at `bottom: 56px` to sit cleanly 8px above the Windows 11 Taskbar in full view.
-- **Automated Next.js Error Recognition & Overlay Window**: When an error occurs (stream drop, API 404/500, or component exception), the engine pauses 2.5s, glides to the Next.js dev icon on the bottom-left, clicks it, turns the badge red, expands the full **Next.js 15 Error Overlay Window** (with error title, origin endpoint, and call stack), and captures it for 4.5s.
+- **Next.js Hydration & Dev-Server Compilation Synchronization**: Waits for `load`, `networkidle`, and component readiness before dispatching actions, with auto-refill and submit retry logic to prevent keypresses from being swallowed during on-demand chunk compilation.
+- **Active Dynamic AI Response Detection**: Dynamically observes the chat DOM using `page.waitForFunction` to detect streaming assistant messages and generative tool shells, followed by smooth cursor tracking over the completed reply.
+- **Shadow DOM Piercing for Web Inspector**: Automatically queries inside Web Component shadow roots to open the CopilotKit DevConsole and navigate between Threads, Agents, and Learning tabs.
+- **Slide-up Windows 11 Notepad Notes**: Injects authentic developer notes for architectural requirements (e.g. database session storage for frontend tool resume).
 - **Pre-flight Service Diagnostics**: Verifies that both Next.js (`http://localhost:3000`) and Agno AgentOS (`http://localhost:8000`) are online before starting.
 - **Natural Human Physics**: Virtual mouse cursor with cubic Bézier curves, Fitts's law acceleration, micro-overshoots, realistic typing jitter, and smooth document scrolling.
 
@@ -285,7 +287,11 @@ All 14 active recording routes in `frontend/src/lib/nav-config.ts` are mapped wi
 - Handlers specialize in unique page interactions:
   - `hitl.action.ts`: Waits for `offerOptions` choice buttons in the stream, glides cursor over Option 1, and clicks it.
   - `programmatic.action.ts`: Clicks "Dark Mode" to update `agent.state`, writes a draft message, and triggers `runAgent`.
-  - `slots.action.ts`: Cycles through Level 1 (Tailwind), Level 2 (Props override), and Level 3 (Custom components).
+  - `slots.action.ts`: Cycles through Level 1 (Tailwind), Level 2 (Props override), and Level 3 (Custom components), dispatching prompts across all 3 tabs.
+  - `inspector.action.ts`: Pierces the Web Inspector Shadow DOM, opens the DevConsole, and navigates to the Agents tab.
+  - `headless-ui.action.ts`: Focuses the custom headless input, types prompts, submits, and tracks assistant response bubbles.
+  - `display-only.action.ts` & `frontend-tools.action.ts`: Exercises client-side tools and displays Windows 11 Notepad architecture notes.
+  - `tool-rendering.action.ts`: Triggers named `get_weather` card with dynamic response detection and cursor focus.
   - `runtime.action.ts`: Tests `default` agent routing then switches to `agno_agent`.
   - `ag-ui.action.ts`: Sends a query and hovers over live SSE event logs (`RunStarted`, `TextMessageContent`, `ToolCall`, `RunFinished`).
 

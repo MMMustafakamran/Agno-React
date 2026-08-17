@@ -1,6 +1,6 @@
 # Autorecording Suite — Project Porting & Integration Guide 🚀
 
-This guide explains how to port and adapt this **3-step automated recording engine** (Official Doc $\rightarrow$ Standalone VS Code $\rightarrow$ Live Demo with interactive Taskbar, Human Cursor, and Error Auto-Capture) into any other project
+This guide explains how to port and adapt this **3-step automated recording engine** (Official Doc $\rightarrow$ Standalone VS Code $\rightarrow$ Live Demo with interactive Taskbar, Human Cursor, Shadow DOM Piercing, Dynamic AI Response Detection, and Error Auto-Capture) into any other project.
 
 ---
 
@@ -101,6 +101,7 @@ export async function checkServicesHealth(): Promise<{
   // Check Backend (e.g. FastAPI / LangGraph / Express / AgentOS)
   const backendOk =
     (await checkPort(`http://localhost:${BACKEND_PORT}/health`)) ||
+    (await checkPort(`http://localhost:${BACKEND_PORT}/agui`)) ||
     (await checkPort(`http://localhost:${BACKEND_PORT}/api/copilotkit`));
 
   return { frontend: frontendOk, backend: backendOk };
@@ -132,12 +133,12 @@ export const PAGES_CONFIG: PageConfig[] = [
     title: "Quickstart Chat",
     docUrl: "https://docs.yourproject.com/quickstart",
     demoUrl: "http://localhost:3000/quickstart/demo-chat",
-    ideFile: "frontend/src/app/quickstart/demo-chat/page.tsx",
-    startLine: 18,
-    endLine: 28,
+    ideFile: "frontend/package.json",
+    startLine: 12,
+    endLine: 24,
     actionType: "chat",
     prompt: "Hello! Can you assist me with this task?",
-    waitAfterPromptMs: 6000, // Increase for complex agent workflows
+    waitAfterPromptMs: 6000,
   },
   {
     id: "custom-tool",
@@ -148,7 +149,7 @@ export const PAGES_CONFIG: PageConfig[] = [
     startLine: 35,
     endLine: 50,
     actionType: "custom-tool",
-    prompt: "Check stock prices",
+    prompt: "Check stock prices for AAPL",
     waitAfterPromptMs: 8000,
   },
 ];
@@ -156,101 +157,117 @@ export const PAGES_CONFIG: PageConfig[] = [
 
 ---
 
-## 🖱️ Step 4: Writing Custom Action Handlers
+## ⚡ Step 4: Next.js Hydration & Dev-Server Compilation Resilience
 
-If a page only needs a prompt typed into chat, set `actionType: 'chat'` and the default runner handles it automatically.
+In Next.js development mode (App Router / Turbopack / Webpack), pages compile chunks on demand upon first navigation. If an automated script types immediately, React hydration can re-render and swallow input or lose event listeners.
 
-For interactive UI (button clicks, dropdowns, tabs, HITL confirmations):
+The engine handles this automatically in Step 3 of [`recorder/engine.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/engine.ts):
 
-1. Create a new handler in `recorder/actions/<name>.action.ts`:
+```typescript
+// Step 3 Navigation in recorder/engine.ts
+await page.goto(config.demoUrl, {
+  waitUntil: 'load',
+  timeout: 60000,
+});
+await ensureOverlays(page, 'chrome');
 
-   ```typescript
-   // autorecord/recorder/actions/custom-tool.action.ts
-   import { type Page } from "playwright";
-   import { type PageConfig } from "../types";
-   import { humanGlide, humanClick, sleep } from "../overlays/cursor";
+// Wait for Next.js compilation, network idle, and chat element mounting
+await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
+await page.waitForSelector(
+  'textarea, input[type="text"], input, [contenteditable="true"], .copilotKitChat, [class*="copilotKit"]',
+  { state: 'visible', timeout: 12000 }
+).catch(() => {});
+await sleep(1800);
+```
 
-   export async function executeCustomToolAction(
-     page: Page,
-     config: PageConfig,
-   ): Promise<void> {
-     // 1. Fill chat input and send
-     const input = page.locator('textarea, input[type="text"]').first();
-     await input.fill(config.prompt || "Run tool");
-     await page.keyboard.press("Enter");
+And in action handlers, verify typed values and re-trigger submission if a re-render swallowed the enter key:
 
-     // 2. Wait for custom tool card or button to render
-     const toolButton = page
-       .locator('button:has-text("Approve Action")')
-       .first();
-     await toolButton
-       .waitFor({ state: "visible", timeout: 10000 })
-       .catch(() => {});
-
-     // 3. Move virtual mouse and click
-     if (await toolButton.isVisible()) {
-       const box = await toolButton.boundingBox();
-       if (box) {
-         await humanGlide(
-           page,
-           box.x + box.width / 2,
-           box.y + box.height / 2,
-           20,
-         );
-         await sleep(250);
-         await humanClick(page);
-         await toolButton.click();
-       }
-     }
-
-     // 4. Wait for stream completion
-     await sleep(config.waitAfterPromptMs || 5000);
-   }
-   ```
-
-2. Export and dispatch it in `recorder/actions/index.ts`:
-
-   ```typescript
-   // autorecord/recorder/actions/index.ts
-   import { executeCustomToolAction } from "./custom-tool.action";
-
-   export async function executePageAction(
-     page: Page,
-     config: PageConfig,
-     rootDir: string,
-   ): Promise<void> {
-     switch (config.actionType) {
-       case "custom-tool":
-         return executeCustomToolAction(page, config);
-       default:
-         return executeDefaultChat(page, config);
-     }
-   }
-   ```
+```typescript
+// Ensure value is synchronized
+const currentVal = await inputLocator.inputValue().catch(() => '');
+if (!currentVal && config.prompt) {
+  await inputLocator.fill(config.prompt);
+  await sleep(300);
+}
+```
 
 ---
 
-## 🚨 Step 5: Next.js / Framework Error Auto-Handling
+## 🎯 Step 5: Active Dynamic AI Response Detection
 
-The error overlay module ([`recorder/overlays/nextjs-error.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/overlays/nextjs-error.ts)) is completely autonomous:
+Rather than relying purely on static sleep timers, use `page.waitForFunction` to actively detect when assistant messages, streaming tokens, or generative cards mount in the DOM:
 
-1. **Detection**: Listens for console errors, network 4xx/5xx responses, and CopilotKit stream errors.
-2. **Visual Pause**: Pauses for 2.5s so the viewer notices the error.
-3. **Cursor Glide**: Glides directly to the Next.js dev badge on the bottom-left (`x: 79, y: 1006`).
-4. **Error Window Expansion**: Clicks the icon, turns the badge red (`#ca2a30`), and expands the **Next.js 15 Error Overlay Modal** with origin route, message, and stack trace.
-5. **Video Tagging**: Saves the video as `AgnoReact-<Feature>_[ERROR].webm` and flags `❌ [FAIL]` in the batch summary.
+```typescript
+console.log(`⏳ Actively detecting AI agent response...`);
+await page.waitForFunction(
+  () => {
+    const assistantMsgs = document.querySelectorAll(
+      '.copilotKitAssistantMessage, [data-message-role="assistant"], .copilotKitMessage:not(:first-child), [class*="assistant"]'
+    );
+    return assistantMsgs.length > 0;
+  },
+  { timeout: 18000 }
+).catch(() => {});
 
-> [!TIP]
-> If porting to a non-Next.js frontend (e.g. Vite, Remix, or SvelteKit), the error overlay module will still render the diagnostic error dialog cleanly when an exception or backend failure occurs.
+await sleep(4000);
+
+// Glide cursor smoothly over the rendered assistant message
+const assistantLocator = page.locator('.copilotKitAssistantMessage, [data-message-role="assistant"]').first();
+if (await assistantLocator.isVisible({ timeout: 4000 }).catch(() => false)) {
+  const box = await assistantLocator.boundingBox();
+  if (box) {
+    await humanGlide(page, box.x + Math.min(box.width / 2, 200), box.y + 30, 25);
+  }
+}
+```
 
 ---
 
-## 🎨 Step 6: Customizing the Taskbar & Branding
+## 🔍 Step 6: Piercing Shadow DOM Web Components (e.g. CopilotKit Inspector)
 
-In `recorder/overlays/taskbar.ts`:
+Modern overlays like `@copilotkit/web-inspector` mount inside `#shadow-root (open)`. Standard DOM queries will not pierce shadow roots without direct traversal.
 
-- Adjust the icons in `#win11-taskbar-center-icons` to match your application (e.g., custom SVG logos).
-- Adjust `activeApp: 'chrome' | 'vscode'` glow bar colors.
+Use `page.evaluate()` to query inside all active shadow roots:
+
+```typescript
+// Finding elements inside shadow DOM:
+const targetPos = await page.evaluate(() => {
+  for (const el of Array.from(document.querySelectorAll('*'))) {
+    if (el.shadowRoot) {
+      const target = Array.from(el.shadowRoot.querySelectorAll('button, a, [role="tab"], div, span')).find(
+        (e) => (e.textContent || '').trim().toLowerCase() === 'agents'
+      ) as HTMLElement;
+      if (target) {
+        target.click();
+        const r = target.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+    }
+  }
+  return null;
+});
+
+if (targetPos) {
+  await humanGlide(page, targetPos.x, targetPos.y, 20);
+  await humanClick(page);
+}
+```
+
+---
+
+## 📝 Step 7: Slide-up Notepad Notes for Architecture & Stubs
+
+For features requiring architectural notes, database requirement explanations, or stub pages, use [`showNotepadNote`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/autorecord/recorder/overlays/notepad.ts):
+
+```typescript
+import { showNotepadNote } from '../overlays/notepad';
+
+await showNotepadNote(page, 'error_notice.txt', [
+  'error : agno agent requires db , after adding sqlite this will work',
+]);
+```
+
+This slides up an authentic Windows 11 Notepad window, clicks into the document, and simulates developer typing keystrokes with natural human jitter.
 
 ---
 
@@ -274,4 +291,5 @@ All recorded videos will be saved to `autorecord/videos/` at **1080p, 60fps WebM
 - [ ] Ran `npm install` and `npx playwright install chromium`.
 - [ ] Verified frontend (`:3000`) and backend (`:8000`) ports in `recorder/diagnostics.ts`.
 - [ ] Registered project routes, files, and line numbers in `recorder/config.ts`.
-- [ ] Tested single page recording: `npx tsx record-all-pages.ts --page=<first_page_id>`.
+- [ ] Created action handlers in `recorder/actions/` with active response detection.
+- [ ] Tested single page recording: `npm run record -- --page=<page_id>`.
