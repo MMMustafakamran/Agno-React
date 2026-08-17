@@ -10,7 +10,7 @@ export const runInspectorAction: PageActionHandler = async (
   const inputLocator = page
     .locator('textarea, input[type="text"], [contenteditable="true"]')
     .first();
-  await inputLocator.waitFor({ timeout: 8000 });
+  await inputLocator.waitFor({ state: 'visible', timeout: 12000 });
   const inputBox = await inputLocator.boundingBox();
   if (inputBox) {
     await humanGlide(page, inputBox.x + 80, inputBox.y + inputBox.height / 2, 20);
@@ -20,37 +20,113 @@ export const runInspectorAction: PageActionHandler = async (
   await sleep(400);
   await page.keyboard.press('Enter');
 
-  console.log(`   Waiting for initial response...`);
+  console.log(`   Waiting for initial agent response...`);
   await sleep(4500);
 
-  // Look for CopilotKit Inspector trigger / floating icon on viewport edge
+  // Look for CopilotKit Inspector trigger (both in shadowRoot and main document)
   console.log(`   Opening CopilotKit Inspector overlay...`);
-  const inspectorTrigger = page
-    .locator(
-      'button[aria-label*="Inspector"], button[aria-label*="dev"], button[aria-label*="Console"], .copilotKitDevConsole, [class*="inspector"], button:has-text("Inspector")',
-    )
-    .first();
-  if (await inspectorTrigger.isVisible({ timeout: 4000 }).catch(() => false)) {
-    const itBox = await inspectorTrigger.boundingBox();
-    if (itBox) {
-      await humanGlide(page, itBox.x + itBox.width / 2, itBox.y + itBox.height / 2, 20);
-      await humanClick(page);
-      await sleep(2000);
+  const triggerPos = await page.evaluate(() => {
+    // 1. Check all elements with shadowRoot
+    for (const el of Array.from(document.querySelectorAll('*'))) {
+      if (el.shadowRoot) {
+        const btn = el.shadowRoot.querySelector(
+          'button, [role="button"], #trigger, .trigger, [aria-label*="Inspector"], [aria-label*="dev"], [aria-label*="Console"]',
+        ) as HTMLElement;
+        if (btn) {
+          const r = btn.getBoundingClientRect();
+          if (r.width > 0 && r.height > 0) {
+            return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+          }
+        }
+      }
     }
+    // 2. Check main document
+    const mainBtn = document.querySelector(
+      'button[aria-label*="Inspector"], button[aria-label*="dev"], button[aria-label*="Console"], .copilotKitDevConsole, [class*="inspector"], button:has-text("Inspector")',
+    ) as HTMLElement;
+    if (mainBtn) {
+      const r = mainBtn.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) {
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+    }
+    return null;
+  });
+
+  if (triggerPos) {
+    await humanGlide(page, triggerPos.x, triggerPos.y, 22);
+    await humanClick(page);
+    // Also trigger inside shadow root if click needed
+    await page.evaluate(() => {
+      for (const el of Array.from(document.querySelectorAll('*'))) {
+        if (el.shadowRoot) {
+          const btn = el.shadowRoot.querySelector(
+            'button, [role="button"], #trigger, .trigger, [aria-label*="Inspector"]',
+          ) as HTMLElement;
+          if (btn) btn.click();
+        }
+      }
+    });
+    await sleep(2500);
   }
 
   // After inspector is opened, locate and click on "Agents" tab
   console.log(`   Clicking on "Agents" tab in Inspector...`);
-  const agentsTab = page
-    .locator('button:has-text("Agents"), [role="tab"]:has-text("Agents"), span:has-text("Agents"), div:has-text("Agents")')
-    .first();
-  if (await agentsTab.isVisible({ timeout: 4000 }).catch(() => false)) {
-    const atBox = await agentsTab.boundingBox();
-    if (atBox) {
-      await humanGlide(page, atBox.x + atBox.width / 2, atBox.y + atBox.height / 2, 20);
-      await humanClick(page);
-      console.log(`   ✓ Switched to Agents tab in Inspector!`);
-      await sleep(3500);
+  const agentsPos = await page.evaluate(() => {
+    // 1. Search inside shadow roots
+    for (const el of Array.from(document.querySelectorAll('*'))) {
+      if (el.shadowRoot) {
+        const items = Array.from(
+          el.shadowRoot.querySelectorAll('button, a, [role="tab"], div, span, p'),
+        );
+        const tab = items.find((e) => {
+          const t = (e.textContent || '').trim().toLowerCase();
+          return t === 'agents' || t === 'agent';
+        }) as HTMLElement;
+        if (tab) {
+          tab.click();
+          const r = tab.getBoundingClientRect();
+          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        }
+      }
+    }
+    // 2. Search main document
+    const docTab = Array.from(
+      document.querySelectorAll('button, a, [role="tab"], span, div'),
+    ).find((e) => {
+      const t = (e.textContent || '').trim().toLowerCase();
+      return t === 'agents' || t === 'agent';
+    }) as HTMLElement;
+    if (docTab) {
+      docTab.click();
+      const r = docTab.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+    return null;
+  });
+
+  if (agentsPos && agentsPos.x > 0 && agentsPos.y > 0) {
+    console.log(
+      `   🎯 Detected Agents tab at (${Math.round(agentsPos.x)}, ${Math.round(agentsPos.y)})`,
+    );
+    await humanGlide(page, agentsPos.x, agentsPos.y, 20);
+    await humanClick(page);
+    console.log(`   ✓ Switched to Agents tab in Inspector!`);
+    await sleep(4000);
+  } else {
+    // Fallback: search via Playwright locator
+    const agentsTab = page
+      .locator(
+        'button:has-text("Agents"), [role="tab"]:has-text("Agents"), span:has-text("Agents")',
+      )
+      .first();
+    if (await agentsTab.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const atBox = await agentsTab.boundingBox();
+      if (atBox) {
+        await humanGlide(page, atBox.x + atBox.width / 2, atBox.y + atBox.height / 2, 20);
+        await humanClick(page);
+        await sleep(3500);
+      }
     }
   }
 

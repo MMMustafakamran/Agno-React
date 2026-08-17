@@ -1,6 +1,0 @@
-- [x] show the package.json to show coplitkit and agui version in quickstart page
-- [x] remove threads pages from being recording
-- [x] slots : give prompt to all 3 tabs chats
-- [x] inspector : after inspector is clicked click on agents
-- [x] headless inst working , demo page
-- [x] display only notepad for db issue

@@ -34,10 +34,8 @@ export const runDisplayOnlyAction: PageActionHandler = async (
     }
   }
 
-  await showNotepadNote(page, 'display_only_notes.txt', [
-    'useComponent registers React components as display-only tools in AG-UI run input.',
-    'The Agno agent invokes the tool with structured parameters (city, temp, condition).',
-    'No backend database modifications are needed for frontend generative components.',
+  await showNotepadNote(page, 'error_notice.txt', [
+    'error : agno agent requires db , after adding sqlite this will work',
   ]);
 
   await humanGlide(page, 960, 500, 25);
