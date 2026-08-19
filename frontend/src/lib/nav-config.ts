@@ -7,7 +7,13 @@
  * but no longer appear in that sidebar.
  */
 
-export const DOC_SYNC_DATE = "2026-08-05";
+/**
+ * There is exactly one doc-sync date in this repo, and it is not here: it is
+ * `syncedAt` in `doc-snapshot/manifest.json`, written every time the sync
+ * button runs. A hand-maintained date alongside it only ever drifted out of
+ * agreement with the machine one, so it was removed — `/doc-sync` is the
+ * single place that answers "how current are these docs".
+ */
 export const DOCS_ROOT = "https://docs.copilotkit.ai/agno";
 
 /**
@@ -296,6 +302,19 @@ export const NAV: NavGroup[] = [
         summary:
           "A live error log fed by the provider-level onError callback, plus the error-code reference.",
         status: "working",
+      },
+    ],
+  },
+  {
+    title: "Doc Sync",
+    routes: [
+      {
+        path: "/doc-sync",
+        title: "Doc drift",
+        docPath: "/agno",
+        summary:
+          "Re-fetches the markdown behind every tracked doc page and diffs it against the stored snapshot, flagging changes inside code blocks.",
+        status: "reference",
       },
     ],
   },
