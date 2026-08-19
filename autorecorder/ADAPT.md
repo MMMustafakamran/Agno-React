@@ -97,6 +97,18 @@ thing most likely to be wrong after a port. Open each `ideFile` and read the
 range. If the frontend marks its interesting lines with `[!code highlight]` or
 `#region`, keep those markers — the doctor uses them to detect drift later.
 
+**Quickstart leads with the dependency manifest. This is not optional.** Its
+`ideFile` must be the frontend's `package.json` — or whatever names and pins
+dependencies in this stack — with the range covering the block that shows the
+CopilotKit and AG-UI versions, plus any `overrides`/`resolutions` that pin them.
+The quickstart code itself moves to the first `extraTabs` entry.
+
+The reason is that these packages move fast, and a recording is evidence. A video
+of a working demo says nothing useful unless the viewer can see which versions it
+worked against — and this is the one page every viewer watches first. It is also
+the fastest way to explain a bug report six months later. Keep it as tab one in
+every adaptation.
+
 ## Step 4 — The selector contract
 
 Edit `config/selectors.config.ts`.

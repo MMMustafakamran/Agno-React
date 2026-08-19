@@ -46,12 +46,22 @@ export const PAGES = definePages([
     videoName: 'Quickstart',
     docPath: 'quickstart',
     route: 'quickstart',
-    ideFile: 'frontend/src/app/quickstart/demo-chat/page.tsx',
-    startLine: 13,
-    endLine: 26,
-    // The three files the quickstart route itself puts side by side: the chat,
-    // the runtime binding, and the Python side that answers it.
+    // Quickstart leads with the dependency manifest, always: a demo is only
+    // meaningful against known versions, and CopilotKit and AG-UI both move fast
+    // enough that "it worked" is not a claim you can make without them on screen.
+    // The `overrides` block is inside the range on purpose -- the @ag-ui/client
+    // pin is a real constraint, not noise.
+    ideFile: 'frontend/package.json',
+    startLine: 12,
+    endLine: 27,
+    // Then the path itself: the chat, the runtime binding, and the Python side
+    // that answers it.
     extraTabs: [
+      {
+        filePath: 'frontend/src/app/quickstart/demo-chat/page.tsx',
+        startLine: 13,
+        endLine: 26,
+      },
       {
         filePath: 'frontend/src/app/api/copilotkit/route.ts',
         startLine: 20,
