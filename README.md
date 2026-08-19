@@ -410,6 +410,7 @@ npm run doctor            # static: config, files, line ranges, handlers
 npm run doctor:online     # also probes every demo route, doc URL, and selector
 npm run record -- --list  # what will be recorded
 npm run record            # all 16, in nav order
+npm run manifest          # record what was produced — run this after every recording
 ```
 
 Output lands in `autorecorder/videos/` as `AGNO-react-<NN>-<Name>.webm`, numbered
@@ -419,6 +420,15 @@ bloats history badly. Publish them as release assets instead.
 
 `npm run doctor` exiting 0 is the definition of a working configuration; it is
 what catches an IDE line range that drifted after someone edited a demo page.
+
+**Tracking which clips are current.** Since the videos are not versioned and each
+run overwrites the same filenames, `npm run manifest` writes
+`autorecorder/videos/manifest.json` and `MANIFEST.md` — ~12KB of committed text
+recording, per clip, when it was made and whether the source it demonstrates has
+changed since. Those two files are the QA record for the recordings, the way the
+table in §8 is for the routes: commit them, and the diff shows what each run
+changed. `npm run manifest:check` exits 1 if any clip is stale or missing. Note it
+tracks freshness, not correctness — a failed run still writes a video.
 
 **Only the 16 routes with a `demo-chat` page are recorded.** The five reference
 routes — `/`, `/threads`, `/threads/import`, `/threads/architecture`, and

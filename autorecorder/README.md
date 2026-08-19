@@ -83,6 +83,48 @@ failure, and the chat beside each of them still drives a real agent turn.
 
 ---
 
+## Tracking recordings
+
+Clips are **not** in git, and every run overwrites the same 16 filenames in place
+— so nothing about the files themselves says which are fresh. `npm run manifest`
+is what closes that gap:
+
+```bash
+npm run record            # produces the clips
+npm run manifest          # records their state — run this straight after
+```
+
+It writes two committed files next to the (uncommitted) videos:
+
+| File | For |
+|---|---|
+| `videos/manifest.json` | source of truth — per clip: mtime, size, sha256, the source files it shows, and a hash of those files plus the page definition |
+| `videos/MANIFEST.md` | the same thing as a table, readable on GitHub |
+
+Commit both. **The diff on those files is the record of what a run changed** —
+that is the whole mechanism. Together they are ~12KB, against ~84MB of video.
+
+| Status | Means |
+|---|---|
+| ✅ current | clip matches the code it shows |
+| 🆕 new | the clip changed since the last manifest — this run re-recorded it |
+| ⚠️ stale | a source file was modified *after* the clip was recorded |
+| ⚠️ drifted | mtimes look fine but the source content hash moved (mtimes all reset on a fresh clone, which hides staleness — this catches it) |
+| ❌ missing | a registered page with no clip on disk |
+
+A clip is judged against the files it actually puts on screen — its `ideFile` and
+any `extraTabs` — plus its own page definition, so changing a prompt or a
+highlighted line range marks it stale exactly as an edit to the code does.
+
+`npm run manifest:check` prints without writing and exits 1 if anything is stale
+or missing, which is the form to put in CI.
+
+**What it does not tell you: whether the run passed.** Playwright saves the video
+even when a page fails, so a clip from a failed run still looks current. Freshness
+and correctness are different questions — the run summary answers the second one.
+
+---
+
 ## Reading the summary
 
 ```

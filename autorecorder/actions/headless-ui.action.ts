@@ -1,6 +1,7 @@
 import { type Page } from 'playwright';
-import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
+import { humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
+import { waitForAgentResponseCompletion } from '../core/actions';
 
 /**
  * Deliberately NOT routed through the shared sendPrompt() helper.
@@ -12,112 +13,80 @@ import { type PageActionHandler, type PageRecordConfig } from '../core/types';
  * all, while this implementation streams reliably. The difference does not
  * reproduce headlessly, so the exact trigger is not pinned down yet.
  *
- * Worth noting either way: the Send button sits at y=1026..1064 in a 1080-tall
- * viewport while the taskbar overlay covers y>1032, so the real click is
- * swallowed by the overlay and the submit actually lands via the Enter retry.
+ * ── Why focus() and not a click ────────────────────────────────────────────
+ * The input and the Send button share one flex row pinned to the bottom of a
+ * `h-full` column, so at 1080p they sit at roughly y=1026..1064 -- underneath
+ * the simulated taskbar, which occupies the bottom 48px and swallows clicks.
+ * A real mouse click on the input therefore never lands, focus never moves, and
+ * every typed character goes nowhere. The recording then shows an empty box and
+ * no conversation.
+ *
+ * So: glide the virtual cursor there for the camera, but move focus
+ * programmatically, which no overlay can intercept. Submitting goes through the
+ * form's Enter handler for the same reason.
  */
+const INPUT = 'input[placeholder="Type a message..."]';
+
+/**
+ * Assistant bubbles only. Both roles carry `.max-w-md`; the user's is the one
+ * with `.ml-auto`, so excluding it leaves the agent's replies.
+ */
+const ASSISTANT_BUBBLE = '.max-w-md:not(.ml-auto)';
+
 export const runHeadlessUiAction: PageActionHandler = async (
   page: Page,
   config: PageRecordConfig,
 ) => {
-  console.log(`   [Headless UI] Waiting for custom headless interface to settle...`);
-  await page.waitForSelector('input[placeholder="Type a message..."], input', {
-    state: 'visible',
-    timeout: 15000,
-  });
+  console.log(`   [Headless UI] Waiting for the hand-built interface to settle...`);
+  const inputLocator = page.locator(INPUT).first();
+  await inputLocator.waitFor({ state: 'visible', timeout: 15000 });
   await sleep(800);
 
-  const inputLocator = page
-    .locator('input[placeholder="Type a message..."], input')
-    .first();
-  await inputLocator.scrollIntoViewIfNeeded();
-
+  // Cursor goes to the input for the camera; focus is set programmatically
+  // because the taskbar overlay covers this row.
   const inputBox = await inputLocator.boundingBox();
   if (inputBox) {
     await humanGlide(page, inputBox.x + 80, inputBox.y + inputBox.height / 2, 20);
-    await humanClick(page);
-  } else {
-    await inputLocator.click();
   }
+  await inputLocator.focus();
   await sleep(400);
 
-  // Type the prompt visibly
   console.log(`   [Headless UI] Typing prompt: "${config.prompt}"...`);
+  const before = await page.locator(ASSISTANT_BUBBLE).count().catch(() => 0);
   await page.keyboard.type(config.prompt, { delay: 35 });
   await sleep(350);
 
-  // Ensure input state is populated
-  const val = await inputLocator.inputValue().catch(() => '');
-  if (!val && config.prompt) {
+  // A controlled input that never received the keystrokes reads back empty --
+  // catch that here rather than discovering it on the finished video.
+  let value = await inputLocator.inputValue().catch(() => '');
+  if (!value) {
     await inputLocator.fill(config.prompt);
     await sleep(200);
+    value = await inputLocator.inputValue().catch(() => '');
+  }
+  if (!value.trim()) {
+    throw new Error(
+      `Headless UI prompt was never entered: "${INPUT}" is still empty after typing. ` +
+        'The input is at the bottom of the viewport, under the taskbar overlay -- ' +
+        'check that focus is being set programmatically rather than by clicking.',
+    );
   }
 
-  // Click the Send button
-  const sendBtn = page
-    .locator('button:has-text("Send"), button[type="submit"]')
-    .first();
-  if (await sendBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-    const sbBox = await sendBtn.boundingBox();
-    if (sbBox) {
-      await humanGlide(page, sbBox.x + sbBox.width / 2, sbBox.y + sbBox.height / 2, 18);
-      await humanClick(page);
-    } else {
-      await sendBtn.click();
-    }
-  } else {
-    await page.keyboard.press('Enter');
-  }
+  // The form submits on Enter; the Send button is under the overlay.
+  await page.keyboard.press('Enter');
+  await sleep(600);
 
-  // Double check if submit went through
-  await sleep(800);
   const remaining = await inputLocator.inputValue().catch(() => '');
   if (remaining.trim().length > 0) {
     await page.keyboard.press('Enter');
   }
 
-  console.log(`   ⏳ Actively detecting Headless UI assistant response bubble...`);
-  // Poll until assistant response starts and stabilizes
-  const streamStart = Date.now();
-  let previousText = '';
-  let stableCount = 0;
-
-  while (Date.now() - streamStart < 35000) {
-    const currentText = await page
-      .evaluate(() => {
-        const bubbles = document.querySelectorAll('.max-w-md');
-        if (bubbles.length < 2) return '';
-        const lastMsg = bubbles[bubbles.length - 1];
-        return (lastMsg.textContent || '').trim();
-      })
-      .catch(() => '');
-
-    if (currentText.length > 0 && currentText === previousText) {
-      stableCount++;
-      if (stableCount >= 4) {
-        console.log(`   ✅ Headless UI response streaming completed.`);
-        break;
-      }
-    } else {
-      stableCount = 0;
-      previousText = currentText;
-    }
-    await sleep(500);
-  }
-
-  // Glide cursor over the rendered assistant message
-  const assistantBubble = page.locator('.max-w-md:not(:first-child)').last();
-  if (await assistantBubble.isVisible({ timeout: 4000 }).catch(() => false)) {
-    const abBox = await assistantBubble.boundingBox();
-    if (abBox) {
-      console.log(
-        `   🎯 Detected Headless UI assistant message at (${Math.round(abBox.x)}, ${Math.round(abBox.y)})`,
-      );
-      await humanGlide(page, abBox.x + Math.min(abBox.width / 2, 200), abBox.y + 25, 22);
-    }
-  } else {
-    await humanGlide(page, 960, 400, 25);
-  }
-
-  await sleep(config.waitAfterPromptMs ?? 6000);
+  // Shared detector, pointed at this page's own bubbles -- so a page that never
+  // answers fails the run instead of quietly producing a video of an idle chat.
+  await waitForAgentResponseCompletion(
+    page,
+    config.waitAfterPromptMs ?? 4000,
+    before,
+    ASSISTANT_BUBBLE,
+  );
 };

@@ -1,0 +1,238 @@
+{
+  "generatedAt": "2026-08-19T15:31:16.586Z",
+  "framework": "Agno (Python)",
+  "videoPrefix": "AGNO-react",
+  "clips": {
+    "quickstart": {
+      "order": 1,
+      "id": "quickstart",
+      "name": "Quickstart",
+      "file": "AGNO-react-01-Quickstart.webm",
+      "sources": [
+        "frontend/src/app/quickstart/demo-chat/page.tsx",
+        "frontend/src/app/api/copilotkit/route.ts",
+        "backend/main.py"
+      ],
+      "sourceSha": "a8139f1661cb",
+      "recordedAt": "2026-08-19T13:52:00.300Z",
+      "bytes": 4629436,
+      "sha256": "65aeb5c00cce",
+      "status": "current"
+    },
+    "prebuilt-components": {
+      "order": 2,
+      "id": "prebuilt-components",
+      "name": "Prebuilt Components",
+      "file": "AGNO-react-02-PrebuiltComponents.webm",
+      "sources": [
+        "frontend/src/app/prebuilt-components/demo-chat/page.tsx"
+      ],
+      "sourceSha": "dbd75dd810cc",
+      "recordedAt": "2026-08-19T13:53:14.823Z",
+      "bytes": 4756224,
+      "sha256": "73ab40e2328a",
+      "status": "current"
+    },
+    "threads-drawer": {
+      "order": 3,
+      "id": "threads-drawer",
+      "name": "Rich Threads - Threads Drawer",
+      "file": "AGNO-react-03-ThreadsDrawer.webm",
+      "sources": [
+        "frontend/src/app/threads/drawer/demo-chat/page.tsx"
+      ],
+      "sourceSha": "34e7fb1a6cd9",
+      "recordedAt": "2026-08-19T13:54:09.207Z",
+      "bytes": 3602796,
+      "sha256": "163a6d96d298",
+      "status": "current"
+    },
+    "threads-headless": {
+      "order": 4,
+      "id": "threads-headless",
+      "name": "Rich Threads - Headless Threads",
+      "file": "AGNO-react-04-ThreadsHeadless.webm",
+      "sources": [
+        "frontend/src/app/threads/headless/demo-chat/page.tsx"
+      ],
+      "sourceSha": "442756ed6797",
+      "recordedAt": "2026-08-19T13:55:15.841Z",
+      "bytes": 4163120,
+      "sha256": "700458b2cc74",
+      "status": "current"
+    },
+    "threads-lifecycle": {
+      "order": 5,
+      "id": "threads-lifecycle",
+      "name": "Rich Threads - Thread & History Lifecycle",
+      "file": "AGNO-react-05-ThreadsLifecycle.webm",
+      "sources": [
+        "frontend/src/app/threads/lifecycle/demo-chat/page.tsx"
+      ],
+      "sourceSha": "320d01bc4b7b",
+      "recordedAt": "2026-08-19T13:56:31.956Z",
+      "bytes": 4739259,
+      "sha256": "ced0203e3b47",
+      "status": "current"
+    },
+    "programmatic-control": {
+      "order": 6,
+      "id": "programmatic-control",
+      "name": "Custom Look and Feel - Programmatic Control",
+      "file": "AGNO-react-06-ProgrammaticControl.webm",
+      "sources": [
+        "frontend/src/app/custom-look-and-feel/programmatic-control/demo-chat/page.tsx"
+      ],
+      "sourceSha": "fc2bc8a9113c",
+      "recordedAt": "2026-08-19T15:13:07.368Z",
+      "bytes": 11504921,
+      "sha256": "7aa977ac0033",
+      "status": "current"
+    },
+    "inspector": {
+      "order": 7,
+      "id": "inspector",
+      "name": "Custom Look and Feel - Inspector",
+      "file": "AGNO-react-07-Inspector.webm",
+      "sources": [
+        "frontend/src/components/providers.tsx",
+        "frontend/src/app/custom-look-and-feel/inspector/demo-chat/page.tsx"
+      ],
+      "sourceSha": "023d89dfbd92",
+      "recordedAt": "2026-08-19T15:15:17.212Z",
+      "bytes": 6787111,
+      "sha256": "0c6d611096d9",
+      "status": "current"
+    },
+    "slots": {
+      "order": 8,
+      "id": "slots",
+      "name": "Custom Look and Feel - Slots",
+      "file": "AGNO-react-08-Slots.webm",
+      "sources": [
+        "frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx"
+      ],
+      "sourceSha": "73a48398785f",
+      "recordedAt": "2026-08-19T15:13:13.237Z",
+      "bytes": 5730514,
+      "sha256": "6b5111d3d666",
+      "status": "current"
+    },
+    "headless-ui": {
+      "order": 9,
+      "id": "headless-ui",
+      "name": "Custom Look and Feel - Headless UI",
+      "file": "AGNO-react-09-HeadlessUI.webm",
+      "sources": [
+        "frontend/src/app/custom-look-and-feel/headless-ui/demo-chat/page.tsx"
+      ],
+      "sourceSha": "e3ea43453ee6",
+      "recordedAt": "2026-08-19T14:58:39.810Z",
+      "bytes": 6420793,
+      "sha256": "d1098e4203b8",
+      "status": "current"
+    },
+    "display-only": {
+      "order": 10,
+      "id": "display-only",
+      "name": "Generative UI - Display Only Component",
+      "file": "AGNO-react-10-DisplayOnly.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/your-components/display-only/demo-chat/page.tsx"
+      ],
+      "sourceSha": "a6873f94a7b7",
+      "recordedAt": "2026-08-19T14:47:31.067Z",
+      "bytes": 3803471,
+      "sha256": "f95f41603a02",
+      "status": "current"
+    },
+    "tool-rendering": {
+      "order": 11,
+      "id": "tool-rendering",
+      "name": "Generative UI - Tool Rendering",
+      "file": "AGNO-react-11-ToolRendering.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/tool-rendering/demo-chat/page.tsx"
+      ],
+      "sourceSha": "c7867d65d44a",
+      "recordedAt": "2026-08-19T14:30:05.560Z",
+      "bytes": 5387270,
+      "sha256": "7282cd410476",
+      "status": "current"
+    },
+    "frontend-tools": {
+      "order": 12,
+      "id": "frontend-tools",
+      "name": "App Control - Frontend Tools",
+      "file": "AGNO-react-12-FrontendTools.webm",
+      "sources": [
+        "frontend/src/app/frontend-tools/demo-chat/page.tsx",
+        "frontend/src/components/global-frontend-tools.tsx"
+      ],
+      "sourceSha": "c2749e1fe945",
+      "recordedAt": "2026-08-19T14:32:18.457Z",
+      "bytes": 6296130,
+      "sha256": "4b656d364ac0",
+      "status": "current"
+    },
+    "human-in-the-loop": {
+      "order": 13,
+      "id": "human-in-the-loop",
+      "name": "App Control - Human in the Loop",
+      "file": "AGNO-react-13-HumanInTheLoop.webm",
+      "sources": [
+        "frontend/src/components/global-frontend-tools.tsx",
+        "frontend/src/app/human-in-the-loop/demo-chat/page.tsx"
+      ],
+      "sourceSha": "55570cbc9c53",
+      "recordedAt": "2026-08-19T14:16:52.061Z",
+      "bytes": 3100987,
+      "sha256": "876f399b89cd",
+      "status": "current"
+    },
+    "copilot-runtime": {
+      "order": 14,
+      "id": "copilot-runtime",
+      "name": "Backend - Copilot Runtime",
+      "file": "AGNO-react-14-CopilotRuntime.webm",
+      "sources": [
+        "frontend/src/app/backend/copilot-runtime/demo-chat/page.tsx",
+        "frontend/src/app/api/copilotkit/route.ts"
+      ],
+      "sourceSha": "3b4b6309bfd6",
+      "recordedAt": "2026-08-19T14:34:16.103Z",
+      "bytes": 5644394,
+      "sha256": "92bdb35a1663",
+      "status": "current"
+    },
+    "ag-ui": {
+      "order": 15,
+      "id": "ag-ui",
+      "name": "Backend - AG-UI Protocol Stream",
+      "file": "AGNO-react-15-AgUi.webm",
+      "sources": [
+        "frontend/src/app/backend/ag-ui/demo-chat/page.tsx"
+      ],
+      "sourceSha": "fb0a585b87d1",
+      "recordedAt": "2026-08-19T14:35:55.831Z",
+      "bytes": 6298619,
+      "sha256": "8b9391576f2a",
+      "status": "current"
+    },
+    "error-debugging": {
+      "order": 16,
+      "id": "error-debugging",
+      "name": "Troubleshooting - Error Debugging & Observability",
+      "file": "AGNO-react-16-ErrorDebugging.webm",
+      "sources": [
+        "frontend/src/app/troubleshooting/error-debugging/demo-chat/page.tsx",
+        "frontend/src/components/providers.tsx"
+      ],
+      "sourceSha": "72629218524f",
+      "recordedAt": "2026-08-19T14:23:55.619Z",
+      "bytes": 6100455,
+      "sha256": "1eb80e296368",
+      "status": "current"
+    }
+  }
+}

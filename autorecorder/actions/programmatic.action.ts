@@ -1,7 +1,7 @@
 import { type Page } from 'playwright';
 import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
-import { sendPrompt } from '../core/actions';
+import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 
 export const runProgrammaticAction: PageActionHandler = async (
   page: Page,
@@ -29,7 +29,17 @@ export const runProgrammaticAction: PageActionHandler = async (
     timeoutMs: 12000,
   });
 
-  console.log(`   Waiting for Programmatic Control run to complete...`);
+  console.log(`   Waiting for the run to stream into the transcript...`);
   await humanGlide(page, 960, 500, 25);
-  await sleep(config.waitAfterPromptMs ?? 1500);
+
+  // This page renders its own transcript -- no CopilotKit message classes at
+  // all -- so the shared detector needs its own selector. Assistant rows are
+  // the `.mr-8` ones; the user's are `.ml-8`. Without this the handler could
+  // only sleep, and a run that never started still reported PASS.
+  await waitForAgentResponseCompletion(
+    page,
+    config.waitAfterPromptMs ?? 1500,
+    0,
+    'section.space-y-2 > div.mr-8',
+  );
 };
