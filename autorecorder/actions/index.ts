@@ -28,6 +28,8 @@ import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { runStandardAction } from '../core/actions';
 import { type Page } from 'playwright';
 
+import { waitForPageReady } from './page-ready';
+
 import { runAgUiAction } from './ag-ui.action';
 import { runDisplayOnlyAction } from './display-only.action';
 import { runErrorDebuggingAction } from './error-debugging.action';
@@ -71,6 +73,14 @@ export async function executePageAction(
   config: PageRecordConfig,
   rootPath: string,
 ): Promise<void> {
+  // One gate for every page, including the ones that fall through to
+  // runStandardAction. The engine waits for the route to respond and for
+  // `chatReady` to be visible, but a dev server compiles client chunks lazily,
+  // so markup can be on screen before anything is wired to it -- and a prompt
+  // typed into an unhydrated input goes nowhere. Handlers that remount a chat
+  // mid-run (tab switches) call waitForDomSettled again themselves.
+  await waitForPageReady(page, { label: config.id });
+
   const handler = ACTION_MAP[config.id] ?? runStandardAction;
   await handler(page, config, rootPath);
 }

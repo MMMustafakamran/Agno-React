@@ -2,6 +2,7 @@ import { type Page } from 'playwright';
 import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { promptsFor, sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
+import { waitForDomSettled } from './page-ready';
 
 /**
  * This app registers exactly two agent ids -- `default` and `agno_agent` -- and
@@ -37,8 +38,10 @@ export const runRuntimeAction: PageActionHandler = async (
         } else {
           await tab.click();
         }
-        // The chat remounts on `key={agentId}`, so give it a beat to paint.
-        await sleep(1200);
+        // The chat remounts on `key={agentId}`; wait for that to finish rather
+        // than guessing at how long it takes.
+        await sleep(400);
+        await waitForDomSettled(page, { settleMs: 800 });
       }
     }
 

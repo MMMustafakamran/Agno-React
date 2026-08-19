@@ -65,6 +65,14 @@ together.
 If the backend is not Python, `backendStartCmd` and `backendHealthPath` change.
 They are only ever printed or fetched; nothing parses them.
 
+`runtimeWarmPath` is the frontend path the browser posts to in order to reach the
+agent — `/api/copilotkit` where the runtime is mounted inside the app, or whatever
+this project uses. It is requested once before the first prompt of every
+recording, because a dev server builds API routes on first request and that first
+request would otherwise be the prompt itself: the endpoint spends its time
+compiling instead of answering, and the run reports that the agent never replied.
+Set it to `''` for a project where nothing needs warming.
+
 ## Step 2 — Fetch the real doc nav
 
 Do not copy the page list from another repo, and do not work from memory. Fetch
@@ -146,6 +154,21 @@ Then record the rest.
 **A page that never answers now fails the run.** That is deliberate — it used to
 report `[PASS]`. If a page fails this way, the demo is broken or
 `assistantMessage` does not match; both are real findings.
+
+**A cold dev server serves markup before it serves behaviour.** The engine waits
+for the demo route to respond and for `chatReady` to be visible, then hands over —
+but client chunks are compiled lazily, so the input can be on screen with nothing
+wired to it. Typing then goes nowhere: the characters land, the submit does not
+fire, and the page fails as "agent never responded" while looking perfectly fine
+on video. `actions/page-ready.ts` closes this: `waitForPageReady` (called once for
+every page in `executePageAction`) waits for `document.readyState`, a DOM-stability
+window, an input that is genuinely enabled, and the warmed endpoint above.
+`waitForDomSettled` is the lighter half, for handlers that remount a chat
+mid-run — a tab switch has exactly the same problem as first load.
+
+That file is framework-agnostic on purpose and **belongs in `core/`**; it lives in
+`actions/` only because `core/` is frozen. Every repo using this suite has the
+same gap, so promote and port it.
 
 **Pages that replace the message view.** A page that swaps in a custom message
 component renders none of CopilotKit's classes, so detection finds nothing and

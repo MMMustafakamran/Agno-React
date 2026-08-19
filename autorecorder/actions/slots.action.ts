@@ -2,6 +2,7 @@ import { type Page } from 'playwright';
 import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { promptsFor, sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
+import { waitForDomSettled } from './page-ready';
 
 /**
  * The three slot customization levels, in the order the page tabs them.
@@ -38,7 +39,11 @@ export const runSlotsAction: PageActionHandler = async (
         await humanGlide(page, tBox.x + tBox.width / 2, tBox.y + tBox.height / 2, 20);
         await humanClick(page);
       }
-      await sleep(1000);
+      // Each tab mounts a different CopilotChat. On a cold route the chunk for
+      // the newly shown level can still be compiling, so a fixed sleep is a
+      // guess -- wait for the swap to actually finish instead.
+      await sleep(400);
+      await waitForDomSettled(page, { settleMs: 800 });
     }
 
     const prompt = prompts[level] ?? prompts[prompts.length - 1];

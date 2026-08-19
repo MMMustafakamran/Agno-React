@@ -6,26 +6,26 @@ The `.webm` files are **not** in git; this file is how their state is tracked.
 Regenerate it after every `npm run record`, and commit it — the diff is the
 record of what that run changed.
 
-Generated **2026-08-19 15:31** · 16 current
+Generated **2026-08-19 16:51** · 16 new
 
 | # | Clip | Recorded | Size | Status | Note |
 |---|------|----------|------|--------|------|
-| 01 | `AGNO-react-01-Quickstart.webm` | 2026-08-19 13:52 | 4.4 MB | ✅ current |  |
-| 02 | `AGNO-react-02-PrebuiltComponents.webm` | 2026-08-19 13:53 | 4.5 MB | ✅ current |  |
-| 03 | `AGNO-react-03-ThreadsDrawer.webm` | 2026-08-19 13:54 | 3.4 MB | ✅ current |  |
-| 04 | `AGNO-react-04-ThreadsHeadless.webm` | 2026-08-19 13:55 | 4.0 MB | ✅ current |  |
-| 05 | `AGNO-react-05-ThreadsLifecycle.webm` | 2026-08-19 13:56 | 4.5 MB | ✅ current |  |
-| 06 | `AGNO-react-06-ProgrammaticControl.webm` | 2026-08-19 15:13 | 11.0 MB | ✅ current |  |
-| 07 | `AGNO-react-07-Inspector.webm` | 2026-08-19 15:15 | 6.5 MB | ✅ current |  |
-| 08 | `AGNO-react-08-Slots.webm` | 2026-08-19 15:13 | 5.5 MB | ✅ current |  |
-| 09 | `AGNO-react-09-HeadlessUI.webm` | 2026-08-19 14:58 | 6.1 MB | ✅ current |  |
-| 10 | `AGNO-react-10-DisplayOnly.webm` | 2026-08-19 14:47 | 3.6 MB | ✅ current |  |
-| 11 | `AGNO-react-11-ToolRendering.webm` | 2026-08-19 14:30 | 5.1 MB | ✅ current |  |
-| 12 | `AGNO-react-12-FrontendTools.webm` | 2026-08-19 14:32 | 6.0 MB | ✅ current |  |
-| 13 | `AGNO-react-13-HumanInTheLoop.webm` | 2026-08-19 14:16 | 3.0 MB | ✅ current |  |
-| 14 | `AGNO-react-14-CopilotRuntime.webm` | 2026-08-19 14:34 | 5.4 MB | ✅ current |  |
-| 15 | `AGNO-react-15-AgUi.webm` | 2026-08-19 14:35 | 6.0 MB | ✅ current |  |
-| 16 | `AGNO-react-16-ErrorDebugging.webm` | 2026-08-19 14:23 | 5.8 MB | ✅ current |  |
+| 01 | `AGNO-react-01-Quickstart.webm` | 2026-08-19 16:16 | 4.6 MB | 🆕 new |  |
+| 02 | `AGNO-react-02-PrebuiltComponents.webm` | 2026-08-19 16:17 | 3.8 MB | 🆕 new |  |
+| 03 | `AGNO-react-03-ThreadsDrawer.webm` | 2026-08-19 16:18 | 3.4 MB | 🆕 new |  |
+| 04 | `AGNO-react-04-ThreadsHeadless.webm` | 2026-08-19 16:19 | 3.7 MB | 🆕 new |  |
+| 05 | `AGNO-react-05-ThreadsLifecycle.webm` | 2026-08-19 16:21 | 4.0 MB | 🆕 new |  |
+| 06 | `AGNO-react-06-ProgrammaticControl.webm` | 2026-08-19 16:22 | 5.1 MB | 🆕 new |  |
+| 07 | `AGNO-react-07-Inspector.webm` | 2026-08-19 16:23 | 4.5 MB | 🆕 new |  |
+| 08 | `AGNO-react-08-Slots.webm` | 2026-08-19 16:25 | 3.8 MB | 🆕 new |  |
+| 09 | `AGNO-react-09-HeadlessUI.webm` | 2026-08-19 16:26 | 3.9 MB | 🆕 new |  |
+| 10 | `AGNO-react-10-DisplayOnly.webm` | 2026-08-19 16:27 | 3.2 MB | 🆕 new |  |
+| 11 | `AGNO-react-11-ToolRendering.webm` | 2026-08-19 16:28 | 3.6 MB | 🆕 new |  |
+| 12 | `AGNO-react-12-FrontendTools.webm` | 2026-08-19 16:29 | 5.0 MB | 🆕 new |  |
+| 13 | `AGNO-react-13-HumanInTheLoop.webm` | 2026-08-19 16:31 | 4.0 MB | 🆕 new |  |
+| 14 | `AGNO-react-14-CopilotRuntime.webm` | 2026-08-19 16:32 | 4.2 MB | 🆕 new |  |
+| 15 | `AGNO-react-15-AgUi.webm` | 2026-08-19 16:34 | 5.4 MB | 🆕 new |  |
+| 16 | `AGNO-react-16-ErrorDebugging.webm` | 2026-08-19 16:36 | 5.6 MB | 🆕 new |  |
 
 **Status meanings**
 

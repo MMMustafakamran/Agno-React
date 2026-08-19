@@ -188,8 +188,9 @@ to change for a port, that is a bug in this folder — see ADAPT.md.
    with Shiki, with the page's line range selected. Multi-tab pages switch tabs.
    Served from the frontend's origin via an intercepted route, so the doc page is
    fully unloaded rather than painted over. Clicks Chrome on the taskbar.
-3. **Demo** — opens the chrome-free demo route, types the prompt, waits for the
-   reply to finish streaming, and pauses for reading.
+3. **Demo** — opens the chrome-free demo route, waits for it to be genuinely
+   ready, types the prompt, waits for the reply to finish streaming, and pauses
+   for reading.
 
 Two details worth knowing, because both were bugs once:
 
@@ -200,6 +201,13 @@ Two details worth knowing, because both were bugs once:
 - Playwright starts recording when the page is created, so the first navigation
   is dead footage. The doc URL is warmed in a throwaway page first, which cuts
   it roughly in half; removing the rest would need an ffmpeg trim in post.
+- A dev server serves markup before it serves behaviour. "The route responded"
+  and "the chat works" are different claims: client chunks compile lazily, and
+  API routes compile on their *first request* — which would otherwise be the
+  prompt. `actions/page-ready.ts` waits for the document to finish, the DOM to
+  stop changing, the input to be genuinely enabled, and `runtimeWarmPath` to be
+  built, before any handler types anything. Without it a cold route produces a
+  video of a prompt that was never really sent.
 
 ---
 
@@ -214,6 +222,13 @@ match this app's messages. Run `npm run doctor --online` to tell the two apart.
 
 **The IDE highlights the wrong lines** — the line range drifted. `npm run doctor`
 names the file and where its markers actually are now.
+
+**A page fails only on the first run after starting the dev server** — it was
+still compiling. The readiness gate absorbs this (it will log
+`agent endpoint compiled in Ns` when it did real work), but the *agent's* own
+cold start is separate: the first model call after starting the backend can take
+~60s, which is longer than the 30s response window. Send one message by hand, or
+record a single page, before running the full suite.
 
 **A recording passes but the video is wrong** — the doctor cannot see cursor
 placement or highlight correctness. Watch it.

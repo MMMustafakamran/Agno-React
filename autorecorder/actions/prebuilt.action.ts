@@ -2,6 +2,7 @@ import { type Page } from 'playwright';
 import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { promptsFor, sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
+import { waitForDomSettled } from './page-ready';
 
 export const runPrebuiltAction: PageActionHandler = async (
   page: Page,
@@ -21,7 +22,8 @@ export const runPrebuiltAction: PageActionHandler = async (
     await humanGlide(page, sBox.x + sBox.width / 2, sBox.y + sBox.height / 2, 20);
     await humanClick(page);
   }
-  await sleep(1000);
+  await sleep(400);
+  await waitForDomSettled(page, { settleMs: 800 });
 
   // Focus the sidebar input if visible
   const sidebarInput = page
@@ -46,7 +48,8 @@ export const runPrebuiltAction: PageActionHandler = async (
     await humanGlide(page, pBox.x + pBox.width / 2, pBox.y + pBox.height / 2, 20);
     await humanClick(page);
   }
-  await sleep(1000);
+  await sleep(400);
+  await waitForDomSettled(page, { settleMs: 800 });
 
   // Click floating launcher in bottom corner if present
   const popupLauncher = page

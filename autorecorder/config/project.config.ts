@@ -56,6 +56,21 @@ export interface ProjectConfig {
    * Set to '' if this project's demos live directly on the route.
    */
   demoSuffix: string;
+
+  /**
+   * Frontend path the browser calls to reach the agent, relative to
+   * `frontendUrl` — e.g. '/api/copilotkit'.
+   *
+   * Hit once before the first prompt of every recording. A dev server compiles
+   * API routes lazily and only on first request, so without this the *page* is
+   * ready while the endpoint behind it is not: the first POST then spends its
+   * time compiling instead of answering, and the recorder reports that the agent
+   * never replied. Measured here at 59s of compile inside a 74s request.
+   *
+   * The request is expected to fail (a GET against a POST-only route answers
+   * 405); compiling it is the whole point. Set to '' to skip.
+   */
+  runtimeWarmPath: string;
 }
 
 export const PROJECT: ProjectConfig = {
@@ -75,6 +90,9 @@ export const PROJECT: ProjectConfig = {
   backendStartCmd: 'cd backend && uv run main.py',
 
   demoSuffix: '/demo-chat',
+
+  // The Copilot Runtime lives inside the Next app; there is no third server.
+  runtimeWarmPath: '/api/copilotkit',
 };
 
 /** Absolute doc URL for a page's `docPath`. */

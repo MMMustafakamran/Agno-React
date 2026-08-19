@@ -436,10 +436,14 @@ routes — `/`, `/threads`, `/threads/import`, `/threads/architecture`, and
 recorder has no way to register a page without a demo URL. See
 [`autorecorder/README.md`](autorecorder/README.md#scope-in-this-repo).
 
-One thing to know before a cold run: the **first** agent turn after starting the
-backend can take ~60s (model cold start), which is longer than the recorder's 30s
-response window, so it fails that page. Send one message in the app by hand — or
-record a single page first — before running the full suite.
+Two cold-start effects, one handled and one not. The **frontend** kind is
+absorbed: a dev server compiles page chunks lazily and API routes on first
+request, so the recorder waits for the demo route to settle and warms
+`/api/copilotkit` before typing anything — without that, a prompt goes into an
+input nothing is wired to yet. The **agent** kind is not: the first model call
+after starting the backend can take ~60s, longer than the recorder's 30s response
+window, so it fails that page. Send one message in the app by hand — or record a
+single page first — before running the full suite.
 
 ---
 
