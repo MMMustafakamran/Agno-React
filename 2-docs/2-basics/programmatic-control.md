@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/programmatic-control
+
 # Programmatic Control
 
 > Control your Agno agent programmatically with useAgent and copilotkit.runAgent().
@@ -470,3 +472,4 @@ const handleStop = () => {
   copilotkit.stopAgent({ agent });
 };
 ```
+

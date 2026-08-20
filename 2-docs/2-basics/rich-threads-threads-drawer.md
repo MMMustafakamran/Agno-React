@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/prebuilt-components/copilot-threads-drawer
+
 # Threads Drawer
 
 > Drop-in threads drawer that lists, switches, and manages conversations next to your chat.
@@ -141,3 +143,4 @@ a locked view in place of the list.
 - [Headless Threads](/agno/headless-threads): build a custom UI with the `useThreads` data layer
 - [Threads Drawer reference (React)](/reference/components/CopilotThreadsDrawer)
 - [CopilotChat](/agno/prebuilt-components/chat): the chat the drawer connects to
+

@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/generative-ui/tool-rendering
+
 # Tool Rendering
 
 > Render your agent's tool calls with custom UI components.
@@ -159,3 +161,4 @@ const YourMainContent = () => {
   [`useRenderTool`](/reference/v2/hooks/useRenderTool) for named or wildcard
   renderer registration.
 </Callout>
+

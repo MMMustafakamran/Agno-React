@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/headless-threads
+
 # Headless Threads
 
 > Build a custom thread UI with useThreads while CopilotKit handles persistence, replay, synchronization, and lifecycle infrastructure.
@@ -199,3 +201,4 @@ before exposing thread lists or lifecycle actions.
 - **Thread architecture:** [Threads & Persistence Architecture](/agno/premium/threads-explained) — event replay model and WebSocket sync
 - **Production self-hosting:** [Self-Hosting Enterprise Intelligence](/agno/premium/self-hosting) — run the Threads platform inside your infrastructure with CopilotKit Engineering
 - **API reference:** [useThreads](/reference/hooks/useThreads) — parameters, return values, types
+

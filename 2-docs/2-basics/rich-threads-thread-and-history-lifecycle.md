@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/threads-lifecycle
+
 # Thread & History Lifecycle
 
 > How a threadId is created, how conversation history is restored, how to switch or start threads, and how CopilotKit threads relate to your agent framework's own persistence.
@@ -244,3 +246,4 @@ Practically, MCP App UI restores the same way the rest of the conversation does:
 - [Threads & Persistence Architecture](/agno/premium/threads-explained) — server-side replay, resume, realtime sync
 - [Multi-conversation chat](/tutorials/multi-conversation-chat) — build a chat-history sidebar
 - [Importing and synchronizing thread history](/agno/threads-import) — bring existing framework conversations into the platform and keep future runs continuous
+

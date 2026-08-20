@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/custom-look-and-feel/slots
+
 # Slots
 
 > Customize any part of the chat UI by overriding individual sub-components via slots for Agno.
@@ -312,3 +314,4 @@ Available via `toggleButton={{ ... }}`:
 | ----------- | ----------------------------------- |
 | `openIcon`  | Icon shown when the chat is closed. |
 | `closeIcon` | Icon shown when the chat is open.   |
+

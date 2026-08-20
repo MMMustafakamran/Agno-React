@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/copilot-runtime
+
 # Copilot Runtime
 
 > The Copilot Runtime is the backend that connects your frontend to your AI agents, providing authentication, middleware, routing, and more.
@@ -166,3 +168,4 @@ There are important things to understand before going this route:
 | **Ecosystem Features** | Full support                | Limited           |
 | **CopilotKit Support** | Supported                   | Not supported     |
 | **Setup**              | Requires a backend endpoint | Frontend-only     |
+

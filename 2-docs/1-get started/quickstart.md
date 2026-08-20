@@ -1,3 +1,5 @@
+﻿Source: https://docs.copilotkit.ai/agno/quickstart
+
 # Quickstart
 
 > Turn your Agno agent into an agent-native application in 10 minutes.
@@ -375,3 +377,4 @@ Now that you have your basic agent setup, explore these advanced features:
   autoPlay
   muted
 />
+
