@@ -2,41 +2,71 @@ import { type Page } from 'playwright';
 import { humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
+import { captureErrors, showErrorConsole } from './error-console';
 
 /**
- * `useComponent` renders a React component from a tool call -- here a weather
+ * `useComponent` renders a React component from a tool call — here a weather
  * card, with no handler and nothing to interact with.
  *
- * The card is generative UI, so it can appear while the reply is still
- * streaming. Waiting only for the card and then sleeping a fixed interval let
- * the recording end mid-answer, or end with no answer at all and still report
- * PASS -- so the card wait is a cue for the camera, and the shared detector is
- * what decides whether the page actually worked.
+ * On this stack the page does not finish cleanly: the card renders, the answer
+ * streams, and then the run dies with Agno's "Frontend tool resume requires a
+ * database". The agent needs somewhere to persist state before it can resume
+ * after an externally-executed tool, and this repo configures no `db`.
+ *
+ * The recording shows both halves. Ending at the card would imply a working
+ * feature; failing the page would produce nothing at all. Neither helps someone
+ * judging whether this integration is ready, so the error goes on screen.
  */
 export const runDisplayOnlyAction: PageActionHandler = async (
   page: Page,
   config: PageRecordConfig,
 ) => {
-  console.log(`   [Display Only Component] Prompting the agent to render WeatherCard...`);
-  const msgCount = await sendPrompt(page, config.prompt, { timeoutMs: 12000 });
+  const errors = captureErrors(page);
 
-  console.log(`   Waiting for the generative WeatherCard to render inline...`);
-  const weatherCard = page.locator('div:has-text("Tokyo"), div:has-text("77°F")').last();
-  await weatherCard.waitFor({ state: 'visible', timeout: 25000 }).catch(() => {});
+  try {
+    console.log(`   [Display Only Component] Prompting the agent to render WeatherCard...`);
+    const msgCount = await sendPrompt(page, config.prompt, { timeoutMs: 12000 });
 
-  if (await weatherCard.isVisible({ timeout: 3000 }).catch(() => false)) {
-    const box = await weatherCard.boundingBox();
-    if (box) {
-      console.log(
-        `   🎯 Card rendered at (${Math.round(box.x)}, ${Math.round(box.y)})`,
-      );
-      await humanGlide(page, box.x + box.width / 2, box.y + box.height / 2, 22);
-      await sleep(1500);
+    console.log(`   Waiting for the generative WeatherCard to render inline...`);
+    const weatherCard = page.locator('div:has-text("Tokyo"), div:has-text("77°F")').last();
+    await weatherCard.waitFor({ state: 'visible', timeout: 25000 }).catch(() => {});
+
+    if (await weatherCard.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const box = await weatherCard.boundingBox();
+      if (box) {
+        console.log(`   🎯 Card rendered at (${Math.round(box.x)}, ${Math.round(box.y)})`);
+        await humanGlide(page, box.x + box.width / 2, box.y + box.height / 2, 22);
+        await sleep(1500);
+      }
     }
-  } else {
-    console.warn(`   ⚠️ No weather card found -- the reply may be plain text.`);
-  }
 
-  // The part that can fail: the reply itself has to arrive and finish.
-  await waitForAgentResponseCompletion(page, config.waitAfterPromptMs ?? 4000, msgCount);
+    // The reply usually completes before the failure lands, so a throw here is
+    // only fatal when the browser also reported nothing -- that would be an
+    // unexplained silence rather than the known limitation.
+    try {
+      await waitForAgentResponseCompletion(page, 1500, msgCount);
+    } catch (e) {
+      if (errors.entries().length === 0) throw e;
+      console.log(`   ℹ️ No reply completed, but the browser reported an error — showing it.`);
+    }
+
+    // The failure arrives after the answer; give it a moment to surface.
+    await sleep(3000);
+
+    const captured = errors.entries();
+    if (captured.length > 0) {
+      console.log(`   🧾 Surfacing ${captured.length} browser error(s) on screen.`);
+      await showErrorConsole(page, captured, {
+        title: 'Browser console — run did not complete',
+        note: 'Agno cannot resume after an external tool without a configured database.',
+      });
+      await humanGlide(page, 700, 780, 22);
+      await sleep(config.waitAfterPromptMs ?? 4000);
+    } else {
+      console.log(`   ✓ No browser errors captured — the run completed cleanly.`);
+      await sleep(config.waitAfterPromptMs ?? 4000);
+    }
+  } finally {
+    errors.stop();
+  }
 };

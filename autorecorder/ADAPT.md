@@ -180,7 +180,19 @@ mid-run — a tab switch has exactly the same problem as first load.
 
 That file is framework-agnostic on purpose and **belongs in `core/`**; it lives in
 `actions/` only because `core/` is frozen. Every repo using this suite has the
-same gap, so promote and port it.
+same gap, so promote and port it. The same applies to `actions/error-console.ts`
+— see below.
+
+**Some demos are supposed to fail, and that is worth recording.** A page can be
+broken for a reason outside the repo — a missing backend capability, an
+unimplemented upstream feature — and there the honest recording is the failure,
+not a video that stops just before it. `actions/error-console.ts` collects what
+the browser reports during a run (`console` errors, page errors, failed requests,
+minus the usual dev-server noise) and renders it into a panel over the page, so
+the video shows the feature *and* the reason it stopped. Guard it the way the
+handlers here do: only show the panel when something was actually reported, and
+still fail the page when it neither answers nor errors — otherwise this becomes a
+way to make genuine breakage look intentional.
 
 **Pages that replace the message view.** A page that swaps in a custom message
 component renders none of CopilotKit's classes, so detection finds nothing and

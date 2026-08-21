@@ -284,10 +284,10 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/inspector` | `/custom-look-and-feel/inspector` | ✅ Working | Dev-only by design. |
 | `/agno/custom-look-and-feel/slots` | `/custom-look-and-feel/slots` | ✅ Working | **Not in the doc sidebar**, but the page resolves (HTTP 200). |
 | `/agno/custom-look-and-feel/headless-ui` | `/custom-look-and-feel/headless-ui` | ✅ Working | **Not in the doc sidebar**; resolves. |
-| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ✅ Working | `useComponent`; verified over the wire. Needs no backend declaration. |
+| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ⚠️ Partial | Card renders and the answer streams, then the run dies — see Known issues #12. |
 | `/agno/generative-ui/your-components/interactive` | `/generative-ui/your-components/interactive` | 🚧 Not started | Upstream doc page is an empty stub — deliberately left blank. |
 | `/agno/generative-ui/tool-rendering` | `/generative-ui/tool-rendering` | ✅ Working | Named + wildcard renderers; tool call verified over the wire. |
-| `/agno/frontend-tools` | `/frontend-tools` | ✅ Working | Verified: tool call emitted with no result, awaiting the browser. |
+| `/agno/frontend-tools` | `/frontend-tools` | ⚠️ Partial | Browser tool executes and the panel updates, but the run cannot resume — see Known issues #12. |
 | `/agno/human-in-the-loop` | `/human-in-the-loop` | ✅ Working | **Not in the doc sidebar**; linked from Quickstart and resolves. |
 | `/agno/copilot-runtime` | `/backend/copilot-runtime` | ✅ Working | Two agent ids verified via the runtime's `info` method. |
 | `/agno/ag-ui` | `/backend/ag-ui` | ✅ Working | Live event panel. |
@@ -342,6 +342,27 @@ The stub still has a purpose — it makes the tool visible to the agent's own in
 **11. Three pages resolve but are missing from the sidebar**
 `human-in-the-loop`, `custom-look-and-feel/slots`, and `custom-look-and-feel/headless-ui` all return HTTP 200 and are linked from other pages, but none appear in the doc nav. All three are implemented here and flagged "Not in doc sidebar".
 
+**12. Resuming after a browser-executed tool needs a database Agno does not have here**
+
+Both [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools) and
+[Display-only](https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only)
+work right up to the point where the result of an externally-executed tool comes
+back. The browser half succeeds — the greeting panel fills in, the weather card
+renders — and then the Agno process logs:
+
+```
+ERROR    Error running entity: Frontend tool resume requires a database
+```
+
+`backend/agent.py` configures no `db`, so there is nowhere to persist the paused
+run, and it stops instead of resuming. Neither doc page mentions a persistence
+requirement for frontend tools. The fix is presumably to give the agent a `db`
+(e.g. `SqliteDb`); untested here, so it is recorded rather than claimed.
+
+The recordings for both pages show this deliberately: `autorecorder` puts the
+browser's own error on screen at the end of those two clips rather than cutting
+away just before the failure.
+
 ---
 
 ## 10. Troubleshooting
@@ -356,6 +377,7 @@ The stub still has a purpose — it makes the tool visible to the agent's own in
 | Backend exits: `Form data requires "python-multipart"` | Missing transitive dep | `uv add python-multipart` (already in this repo). |
 | Backend exits: `OPENAI_API_KEY is not set` | No key | Copy `.env.example` → `backend/.env`. Failing fast is intentional. |
 | Inspector never appears | Production build | It is disabled unconditionally in production. Use `npm run dev`. |
+| Browser tool visibly runs, then the chat stops dead | Agno cannot resume a paused run without a `db` | Expected on this repo — see Known issues #12. The backend logs `Frontend tool resume requires a database`. |
 
 ---
 

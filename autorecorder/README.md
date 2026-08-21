@@ -125,6 +125,26 @@ and correctness are different questions — the run summary answers the second o
 
 ---
 
+## Pages that are supposed to fail
+
+Not every demo works, and some do not work for reasons outside this repo. On this
+stack `display-only` and `frontend-tools` both stream an answer, run their tool,
+and then stop: Agno needs a configured database to resume after an
+externally-executed tool, and this repo configures none.
+
+Recording those two as successes would imply a working feature; failing them
+would produce nothing to look at. Both handlers instead capture what the browser
+reported during the run and render it into a panel over the page before the
+recording ends — `actions/error-console.ts`. The video shows the feature *and*
+the reason it stopped.
+
+Two rules keep that from becoming a way to hide real breakage:
+
+- The panel only appears when the browser actually reported something. A silent
+  page still fails the run.
+- The reply is still awaited normally. A page that neither answers nor errors is
+  an unexplained failure and is treated as one.
+
 ## Reading the summary
 
 ```
@@ -160,6 +180,8 @@ autorecorder/
 │
 ├── actions/                    ← ★ what to DO on each page
 │   ├── index.ts                  page id → handler registry
+│   ├── page-ready.ts             wait until the app can actually be driven
+│   ├── error-console.ts          put browser errors on screen when that is the story
 │   └── *.action.ts               per-page interaction scripts
 │
 ├── core/                       ← ✖ DO NOT EDIT — no framework knowledge here
