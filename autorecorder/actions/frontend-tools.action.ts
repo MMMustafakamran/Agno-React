@@ -2,7 +2,7 @@ import { type Page } from 'playwright';
 import { humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
-import { captureErrors, showErrorConsole } from './error-console';
+import { captureErrors, openDevToolsConsole } from './error-console';
 
 /**
  * Browser-executed tools: the agent calls `sayHello`, the handler runs in this
@@ -56,11 +56,9 @@ export const runFrontendToolsAction: PageActionHandler = async (
     const captured = errors.entries();
     if (captured.length > 0) {
       console.log(`   🧾 Surfacing ${captured.length} browser error(s) on screen.`);
-      await showErrorConsole(page, captured, {
-        title: 'Browser console — tool ran, run did not finish',
+      await openDevToolsConsole(page, captured, {
         note: 'The browser tool executed; Agno needs a configured database to resume afterwards.',
       });
-      await humanGlide(page, 700, 780, 22);
       await sleep(config.waitAfterPromptMs ?? 4000);
     } else {
       console.log(`   ✓ No browser errors captured — the run completed cleanly.`);

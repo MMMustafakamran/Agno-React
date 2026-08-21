@@ -2,7 +2,7 @@ import { type Page } from 'playwright';
 import { humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
-import { captureErrors, showErrorConsole } from './error-console';
+import { captureErrors, openDevToolsConsole } from './error-console';
 
 /**
  * `useComponent` renders a React component from a tool call — here a weather
@@ -56,11 +56,9 @@ export const runDisplayOnlyAction: PageActionHandler = async (
     const captured = errors.entries();
     if (captured.length > 0) {
       console.log(`   🧾 Surfacing ${captured.length} browser error(s) on screen.`);
-      await showErrorConsole(page, captured, {
-        title: 'Browser console — run did not complete',
+      await openDevToolsConsole(page, captured, {
         note: 'Agno cannot resume after an external tool without a configured database.',
       });
-      await humanGlide(page, 700, 780, 22);
       await sleep(config.waitAfterPromptMs ?? 4000);
     } else {
       console.log(`   ✓ No browser errors captured — the run completed cleanly.`);

@@ -23,7 +23,7 @@
  */
 
 import { type Page } from 'playwright';
-import { sleep } from '../core/overlays/cursor';
+import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 
 /** One thing the browser complained about. */
 export interface CapturedError {
@@ -107,35 +107,37 @@ export function captureErrors(page: Page): ErrorCollector {
 }
 
 export interface ErrorConsoleOptions {
-  /** Heading on the panel. Say what the viewer is looking at. */
-  title?: string;
-  /** One line under the heading explaining why the failure is expected. */
+  /** Sits in the console's own message area, above the errors. */
   note?: string;
   /** Longest an entry may run before it is cut, so one stack trace cannot fill the frame. */
   maxChars?: number;
   /** Most entries to show. */
   maxEntries?: number;
+  /** Move the virtual cursor down to the panel as it opens. */
+  moveCursor?: boolean;
 }
 
 /**
- * Renders the captured errors into a panel on the page.
+ * Opens a console at the bottom of the page and shows the captured errors in it.
  *
- * Styled to read as a console rather than as part of the app, and positioned
- * clear of the simulated taskbar's bottom 48px. Appended to <html> like the
- * other overlays, so app-level re-renders are less likely to disturb it, and
- * fades in so the cut is not jarring on video.
+ * ── Why this is drawn rather than opened ───────────────────────────────────
+ * Playwright records the page viewport, not the browser's own UI, so real
+ * DevTools would be invisible in the video — pressing F12 produces a recording
+ * in which nothing happens. This draws the console into the page instead, which
+ * is the same trick the suite already uses for VS Code and the Windows taskbar:
+ * the surrounding chrome is simulated, the content is real. Every line in the
+ * panel is something the browser actually reported during the run.
+ *
+ * It is docked above the taskbar's 48px and slides open, so on video it reads as
+ * a console being opened after the failure rather than a panel that was always
+ * there.
  */
-export async function showErrorConsole(
+export async function openDevToolsConsole(
   page: Page,
   errors: CapturedError[],
   opts: ErrorConsoleOptions = {},
 ): Promise<void> {
-  const {
-    title = 'Browser console',
-    note = '',
-    maxChars = 320,
-    maxEntries = 5,
-  } = opts;
+  const { note = '', maxChars = 300, maxEntries = 6, moveCursor = true } = opts;
 
   if (errors.length === 0) return;
 
@@ -144,66 +146,110 @@ export async function showErrorConsole(
     text: e.text.length > maxChars ? `${e.text.slice(0, maxChars)}…` : e.text,
   }));
 
+  // Bring the cursor down first, so the console opening reads as deliberate.
+  if (moveCursor) {
+    const viewport = page.viewportSize();
+    const y = viewport ? viewport.height - 150 : 900;
+    await humanGlide(page, 240, y, 22);
+    await humanClick(page);
+    await sleep(250);
+  }
+
   await page.evaluate(
-    ({ rows: entries, title: heading, note: subtitle }) => {
+    ({ rows: entries, note: subtitle }) => {
       document.getElementById('__autorecord_error_console')?.remove();
 
+      const TABS = ['Elements', 'Console', 'Sources', 'Network', 'Performance'];
       const panel = document.createElement('div');
       panel.id = '__autorecord_error_console';
       panel.style.cssText = [
         'position:fixed',
-        'left:24px',
-        'right:24px',
-        'bottom:72px', // clears the 48px taskbar overlay
+        'left:0',
+        'right:0',
+        'bottom:48px', // sits on top of the simulated taskbar
         'z-index:2147483646',
-        'max-height:38vh',
+        'height:0px', // animated open below
         'overflow:hidden',
-        'background:#1b1116',
-        'border:1px solid #7f1d1d',
-        'border-radius:10px',
-        'box-shadow:0 18px 48px rgba(0,0,0,.55)',
-        'font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace',
-        'color:#fecaca',
-        'opacity:0',
-        'transition:opacity .35s ease',
+        'background:#282828',
+        'border-top:1px solid #4a4a4a',
+        'box-shadow:0 -12px 32px rgba(0,0,0,.45)',
+        'font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace',
+        'color:#e8eaed',
+        'transition:height .32s cubic-bezier(.2,.7,.3,1)',
       ].join(';');
 
-      const head = document.createElement('div');
-      head.style.cssText =
-        'display:flex;align-items:center;gap:8px;padding:9px 14px;background:#2b1218;border-bottom:1px solid #7f1d1d;color:#fca5a5;font-weight:600;';
-      head.textContent = `✖ ${heading}`;
-      panel.appendChild(head);
+      // Tab strip, with Console active.
+      const tabs = document.createElement('div');
+      tabs.style.cssText =
+        'display:flex;align-items:center;gap:2px;padding:0 8px;background:#333;border-bottom:1px solid #4a4a4a;height:30px;flex:0 0 auto;';
+      for (const name of TABS) {
+        const tab = document.createElement('div');
+        const active = name === 'Console';
+        tab.style.cssText = `padding:6px 11px;font-size:12px;color:${
+          active ? '#e8eaed' : '#9aa0a6'
+        };${
+          active ? 'background:#282828;border-bottom:2px solid #8ab4f8;' : ''
+        }`;
+        tab.textContent = name;
+        tabs.appendChild(tab);
+      }
+      const count = document.createElement('div');
+      count.style.cssText =
+        'margin-left:auto;display:flex;align-items:center;gap:6px;color:#f28b82;font-size:12px;';
+      count.textContent = `⊘ ${entries.length}`;
+      tabs.appendChild(count);
+      panel.appendChild(tabs);
+
+      // Filter row, the way DevTools shows one.
+      const filter = document.createElement('div');
+      filter.style.cssText =
+        'display:flex;align-items:center;gap:10px;padding:5px 10px;background:#282828;border-bottom:1px solid #3c3c3c;color:#9aa0a6;font-size:11px;flex:0 0 auto;';
+      filter.textContent = 'top ▾   Filter   Errors only';
+      panel.appendChild(filter);
+
+      const body = document.createElement('div');
+      body.style.cssText = 'overflow-y:auto;';
 
       if (subtitle) {
         const sub = document.createElement('div');
         sub.style.cssText =
-          'padding:7px 14px;color:#fca5a5;background:#241016;border-bottom:1px solid #7f1d1d;font-size:12px;';
+          'padding:7px 12px;color:#9aa0a6;border-bottom:1px solid #3c3c3c;font-style:italic;';
         sub.textContent = subtitle;
-        panel.appendChild(sub);
+        body.appendChild(sub);
       }
 
-      const body = document.createElement('div');
-      body.style.cssText = 'padding:8px 14px 12px;overflow-y:auto;max-height:26vh;';
       for (const entry of entries) {
         const row = document.createElement('div');
         row.style.cssText =
-          'padding:5px 0;border-bottom:1px solid rgba(127,29,29,.4);white-space:pre-wrap;word-break:break-word;';
-        const tag = document.createElement('span');
-        tag.style.cssText = 'color:#f87171;margin-right:8px;text-transform:uppercase;font-size:11px;';
-        tag.textContent = entry.kind;
-        row.appendChild(tag);
-        row.appendChild(document.createTextNode(entry.text));
+          'display:flex;gap:8px;padding:6px 12px;border-bottom:1px solid #3c3c3c;background:#2d1b1b;color:#f28b82;white-space:pre-wrap;word-break:break-word;';
+        const icon = document.createElement('span');
+        icon.style.cssText = 'flex:0 0 auto;color:#f28b82;';
+        icon.textContent = '✖';
+        row.appendChild(icon);
+        const text = document.createElement('span');
+        text.textContent = entry.text;
+        row.appendChild(text);
         body.appendChild(row);
       }
       panel.appendChild(body);
 
       document.documentElement.appendChild(panel);
+
+      // Open to the height the content actually needs. A console holding one
+      // error should not be a wall of empty grey, and one holding six should
+      // still stop before it swallows the page it is reporting on.
+      const needed = tabs.offsetHeight + filter.offsetHeight + body.scrollHeight;
+      const target = Math.min(Math.max(needed, 120), Math.round(innerHeight * 0.42));
+      body.style.maxHeight = `${target - tabs.offsetHeight - filter.offsetHeight}px`;
+
+      // Slide it open on the next frame so the transition actually runs.
       requestAnimationFrame(() => {
-        panel.style.opacity = '1';
+        panel.style.height = `${target}px`;
       });
     },
-    { rows, title, note },
+    { rows, note },
   );
 
-  await sleep(600);
+  // Let the open animation finish before the caller starts its reading pause.
+  await sleep(700);
 }

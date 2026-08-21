@@ -134,9 +134,18 @@ externally-executed tool, and this repo configures none.
 
 Recording those two as successes would imply a working feature; failing them
 would produce nothing to look at. Both handlers instead capture what the browser
-reported during the run and render it into a panel over the page before the
-recording ends — `actions/error-console.ts`. The video shows the feature *and*
-the reason it stopped.
+reported during the run and then **open a console** across the bottom of the page
+to show it — `actions/error-console.ts`. The video shows the feature working, and
+then the error that ended it.
+
+The console is drawn into the page rather than being the browser's real one, for
+a blunt reason: Playwright records the page viewport, not the browser's own UI,
+so pressing F12 would produce a video in which nothing visibly happens. It is the
+same trick the suite already uses for VS Code and the Windows taskbar — the
+chrome around it is simulated, every line inside it is something the browser
+actually reported. It docks above the taskbar, sizes itself to its contents, and
+slides open after the failure so it reads as being opened rather than having been
+there all along.
 
 Two rules keep that from becoming a way to hide real breakage:
 
