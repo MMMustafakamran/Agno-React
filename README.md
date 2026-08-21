@@ -105,6 +105,28 @@ Then edit `backend/.env`:
 
 **Default ports:** frontend **3000**, backend **8000**.
 
+**5. Updating packages to latest versions (optional)**
+
+To update dependencies to their latest versions:
+
+- **Frontend (`frontend/`)**:
+  ```bash
+  cd frontend
+
+  # Option A: Update all dependencies to latest major/minor versions
+  npx npm-check-updates -u && npm install
+
+  ```
+  > **Note:** If `@ag-ui/*` packages are updated, verify the versions in the `overrides` section in `frontend/package.json` match to prevent version mismatches.
+
+- **Backend (`backend/`)**:
+  ```bash
+  cd backend
+  # Using uv (recommended) — upgrade uv.lock and sync:
+  uv lock --upgrade && uv sync
+
+  ```
+
 ---
 
 ## 6. Running the project
