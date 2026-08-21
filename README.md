@@ -107,24 +107,26 @@ Then edit `backend/.env`:
 
 **5. Updating packages to latest versions (optional)**
 
-To update dependencies to their latest versions:
+To update dependencies while ensuring peer dependencies and version compatibility:
 
 - **Frontend (`frontend/`)**:
   ```bash
   cd frontend
 
-  # Option A: Update all dependencies to latest major/minor versions
-  npx npm-check-updates -u && npm install
+  # Safe update within semver ranges (strictly validates peer dependencies):
+  npm update
 
+  # Or upgrade to latest releases with peer dependency validation:
+  npx npm-check-updates --peer -u ; npm install
   ```
   > **Note:** If `@ag-ui/*` packages are updated, verify the versions in the `overrides` section in `frontend/package.json` match to prevent version mismatches.
 
 - **Backend (`backend/`)**:
   ```bash
   cd backend
-  # Using uv (recommended) — upgrade uv.lock and sync:
-  uv lock --upgrade && uv sync
 
+  # Resolves the full dependency tree and ensures compatibility:
+  uv lock --upgrade ; uv sync
   ```
 
 ---

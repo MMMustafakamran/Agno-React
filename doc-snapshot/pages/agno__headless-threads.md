@@ -151,17 +151,9 @@ before exposing thread lists or lifecycle actions.
 
         When `threadId` changes, the chat component automatically loads the selected thread's history and reconnects to the agent's stream. If the agent is still running on that thread, the chat picks up the live stream.
 
-        <WhenFrameworkHas flag="thread_persistence_pattern" equals="langgraph">
-          <Callout type="info" title="LangGraph persistence">
-            When you pass an explicit CopilotKit `threadId`, CopilotKit forwards it to your backend as the AG-UI `threadId`. A LangGraph backend can use that value directly, or map it to its own checkpoint/thread identifier, when you implement that mapping. LangGraph Platform thread IDs must be UUIDs. CopilotKit `useThreads` manages Enterprise Intelligence Platform thread records; rename, archive, and delete operations do not update LangGraph stores unless your backend adds that bridge.
-          </Callout>
-        </WhenFrameworkHas>
+        
 
-        <WhenFrameworkHas flag="thread_persistence_pattern" equals="adk-session">
-          <Callout type="info" title="ADK sessions">
-            When you pass an explicit CopilotKit `threadId`, CopilotKit forwards it to your backend as the AG-UI `threadId`. An ADK backend can map that value to an ADK session ID, but the current showcase uses in-memory ADK services, so those sessions are not durable by default. Durable ADK session persistence requires configuring a separate ADK session service. CopilotKit `useThreads` manages Enterprise Intelligence Platform thread records, not ADK's native session store.
-          </Callout>
-        </WhenFrameworkHas>
+        
       </Step>
 
       <Step>

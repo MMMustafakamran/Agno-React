@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-08-17T12:29:23.727Z",
+  "syncedAt": "2026-08-21T13:15:16.778Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -114,15 +114,15 @@
     },
     "/agno/headless-threads": {
       "file": "agno__headless-threads.md",
-      "sha256": "f5e27f72c94647b485ad447f13ccfca5581a828937f074fac6df7afa6e3b67da",
-      "bytes": 10542,
-      "lines": 202,
+      "sha256": "db5f518958ddb2601058268ce76e1220ce6251f87ad10b346d849fb3ca682252",
+      "bytes": 9213,
+      "lines": 193,
       "routes": [
         "/threads/headless"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+      "date": "Fri, 21 Aug 2026 13:15:16 GMT"
     },
     "/agno/human-in-the-loop": {
       "file": "agno__human-in-the-loop.md",
@@ -138,15 +138,15 @@
     },
     "/agno/inspector": {
       "file": "agno__inspector.md",
-      "sha256": "9402936383a73adf7d2b381071891796c2b51bd74e3b6822c174590fa950dedc",
-      "bytes": 5148,
-      "lines": 111,
+      "sha256": "08ab1c8d0c4c156a5b12521a6a25fed54d97f14477f3c0f16ab73270ff580f05",
+      "bytes": 5586,
+      "lines": 117,
       "routes": [
         "/custom-look-and-feel/inspector"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 17 Aug 2026 12:29:24 GMT"
+      "date": "Fri, 21 Aug 2026 13:15:16 GMT"
     },
     "/agno/prebuilt-components": {
       "file": "agno__prebuilt-components.md",
@@ -198,27 +198,27 @@
     },
     "/agno/quickstart": {
       "file": "agno__quickstart.md",
-      "sha256": "a350367bca05082edf93287e9045aa8a62538a40cd4df04d2b7dee047c60f410",
-      "bytes": 12528,
-      "lines": 377,
+      "sha256": "36abdd94e5d833b8f9f2fcdc98dfe0bd6621b04926460de39b4e6ab99ba49e64",
+      "bytes": 12975,
+      "lines": 391,
       "routes": [
         "/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 17 Aug 2026 12:29:25 GMT"
+      "date": "Fri, 21 Aug 2026 13:15:16 GMT"
     },
     "/agno/threads": {
       "file": "agno__threads.md",
-      "sha256": "f72c209839a08f5eb4f55c8bd091cc5d48bb07866f7930cd39a92985f797eb27",
-      "bytes": 12444,
-      "lines": 213,
+      "sha256": "069d3b1ca8b4b884cd09ca59116ebffdc24487ca6230c7b2da4f2f9986359771",
+      "bytes": 11956,
+      "lines": 212,
       "routes": [
         "/threads"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 17 Aug 2026 12:29:25 GMT"
+      "date": "Fri, 21 Aug 2026 13:15:16 GMT"
     },
     "/agno/threads-import": {
       "file": "agno__threads-import.md",
