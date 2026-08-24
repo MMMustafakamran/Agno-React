@@ -207,6 +207,21 @@ export const PAGES = definePages([
     waitAfterPromptMs: 4000,
   },
   {
+    id: 'interactive',
+    name: 'Generative UI - Interactive Component (Empty Doc)',
+    videoName: 'Interactive',
+    docPath: 'generative-ui/your-components/interactive',
+    route: 'generative-ui/your-components/interactive',
+    ideFile:
+      'frontend/src/app/generative-ui/your-components/interactive/page.tsx',
+    startLine: 1,
+    endLine: 16,
+    docOnly: true,
+    docViewDurationMs: 6000,
+    prompt: 'N/A',
+    waitAfterPromptMs: 6000,
+  },
+  {
     id: 'tool-rendering',
     name: 'Generative UI - Tool Rendering',
     videoName: 'ToolRendering',

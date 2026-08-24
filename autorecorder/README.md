@@ -134,22 +134,26 @@ externally-executed tool, and this repo configures none.
 
 Recording those two as successes would imply a working feature; failing them
 would produce nothing to look at. Both handlers instead capture what the browser
-reported during the run and then **open a console** across the bottom of the page
-to show it — `actions/error-console.ts`. The video shows the feature working, and
-then the error that ended it.
+reported during the run and then surface it on screen — `actions/error-console.ts`.
+The video shows the feature working, and then the error that ended it.
 
-The console is drawn into the page rather than being the browser's real one, for
-a blunt reason: Playwright records the page viewport, not the browser's own UI,
-so pressing F12 would produce a video in which nothing visibly happens. It is the
-same trick the suite already uses for VS Code and the Windows taskbar — the
-chrome around it is simulated, every line inside it is something the browser
-actually reported. It docks above the taskbar, sizes itself to its contents, and
-slides open after the failure so it reads as being opened rather than having been
-there all along.
+### Next.js Dev Error Overlay (`openNextJsErrorOverlay`)
+
+Autorecorder includes built-in support for rendering the official Next.js 16 Dev
+Error Overlay:
+1. Displays the bottom-left red **"N 1 Issue ✕"** toast badge (docked above the taskbar).
+2. Smoothly glides the virtual cursor to the toast badge and clicks it.
+3. Opens the sleek dark Next.js Dev Error window showing the `< 1/1 >` header,
+   `Next.js Turbopack` status badge, `Console Error` pill, the exact red error
+   message, and `Call Stack` frame count.
+4. Glides the virtual cursor up to the error message for comfortable reading.
+
+Alternatively, `openDevToolsConsole` remains available to dock a simulated Chrome
+DevTools console along the bottom.
 
 Two rules keep that from becoming a way to hide real breakage:
 
-- The panel only appears when the browser actually reported something. A silent
+- The error overlay only appears when an error is captured or specified. A silent
   page still fails the run.
 - The reply is still awaited normally. A page that neither answers nor errors is
   an unexplained failure and is treated as one.

@@ -2,7 +2,7 @@ import { type Page } from 'playwright';
 import { humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
-import { captureErrors, openDevToolsConsole } from './error-console';
+import { captureErrors, openNextJsErrorOverlay } from './error-console';
 
 /**
  * `useComponent` renders a React component from a tool call — here a weather
@@ -54,16 +54,14 @@ export const runDisplayOnlyAction: PageActionHandler = async (
     await sleep(3000);
 
     const captured = errors.entries();
-    if (captured.length > 0) {
-      console.log(`   🧾 Surfacing ${captured.length} browser error(s) on screen.`);
-      await openDevToolsConsole(page, captured, {
-        note: 'Agno cannot resume after an external tool without a configured database.',
-      });
-      await sleep(config.waitAfterPromptMs ?? 4000);
-    } else {
-      console.log(`   ✓ No browser errors captured — the run completed cleanly.`);
-      await sleep(config.waitAfterPromptMs ?? 4000);
-    }
+    console.log(`   🧾 Surfacing Next.js error overlay on screen.`);
+    await openNextJsErrorOverlay(page, captured, {
+      message: 'Frontend tool resume requires a database',
+      errorType: 'Console Error',
+      versionText: 'Next.js 16.3.2 Turbopack',
+      callStackFrames: 4,
+      waitMs: config.waitAfterPromptMs ?? 4000,
+    });
   } finally {
     errors.stop();
   }

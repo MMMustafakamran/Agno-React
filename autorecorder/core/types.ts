@@ -45,6 +45,12 @@ export interface PageDefinition {
 
   /** Reading pause after the reply finishes streaming. */
   waitAfterPromptMs?: number;
+
+  /** When true, only records the doc page (e.g. for empty stub doc pages) without IDE/demo steps. */
+  docOnly?: boolean;
+
+  /** Duration in ms to display the doc page when docOnly is true (defaults to 6000ms). */
+  docViewDurationMs?: number;
 }
 
 /** A page definition with everything resolved. What the engine consumes. */

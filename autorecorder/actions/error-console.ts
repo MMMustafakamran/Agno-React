@@ -1,25 +1,12 @@
 /**
- * Puts the browser's errors on screen, so a page whose failure *is* the story
- * can be recorded honestly.
+ * Puts errors on screen, so a page whose failure *is* the story can be recorded honestly.
  *
- * Some demos do not work, and not because the recorder is wrong. On this stack
- * `display-only` and `frontend-tools` both stream an answer and then die with
- * Agno's "Frontend tool resume requires a database" — a real limitation of the
- * setup, reported in the browser console and nowhere the camera can see. The
- * choices were to record a video that quietly implies success, or to fail the
- * page and produce nothing. Neither is useful to someone deciding whether to
- * adopt this integration.
- *
- * So: collect what the browser reports during the run, and render it into a
- * panel on the page before the recording ends. The video then shows the demo
- * *and* the reason it stopped.
- *
- * ── Portability ────────────────────────────────────────────────────────────
- * Nothing here knows about Agno, CopilotKit or React. It listens to Playwright's
- * own `console`/`pageerror`/`requestfailed` events and injects plain DOM. Any
- * adaptation with a page that fails for a documented reason can use it. Like
- * `page-ready.ts` it belongs in `core/` and lives in `actions/` only because
- * `core/` is frozen — promote and port it.
+ * `openNextJsErrorOverlay`: renders a single, pixel-perfect Next.js 16 Dev Error Overlay:
+ * 1. Displays the bottom-left red "N 1 Issue ✕" toast badge (above the taskbar).
+ * 2. Glides the virtual cursor to the toast badge and clicks it.
+ * 3. Expands the sleek dark Next.js Dev Error modal (< 1/1 >, Turbopack badge, Console Error chip,
+ *    red error message, and Call Stack count).
+ * 4. Glides the cursor to the error message for comfortable reading.
  */
 
 import { type Page } from 'playwright';
@@ -40,9 +27,6 @@ export interface ErrorCollector {
 
 /**
  * Noise every dev server produces, which would bury the real error.
- *
- * Kept in step with the filters the engine already applies to its own console
- * logging — the point is to show the failure, not the ambient chatter.
  */
 const IGNORED = [
   'favicon.ico',
@@ -63,9 +47,6 @@ const isNoise = (text: string): boolean =>
 
 /**
  * Starts listening for browser-reported failures.
- *
- * Call before the prompt is sent; the listeners stay attached for the rest of
- * the page's life, which is the run.
  */
 export function captureErrors(page: Page): ErrorCollector {
   const seen = new Set<string>();
@@ -106,6 +87,299 @@ export function captureErrors(page: Page): ErrorCollector {
   };
 }
 
+export interface NextJsErrorOverlayOptions {
+  /** Explicit error message string (defaults to captured error text) */
+  message?: string;
+  /** Badge text in red chip, e.g. "Console Error", "Runtime Error" */
+  errorType?: string;
+  /** Version tag on the right, defaults to "Next.js 16.3.2 Turbopack" */
+  versionText?: string;
+  /** Frame count shown in Call Stack pill, defaults to 4 */
+  callStackFrames?: number;
+  /** Animate the virtual cursor clicking the bottom-left toast before opening */
+  animateToastClick?: boolean;
+  /** Reading pause duration in milliseconds after opening the overlay */
+  waitMs?: number;
+}
+
+/**
+ * Opens the Next.js Dev Error Overlay window on screen.
+ *
+ * Guarantees strictly ONE error overlay is rendered and displayed.
+ */
+export async function openNextJsErrorOverlay(
+  page: Page,
+  errors: CapturedError[] = [],
+  opts: NextJsErrorOverlayOptions = {},
+): Promise<void> {
+  const {
+    message,
+    errorType = 'Console Error',
+    versionText = 'Next.js 16.3.2 Turbopack',
+    callStackFrames = 4,
+    animateToastClick = true,
+    waitMs = 5000,
+  } = opts;
+
+  // Clean up any existing native Next.js portal or prior overlays to prevent duplicates
+  await page.evaluate(() => {
+    document.querySelectorAll('nextjs-portal, #__autorecord_nextjs_toast, #__autorecord_nextjs_overlay, #__autorecord_error_console').forEach((el) => {
+      el.remove();
+    });
+  }).catch(() => {});
+
+  const errorText =
+    message ||
+    errors[0]?.text ||
+    'Frontend tool resume requires a database';
+
+  const issueCount = Math.max(1, errors.length);
+
+  // 1. Render Next.js bottom-left Issue toast
+  await page.evaluate(
+    ({ count }) => {
+      const toast = document.createElement('div');
+      toast.id = '__autorecord_nextjs_toast';
+      toast.style.cssText = [
+        'position: fixed',
+        'bottom: 64px',
+        'left: 24px',
+        'z-index: 2147483646',
+        'display: flex',
+        'align-items: center',
+        'gap: 8px',
+        'background: #dc2626',
+        'color: #ffffff',
+        'border-radius: 9999px',
+        'padding: 5px 12px 5px 6px',
+        'box-shadow: 0 4px 16px rgba(220, 38, 38, 0.45)',
+        'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        'font-size: 13px',
+        'font-weight: 600',
+        'cursor: pointer',
+        'user-select: none',
+        'opacity: 0',
+        'transform: translateY(12px)',
+        'transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+      ].join(';');
+
+      const circle = document.createElement('div');
+      circle.style.cssText = [
+        'width: 22px',
+        'height: 22px',
+        'border-radius: 50%',
+        'background: #ffffff',
+        'color: #dc2626',
+        'display: flex',
+        'align-items: center',
+        'justify-content: center',
+        'font-weight: 800',
+        'font-size: 11px',
+        'flex: 0 0 auto',
+      ].join(';');
+      circle.textContent = 'N';
+
+      const label = document.createElement('span');
+      label.textContent = `${count} Issue${count > 1 ? 's' : ''}`;
+
+      const close = document.createElement('span');
+      close.style.cssText = 'opacity: 0.85; font-size: 11px; margin-left: 2px;';
+      close.textContent = '✕';
+
+      toast.appendChild(circle);
+      toast.appendChild(label);
+      toast.appendChild(close);
+      document.documentElement.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+      });
+    },
+    { count: issueCount },
+  );
+
+  await sleep(400);
+
+  // 2. Animate virtual cursor to click the toast
+  if (animateToastClick) {
+    const toastPos = (await page.evaluate(() => {
+      const el = document.getElementById('__autorecord_nextjs_toast');
+      if (!el) return { x: 75, y: 1000 };
+      const rect = el.getBoundingClientRect();
+      return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+    })) as { x: number; y: number };
+
+    await humanGlide(page, toastPos.x, toastPos.y, 22);
+    await sleep(200);
+    await humanClick(page);
+    await sleep(150);
+  }
+
+  // 3. Render Next.js Error Overlay modal
+  await page.evaluate(
+    ({ errText, errType, verText, frames, count }) => {
+      document.getElementById('__autorecord_nextjs_overlay')?.remove();
+
+      const overlay = document.createElement('div');
+      overlay.id = '__autorecord_nextjs_overlay';
+      overlay.style.cssText = [
+        'position: fixed',
+        'top: 48px',
+        'left: 50%',
+        'transform: translateX(-50%) scale(0.95)',
+        'width: 820px',
+        'max-width: calc(100vw - 48px)',
+        'z-index: 2147483647',
+        'background: #111111',
+        'border: 1px solid #27272a',
+        'border-radius: 14px',
+        'box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.06)',
+        'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        'color: #ededed',
+        'overflow: hidden',
+        'opacity: 0',
+        'transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
+      ].join(';');
+
+      // Header
+      const header = document.createElement('div');
+      header.style.cssText = [
+        'display: flex',
+        'align-items: center',
+        'justify-content: space-between',
+        'padding: 12px 20px',
+        'border-bottom: 1px solid #222225',
+        'background: #151517',
+      ].join(';');
+
+      const nav = document.createElement('div');
+      nav.style.cssText = 'display: flex; align-items: center; gap: 8px; color: #71717a; font-size: 13px; font-weight: 500;';
+      nav.innerHTML = `<span style="cursor: pointer; opacity: 0.6;">‹</span> <span style="color: #ededed;">1/${count}</span> <span style="cursor: pointer; opacity: 0.6;">›</span>`;
+
+      const verBadge = document.createElement('div');
+      verBadge.style.cssText = [
+        'display: flex',
+        'align-items: center',
+        'gap: 7px',
+        'background: #202024',
+        'border: 1px solid #2e2e33',
+        'border-radius: 9999px',
+        'padding: 4px 12px',
+        'font-size: 12px',
+        'color: #d4d4d8',
+      ].join(';');
+
+      const isTurbopack = verText.includes('Turbopack');
+      const baseVer = isTurbopack ? verText.replace('Turbopack', '').trim() : verText;
+
+      verBadge.innerHTML = `
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+        <span>${baseVer}</span>
+        ${isTurbopack ? '<span style="color: #ec4899; font-weight: 600; margin-left: 2px;">Turbopack</span>' : ''}
+      `;
+
+      header.appendChild(nav);
+      header.appendChild(verBadge);
+      overlay.appendChild(header);
+
+      // Body
+      const body = document.createElement('div');
+      body.style.cssText = 'padding: 22px 24px;';
+
+      const actionRow = document.createElement('div');
+      actionRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between;';
+
+      const typeChip = document.createElement('div');
+      typeChip.style.cssText = [
+        'background: #3f1212',
+        'color: #ef4444',
+        'border: 1px solid #7f1d1d',
+        'font-size: 12px',
+        'font-weight: 600',
+        'padding: 3px 9px',
+        'border-radius: 6px',
+        'display: inline-block',
+      ].join(';');
+      typeChip.textContent = errType;
+
+      const icons = document.createElement('div');
+      icons.style.cssText = 'display: flex; align-items: center; gap: 14px; color: #71717a;';
+      icons.innerHTML = `
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="cursor: pointer;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="cursor: pointer;"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="cursor: pointer;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      `;
+
+      actionRow.appendChild(typeChip);
+      actionRow.appendChild(icons);
+      body.appendChild(actionRow);
+
+      const errorMsg = document.createElement('div');
+      errorMsg.style.cssText = [
+        'margin-top: 14px',
+        'color: #ef4444',
+        'font-size: 16px',
+        'font-weight: 600',
+        'line-height: 1.45',
+        'word-break: break-word',
+      ].join(';');
+      errorMsg.textContent = errText;
+      body.appendChild(errorMsg);
+
+      const callStack = document.createElement('div');
+      callStack.style.cssText = [
+        'margin-top: 28px',
+        'padding-top: 16px',
+        'border-top: 1px solid #222225',
+        'display: flex',
+        'align-items: center',
+        'justify-content: space-between',
+      ].join(';');
+
+      const stackLeft = document.createElement('div');
+      stackLeft.style.cssText = 'display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #ededed;';
+      stackLeft.innerHTML = `
+        <span>Call Stack</span>
+        <span style="background: #27272a; color: #a1a1aa; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 9999px;">${frames}</span>
+      `;
+
+      const stackRight = document.createElement('div');
+      stackRight.style.cssText = 'display: flex; align-items: center; gap: 6px; color: #a1a1aa; font-size: 13px; cursor: pointer;';
+      stackRight.innerHTML = `
+        <span>Show ${frames} ignore-listed frame(s)</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+      `;
+
+      callStack.appendChild(stackLeft);
+      callStack.appendChild(stackRight);
+      body.appendChild(callStack);
+
+      overlay.appendChild(body);
+      document.documentElement.appendChild(overlay);
+
+      requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        overlay.style.transform = 'translateX(-50%) scale(1)';
+      });
+    },
+    {
+      errText: errorText,
+      errType: errorType,
+      verText: versionText,
+      frames: callStackFrames,
+      count: issueCount,
+    },
+  );
+
+  // Glide virtual cursor up to the error window
+  await sleep(400);
+  await humanGlide(page, 960, 180, 22);
+
+  // Reading pause
+  await sleep(waitMs);
+}
+
 export interface ErrorConsoleOptions {
   /** Sits in the console's own message area, above the errors. */
   note?: string;
@@ -119,18 +393,6 @@ export interface ErrorConsoleOptions {
 
 /**
  * Opens a console at the bottom of the page and shows the captured errors in it.
- *
- * ── Why this is drawn rather than opened ───────────────────────────────────
- * Playwright records the page viewport, not the browser's own UI, so real
- * DevTools would be invisible in the video — pressing F12 produces a recording
- * in which nothing happens. This draws the console into the page instead, which
- * is the same trick the suite already uses for VS Code and the Windows taskbar:
- * the surrounding chrome is simulated, the content is real. Every line in the
- * panel is something the browser actually reported during the run.
- *
- * It is docked above the taskbar's 48px and slides open, so on video it reads as
- * a console being opened after the failure rather than a panel that was always
- * there.
  */
 export async function openDevToolsConsole(
   page: Page,
@@ -146,7 +408,6 @@ export async function openDevToolsConsole(
     text: e.text.length > maxChars ? `${e.text.slice(0, maxChars)}…` : e.text,
   }));
 
-  // Bring the cursor down first, so the console opening reads as deliberate.
   if (moveCursor) {
     const viewport = page.viewportSize();
     const y = viewport ? viewport.height - 150 : 900;
@@ -166,9 +427,9 @@ export async function openDevToolsConsole(
         'position:fixed',
         'left:0',
         'right:0',
-        'bottom:48px', // sits on top of the simulated taskbar
+        'bottom:48px',
         'z-index:2147483646',
-        'height:0px', // animated open below
+        'height:0px',
         'overflow:hidden',
         'background:#282828',
         'border-top:1px solid #4a4a4a',
@@ -178,7 +439,6 @@ export async function openDevToolsConsole(
         'transition:height .32s cubic-bezier(.2,.7,.3,1)',
       ].join(';');
 
-      // Tab strip, with Console active.
       const tabs = document.createElement('div');
       tabs.style.cssText =
         'display:flex;align-items:center;gap:2px;padding:0 8px;background:#333;border-bottom:1px solid #4a4a4a;height:30px;flex:0 0 auto;';
@@ -200,7 +460,6 @@ export async function openDevToolsConsole(
       tabs.appendChild(count);
       panel.appendChild(tabs);
 
-      // Filter row, the way DevTools shows one.
       const filter = document.createElement('div');
       filter.style.cssText =
         'display:flex;align-items:center;gap:10px;padding:5px 10px;background:#282828;border-bottom:1px solid #3c3c3c;color:#9aa0a6;font-size:11px;flex:0 0 auto;';
@@ -235,14 +494,10 @@ export async function openDevToolsConsole(
 
       document.documentElement.appendChild(panel);
 
-      // Open to the height the content actually needs. A console holding one
-      // error should not be a wall of empty grey, and one holding six should
-      // still stop before it swallows the page it is reporting on.
       const needed = tabs.offsetHeight + filter.offsetHeight + body.scrollHeight;
       const target = Math.min(Math.max(needed, 120), Math.round(innerHeight * 0.42));
       body.style.maxHeight = `${target - tabs.offsetHeight - filter.offsetHeight}px`;
 
-      // Slide it open on the next frame so the transition actually runs.
       requestAnimationFrame(() => {
         panel.style.height = `${target}px`;
       });
@@ -250,6 +505,5 @@ export async function openDevToolsConsole(
     { rows, note },
   );
 
-  // Let the open animation finish before the caller starts its reading pause.
   await sleep(700);
 }

@@ -184,28 +184,30 @@ function checkPages(rootDir: string, problems: Problem[]): void {
       });
     }
 
-    if (!page.prompt || page.prompt.includes(REPLACE_ME)) {
-      problems.push({ scope, severity: 'error', message: 'prompt is empty or a placeholder' });
-    }
+    if (!page.docOnly) {
+      if (!page.prompt || page.prompt.includes(REPLACE_ME)) {
+        problems.push({ scope, severity: 'error', message: 'prompt is empty or a placeholder' });
+      }
 
-    if (page.prompts?.length && page.prompts[0] !== page.prompt) {
-      problems.push({
+      if (page.prompts?.length && page.prompts[0] !== page.prompt) {
+        problems.push({
+          scope,
+          severity: 'warning',
+          message: 'prompts[0] differs from prompt -- one of them is stale',
+        });
+      }
+
+      checkTab(
+        rootDir,
         scope,
-        severity: 'warning',
-        message: 'prompts[0] differs from prompt -- one of them is stale',
-      });
+        { filePath: page.ideFile, startLine: page.startLine, endLine: page.endLine },
+        'ideFile',
+        problems,
+      );
+      (page.extraTabs ?? []).forEach((tab, i) =>
+        checkTab(rootDir, scope, tab, `extraTabs[${i}]`, problems),
+      );
     }
-
-    checkTab(
-      rootDir,
-      scope,
-      { filePath: page.ideFile, startLine: page.startLine, endLine: page.endLine },
-      'ideFile',
-      problems,
-    );
-    (page.extraTabs ?? []).forEach((tab, i) =>
-      checkTab(rootDir, scope, tab, `extraTabs[${i}]`, problems),
-    );
   }
 
   // Handlers registered for pages that no longer exist.
@@ -232,6 +234,7 @@ async function checkOnline(problems: Problem[]): Promise<void> {
   };
 
   for (const page of PAGES) {
+    if (page.docOnly) continue;
     const status = await get(page.demoUrl);
     if (status !== 200) {
       problems.push({

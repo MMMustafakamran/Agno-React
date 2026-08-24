@@ -278,9 +278,16 @@ export class RecordingEngine {
         // Reading pause on the doc code snippet
         await sleep(2000);
 
-        // Switch to VS Code via Windows 11 Taskbar
-        console.log(`   🖱️ Switching to VS Code via Windows 11 Taskbar...`);
-        await clickTaskbarApp(page, 'vscode');
+        if (config.docOnly) {
+          console.log(`   📄 Page is doc-only (empty section). Pausing for viewing...`);
+          const duration = config.docViewDurationMs ?? 6000;
+          await sleep(duration);
+          console.log(`✅ Doc-only recording completed for ${config.id}.`);
+        } else {
+          // Switch to VS Code via Windows 11 Taskbar
+          console.log(`   🖱️ Switching to VS Code via Windows 11 Taskbar...`);
+          await clickTaskbarApp(page, 'vscode');
+        }
       } catch (e) {
         // The doc site is external and not the thing under test, so a bad fetch
         // degrades the intro rather than invalidating the recording.
@@ -290,13 +297,14 @@ export class RecordingEngine {
         await sleep(600);
       }
 
-      // ----------------------------------------------------
-      // STEP 2: SHOW PROJECT CODE IN VS CODE IDE WITH SNIPPET SELECTION
-      // ----------------------------------------------------
-      const hasExtraTabs = config.extraTabs && config.extraTabs.length > 0;
-      console.log(
-        `\n💻 Step 2: Displaying Project Code in VS Code IDE (${config.ideFile}: lines ${config.startLine}-${config.endLine})...`,
-      );
+      if (!config.docOnly) {
+        // ----------------------------------------------------
+        // STEP 2: SHOW PROJECT CODE IN VS CODE IDE WITH SNIPPET SELECTION
+        // ----------------------------------------------------
+        const hasExtraTabs = config.extraTabs && config.extraTabs.length > 0;
+        console.log(
+          `\n💻 Step 2: Displaying Project Code in VS Code IDE (${config.ideFile}: lines ${config.startLine}-${config.endLine})...`,
+        );
       try {
         const ideHtml = await generateIdeHtml(
           this.rootDir,
@@ -461,11 +469,12 @@ export class RecordingEngine {
 
         console.log(`✅ Demo execution completed for ${config.id}.`);
         await sleep(1500);
-      } catch (e) {
-        const msg = `Demo step failed: ${diagnoseError(e, config.demoUrl)}`;
-        fail(msg);
-        console.error(`\n❌ [Demo Failure on ${config.id}]:\n${msg}\n`);
-        await sleep(1000);
+        } catch (e) {
+          const msg = `Demo step failed: ${diagnoseError(e, config.demoUrl)}`;
+          fail(msg);
+          console.error(`\n❌ [Demo Failure on ${config.id}]:\n${msg}\n`);
+          await sleep(1000);
+        }
       }
 
       recordSuccess = !recordError;
