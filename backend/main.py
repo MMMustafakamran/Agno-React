@@ -1,7 +1,7 @@
-"""Serves the Agno agent over AG-UI.
+"""Serves the Agno agent over AG-UI.
 
 `AgentOS` + the `AGUI` interface produce an ASGI app whose AG-UI endpoint lives
-at `/agui`. The Next.js runtime route (`frontend/src/app/api/copilotkit/route.ts`)
+at `/agui`. The Next.js runtime route (`frontend/src/app/api/copilotkit/[[...slug]]/route.ts`)
 is what actually talks to it; the browser never calls this service directly
 except on the AG-UI debug route, which is why CORS is opened for the dev origin.
 """

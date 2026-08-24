@@ -10,6 +10,9 @@ const CONTROL_SNIPPET = `// <CopilotKit> — takes enableInspector, defaults to 
 <CopilotKitProvider runtimeUrl="/api/copilotkit" showDevConsole="auto">`;
 
 const ROWS: [string, string][] = [
+  ["Home", "Project, runtime, services, and CopilotKit news."],
+  ["Threads", "Inspect real Threads and their messages, AG-UI events, and state."],
+  ["Memory", "Inspect long-term memory when Intelligence exposes it."],
   ["AG-UI Events", "The raw event stream between this page and the agent."],
   ["Available Agents", "Which agent ids the runtime reported."],
   ["Agent State", "The current shared state object, updating live."],

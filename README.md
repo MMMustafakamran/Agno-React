@@ -44,7 +44,7 @@ OpenAI  (gpt-4o by default)
 Three points worth noting:
 
 - **The backend for this framework is Python.** Agno is a Python library; the agent runs under `uvicorn`, not Node.
-- **The runtime lives inside the Next app**, at `frontend/src/app/api/copilotkit/route.ts`. There is no third server.
+- **The runtime lives inside the Next app**, at `frontend/src/app/api/copilotkit/[[...slug]]/route.ts`. There is no third server.
 - **The model key never reaches the browser.** Only the Agno process holds it, and the browser never talks to Agno directly.
 
 ---
@@ -410,7 +410,7 @@ agno/
 │       │   ├── layout.tsx             # providers + chrome; imports v2 styles
 │       │   ├── page.tsx               # / — intro + connection check
 │       │   ├── status/page.tsx        # status overview table
-│       │   ├── api/copilotkit/route.ts   # ★ CopilotRuntime + AgnoAgent binding
+│       │   ├── api/copilotkit/[[...slug]]/route.ts # ★ CopilotRuntime + AgnoAgent binding
 │       │   └── <doc route>/
 │       │       ├── page.tsx           # notes + exact source (server component)
 │       │       └── demo-chat/page.tsx # ★ the running feature, chrome-free

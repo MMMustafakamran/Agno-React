@@ -63,9 +63,9 @@ export const PAGES = definePages([
         endLine: 26,
       },
       {
-        filePath: 'frontend/src/app/api/copilotkit/route.ts',
-        startLine: 20,
-        endLine: 38,
+        filePath: 'frontend/src/app/api/copilotkit/[[...slug]]/route.ts',
+        startLine: 14,
+        endLine: 28,
       },
       {
         filePath: 'backend/main.py',
@@ -271,9 +271,9 @@ export const PAGES = definePages([
     endLine: 50,
     extraTabs: [
       {
-        filePath: 'frontend/src/app/api/copilotkit/route.ts',
-        startLine: 20,
-        endLine: 38,
+        filePath: 'frontend/src/app/api/copilotkit/[[...slug]]/route.ts',
+        startLine: 14,
+        endLine: 28,
       },
     ],
     // Two registered ids resolving to the same Agno process, one turn each.

@@ -44,12 +44,13 @@ export default function Page() {
         title="This repo's runtime"
         description="Read from disk — diff it against the doc's minimal sample."
       >
-        <SourceCode file="frontend/src/app/api/copilotkit/route.ts" />
+        <SourceCode file="frontend/src/app/api/copilotkit/[[...slug]]/route.ts" />
         <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-          <code>ExperimentalEmptyAdapter</code> is used because Agno calls the
-          model, not the runtime — the service adapter only matters when the
-          runtime itself talks to a provider. Registering an agent under the id{" "}
-          <code>default</code> is what lets every prebuilt component work with
+          <code>createCopilotRuntimeHandler</code> with{" "}
+          <code>InMemoryAgentRunner</code> is used from{" "}
+          <code>@copilotkit/runtime/v2</code>. Agno calls the model, and the
+          runtime acts as the server-side bridge. Registering an agent under the
+          id <code>default</code> is what lets every prebuilt component work with
           no <code>agentId</code> prop.
         </p>
       </Panel>

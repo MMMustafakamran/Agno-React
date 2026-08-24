@@ -20,9 +20,9 @@ A concise, diagram-driven reference explaining how **CopilotKit (Frontend & Runt
 |                                              | HTTP POST (SSE Stream)                       |
 |                                              v                                              |
 |   +-------------------------------------------------------------------------------------+   |
-|   |  Next.js API Route (/api/copilotkit/route.ts)                                       |   |
+|   |  Next.js API Route (/api/copilotkit/[[...slug]]/route.ts)                           |   |
 |   |                                                                                     |   |
-|   |  • CopilotRuntime + copilotRuntimeNextJSAppRouterEndpoint                           |   |
+|   |  • CopilotRuntime + createCopilotRuntimeHandler (@copilotkit/runtime/v2)            |   |
 |   |  • @ag-ui/agno Adapter -> connects to AGNO_AGENT_URL (http://localhost:8000/agui)   |   |
 |   +------------------------------------------+------------------------------------------+   |
 +----------------------------------------------|----------------------------------------------+
@@ -97,7 +97,7 @@ The frontend is a **Next.js 16 (App Router)** application built with TypeScript 
 | :--- | :--- |
 | [`src/app/layout.tsx`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/frontend/src/app/layout.tsx) | Root layout; imports `@copilotkit/react-core/v2/styles.css` and wraps entire app in `Providers`. |
 | [`src/components/providers.tsx`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/frontend/src/components/providers.tsx) | Configures `<CopilotKitProvider runtimeUrl="/api/copilotkit">`, dev console inspector, and error logging. |
-| [`src/app/api/copilotkit/route.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/frontend/src/app/api/copilotkit/route.ts) | Server-side runtime bridge converting Next.js requests to Agno AG-UI backend calls via `AgnoAgent`. |
+| [`src/app/api/copilotkit/[[...slug]]/route.ts`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/frontend/src/app/api/copilotkit/[[...slug]]/route.ts) | Server-side runtime bridge converting Next.js requests to Agno AG-UI backend calls via `AgnoAgent`. |
 | [`src/components/global-frontend-tools.tsx`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/frontend/src/components/global-frontend-tools.tsx) | Mounts browser-side tools (`sayHello`, `setThemeColor`, `addBookmark`, `offerOptions`). |
 | [`src/components/harness-state.tsx`](file:///c:/Users/dynamic%20computer/Desktop/work/FIQROS/optimized-malaika/agno/frontend/src/components/harness-state.tsx) | Client React state (accent color, bookmarks, notifications, error logs). |
 

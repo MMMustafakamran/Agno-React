@@ -10,7 +10,7 @@
       "file": "AGNO-react-01-Quickstart.webm",
       "sources": [
         "frontend/src/app/quickstart/demo-chat/page.tsx",
-        "frontend/src/app/api/copilotkit/route.ts",
+        "frontend/src/app/api/copilotkit/[[...slug]]/route.ts",
         "backend/main.py"
       ],
       "sourceSha": "a8139f1661cb",
@@ -197,7 +197,7 @@
       "file": "AGNO-react-14-CopilotRuntime.webm",
       "sources": [
         "frontend/src/app/backend/copilot-runtime/demo-chat/page.tsx",
-        "frontend/src/app/api/copilotkit/route.ts"
+        "frontend/src/app/api/copilotkit/[[...slug]]/route.ts"
       ],
       "sourceSha": "3b4b6309bfd6",
       "recordedAt": "2026-08-19T16:32:27.583Z",

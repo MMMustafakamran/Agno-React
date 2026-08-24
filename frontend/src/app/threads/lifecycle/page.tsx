@@ -2,7 +2,15 @@ import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
 import { Callout, CodeBlock, Panel, TryIt } from "@/components/ui";
 
-const IDENTIFY_SNIPPET = `const runtime = new CopilotRuntime({
+const IDENTIFY_SNIPPET = `import { CopilotKitIntelligence, CopilotRuntime } from "@copilotkit/runtime/v2";
+
+// \`apiKey\` is the only required field. The key scopes the project, so there is
+// no separate project or organization id to pass.
+const intelligence = new CopilotKitIntelligence({
+  apiKey: process.env.INTELLIGENCE_API_KEY!,
+});
+
+const runtime = new CopilotRuntime({
   agents: { default: agent },
   intelligence,
   identifyUser: async (request) => {

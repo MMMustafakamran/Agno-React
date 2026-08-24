@@ -6,7 +6,7 @@ import { waitForDomSettled } from './page-ready';
 
 /**
  * This app registers exactly two agent ids -- `default` and `agno_agent` -- and
- * both resolve to the same Agno process (see `api/copilotkit/route.ts`). The
+ * both resolve to the same Agno process (see `api/copilotkit/[[...slug]]/route.ts`). The
  * demo renders one button per id, labelled with the id itself, and remounts the
  * chat on switch, so each id carries its own conversation.
  *
