@@ -2,14 +2,14 @@
 
 A navigable, working test harness covering every page of the CopilotKit Agno documentation — each doc page is a route that actually runs the thing it describes.
 
-| | |
-|---|---|
-| **Doc sync date** | Machine-maintained — `doc-snapshot/manifest.json` → `syncedAt`, rewritten on every sync |
-| **CopilotKit packages** | `@copilotkit/react-core` 1.66.2 · `@copilotkit/runtime` 1.66.2 |
-| **AG-UI packages** | `@ag-ui/agno` 0.0.5 · `@ag-ui/client` 0.0.57 |
-| **Frontend** | Next.js 16.3.0 (App Router) · React 19.2 · TypeScript · Tailwind 4 |
-| **Backend** | Python 3.12 · Agno 2.8.6 · FastAPI/AgentOS |
-| **Build status** | No CI. Locally verified: 21 doc routes + 15 demo routes, live agent run ✅, rendered source byte-matches disk ✅. **Typecheck currently failing** — see Known issues. |
+|                         |                                                                                                                                                                       |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Doc sync date**       | Machine-maintained — `doc-snapshot/manifest.json` → `syncedAt`, rewritten on every sync                                                                               |
+| **CopilotKit packages** | `@copilotkit/react-core` 1.66.2 · `@copilotkit/runtime` 1.66.2                                                                                                        |
+| **AG-UI packages**      | `@ag-ui/agno` 0.0.5 · `@ag-ui/client` 0.0.57                                                                                                                          |
+| **Frontend**            | Next.js 16.3.0 (App Router) · React 19.2 · TypeScript · Tailwind 4                                                                                                    |
+| **Backend**             | Python 3.12 · Agno 2.8.6 · FastAPI/AgentOS                                                                                                                            |
+| **Build status**        | No CI. Locally verified: 21 doc routes + 15 demo routes, live agent run ✅, rendered source byte-matches disk ✅. **Typecheck currently failing** — see Known issues. |
 
 ---
 
@@ -51,14 +51,14 @@ Three points worth noting:
 
 ## 4. Prerequisites
 
-| Requirement | Version | Notes |
-|---|---|---|
-| Node.js | 20+ (built on 24.16.0) | Next.js 16 requires 20+. |
-| npm | 10+ (built on 12.0.1) | Or pnpm/yarn/bun. |
-| Python | 3.9+ (built on 3.12.3) | Per the Agno quickstart. |
-| [`uv`](https://docs.astral.sh/uv/) | 0.11+ | Used for the backend. `pip` works too. |
-| OpenAI API key | — | Required. |
-| CopilotKit license key | — | **Optional.** Only unlocks the Rich Threads routes. |
+| Requirement                        | Version                | Notes                                               |
+| ---------------------------------- | ---------------------- | --------------------------------------------------- |
+| Node.js                            | 20+ (built on 24.16.0) | Next.js 16 requires 20+.                            |
+| npm                                | 10+ (built on 12.0.1)  | Or pnpm/yarn/bun.                                   |
+| Python                             | 3.9+ (built on 3.12.3) | Per the Agno quickstart.                            |
+| [`uv`](https://docs.astral.sh/uv/) | 0.11+                  | Used for the backend. `pip` works too.              |
+| OpenAI API key                     | —                      | Required.                                           |
+| CopilotKit license key             | —                      | **Optional.** Only unlocks the Rich Threads routes. |
 
 No framework-specific CLI is required. The CopilotKit CLI (`npx copilotkit@latest`) scaffolds new projects and signs into the licensed platform; this repo is already scaffolded, so you don't need it.
 
@@ -92,14 +92,14 @@ cp .env.example backend/.env
 
 Then edit `backend/.env`:
 
-| Variable | Where | What it does |
-|---|---|---|
-| `OPENAI_API_KEY` | `backend/.env` | **Required.** The model key. The backend refuses to start without it. |
-| `OPENAI_MODEL` | `backend/.env` | Model id. Defaults to `gpt-4o`. |
-| `AGENT_PORT` | `backend/.env` | Agno's port. Defaults to `8000`. |
-| `AGENT_CORS_ORIGINS` | `backend/.env` | Origins allowed to hit the agent directly. Not needed on the normal path. |
-| `AGNO_AGENT_URL` | `frontend/.env.local` | Where the runtime finds the agent. Defaults to `http://localhost:8000/agui`. |
-| `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` | `frontend/.env.local` | Browser-safe `ck_pub_…` key. Unlocks Rich Threads. Optional. |
+| Variable                             | Where                 | What it does                                                                 |
+| ------------------------------------ | --------------------- | ---------------------------------------------------------------------------- |
+| `OPENAI_API_KEY`                     | `backend/.env`        | **Required.** The model key. The backend refuses to start without it.        |
+| `OPENAI_MODEL`                       | `backend/.env`        | Model id. Defaults to `gpt-4o`.                                              |
+| `AGENT_PORT`                         | `backend/.env`        | Agno's port. Defaults to `8000`.                                             |
+| `AGENT_CORS_ORIGINS`                 | `backend/.env`        | Origins allowed to hit the agent directly. Not needed on the normal path.    |
+| `AGNO_AGENT_URL`                     | `frontend/.env.local` | Where the runtime finds the agent. Defaults to `http://localhost:8000/agui`. |
+| `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` | `frontend/.env.local` | Browser-safe `ck_pub_…` key. Unlocks Rich Threads. Optional.                 |
 
 > Next.js does not read the repo-root `.env`. Frontend variables belong in `frontend/.env.local`. The defaults are correct for a standard local run, so in practice you only need `OPENAI_API_KEY`.
 
@@ -107,26 +107,27 @@ Then edit `backend/.env`:
 
 **5. Updating packages to latest versions (optional)**
 
-To update dependencies while ensuring peer dependencies and version compatibility:
+To update dependencies to their latest versions:
 
 - **Frontend (`frontend/`)**:
+
   ```bash
   cd frontend
 
-  # Safe update within semver ranges (strictly validates peer dependencies):
-  npm update
+  # Option A: Update all dependencies to latest major/minor versions
+  npx npm-check-updates -u && npm install
 
-  # Or upgrade to latest releases with peer dependency validation:
-  npx npm-check-updates --peer -u ; npm install
   ```
+
   > **Note:** If `@ag-ui/*` packages are updated, verify the versions in the `overrides` section in `frontend/package.json` match to prevent version mismatches.
 
 - **Backend (`backend/`)**:
+
   ```bash
   cd backend
-
-  # Resolves the full dependency tree and ensures compatibility:
+  # Using uv (recommended) — upgrade uv.lock and sync:
   uv lock --upgrade ; uv sync
+
   ```
 
 ---
@@ -178,15 +179,15 @@ Every route shows a status badge and a link to the doc page it tests. "Pass" and
 
 Routes with a live feature are split in two:
 
-| | |
-|---|---|
-| **`<route>`** | Notes, pass/fail criteria, and **the exact source** of the implementation, read off disk at render time. No live chat here. |
+|                         |                                                                                                                                                    |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`<route>`**           | Notes, pass/fail criteria, and **the exact source** of the implementation, read off disk at render time. No live chat here.                        |
 | **`<route>/demo-chat`** | Just the running feature, with no sidebar or page chrome — built for screen recording. Reached via the **Open demo ↗** button in the route header. |
 
 Two consequences worth knowing:
 
 - **The code on a page is never a re-typed approximation.** Each page reads real files from the repo (`frontend/src/lib/source.ts`), so what you compare against the doc is what actually runs. Some excerpts use `#region` markers, which stay visible in the source file and are labelled with their line numbers.
-- **Demo routes share the app-wide provider**, so a conversation started in a demo continues on any other route. That's deliberate — `/custom-look-and-feel/headless-ui/demo-chat` and `/custom-look-and-feel/programmatic-control/demo-chat` show the *same* conversation through two completely different UIs.
+- **Demo routes share the app-wide provider**, so a conversation started in a demo continues on any other route. That's deliberate — `/custom-look-and-feel/headless-ui/demo-chat` and `/custom-look-and-feel/programmatic-control/demo-chat` show the _same_ conversation through two completely different UIs.
 
 15 of the 21 doc routes have a demo: quickstart, prebuilt-components, the three interactive thread routes, all four Custom Look and Feel routes, display-only, tool-rendering, frontend-tools, human-in-the-loop, both Backend routes, and error-debugging. The remaining 6 are reference pages with nothing to run (or, in the case of Interactive, a doc page with nothing in it).
 
@@ -207,11 +208,11 @@ The minimum viable path: provider, runtime route, one chat. **Try:** `Can you te
 
 **`/threads` — Overview.** Reference: what threads persist and why it's an event log, not a transcript.
 
-**`/threads/drawer` — Threads Drawer.** `CopilotThreadsDrawer` beside a chat in a shared `CopilotChatConfigurationProvider`. **Pass (licensed):** selecting a row replays that conversation with no state written by you. **Pass (unlicensed):** a *locked panel* — that's the correct result, and proves the component mounted and detected the missing license. **Fail:** a blank area with no locked state.
+**`/threads/drawer` — Threads Drawer.** `CopilotThreadsDrawer` beside a chat in a shared `CopilotChatConfigurationProvider`. **Pass (licensed):** selecting a row replays that conversation with no state written by you. **Pass (unlicensed):** a _locked panel_ — that's the correct result, and proves the component mounted and detected the missing license. **Fail:** a blank area with no locked state.
 
 **`/threads/headless` — Headless Threads.** A thread list built by hand on `useThreads`, including **rename**, which the prebuilt drawer doesn't expose. **Pass (licensed):** threads list, and rename/archive/delete take effect. **Pass (unlicensed):** an empty list with an explanatory note.
 
-**`/threads/lifecycle` — Thread & History Lifecycle.** *Partly testable without a license.* **Try:** send a message, press "Remount chat". **Pass:** the conversation clears — a new `threadId` was minted. Pin an explicit id and remount: the id survives. **Fail:** a pinned id changes on remount.
+**`/threads/lifecycle` — Thread & History Lifecycle.** _Partly testable without a license._ **Try:** send a message, press "Remount chat". **Pass:** the conversation clears — a new `threadId` was minted. Pin an explicit id and remount: the id survives. **Fail:** a pinned id changes on remount.
 
 **`/threads/import` — Synchronize Thread History.** Reference. Import targets ADK and LangGraph history; Agno isn't a documented source.
 
@@ -223,12 +224,12 @@ The minimum viable path: provider, runtime route, one chat. **Try:** `Can you te
 Drives the agent with no chat component. **Try:** type a message, press Run. **Pass:** status flips to Running, the message count climbs, tokens stream into the transcript; Stop halts it mid-stream. **Fail:** Run does nothing.
 
 **`/custom-look-and-feel/inspector`**
-The debugging overlay, mounted by the provider (never by hand — see §9). **Try:** send a message, open the inspector docked at the window edge. **Pass:** the event list fills, and Frontend Tools lists all four browser tools with schemas. **Fail:** no inspector at all — it is force-disabled in production builds, so confirm you're on `npm run dev`. If it appears but says *"CopilotKit core not attached"*, something is rendering `<CopilotKitInspector />` without a `core` prop.
+The debugging overlay, mounted by the provider (never by hand — see §9). **Try:** send a message, open the inspector docked at the window edge. **Pass:** the event list fills, and Frontend Tools lists all four browser tools with schemas. **Fail:** no inspector at all — it is force-disabled in production builds, so confirm you're on `npm run dev`. If it appears but says _"CopilotKit core not attached"_, something is rendering `<CopilotKitInspector />` without a `core` prop.
 
-**`/custom-look-and-feel/slots`** *(page live but absent from the doc sidebar)*
+**`/custom-look-and-feel/slots`** _(page live but absent from the doc sidebar)_
 Three override levels against one chat. **Pass:** level 1 tints the message area; level 2 auto-focuses the input; level 3 shows a custom header, custom layout, and a custom streaming cursor. **Fail:** all three tabs look identical.
 
-**`/custom-look-and-feel/headless-ui`** *(live but absent from the sidebar)*
+**`/custom-look-and-feel/headless-ui`** _(live but absent from the sidebar)_
 A chat with zero CopilotKit chrome. **Try:** `What's the weather in London?` **Pass:** messages stream into hand-written bubbles and tool calls still render through the registry. **Fail:** Send does nothing.
 
 ### Generative UI
@@ -246,7 +247,7 @@ A named renderer for `get_weather` plus a wildcard fallback. **Try:** `What's th
 **`/frontend-tools` — Frontend Tools**
 Three tools that run in the browser and change this page. **Try:** `Say hello to Malaika`, `Change the theme to violet`, `Bookmark the CopilotKit docs at https://docs.copilotkit.ai`. **Pass:** each panel updates the moment the call completes; the theme change follows you across every route. **Fail:** the agent claims success but nothing changes — the tool names have drifted apart.
 
-**`/human-in-the-loop`** *(live but absent from the sidebar)*
+**`/human-in-the-loop`** _(live but absent from the sidebar)_
 **Try:** `Can you show me two good options for a restaurant name?` **Pass:** two buttons render in the message stream and **nothing further streams until you click one**. **Fail:** two options as plain text, or the agent continues without waiting.
 
 ### Backend
@@ -269,29 +270,29 @@ A live capture of the raw AG-UI event stream, with pause and clear. **Try:** `Wh
 
 Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MCP server).
 
-| Doc page | Route | Status | Notes |
-|---|---|---|---|
-| `/agno` | `/` | ✅ Working | Server-side agent probe. |
-| `/agno/quickstart` | `/quickstart` | ✅ Working | Verified end-to-end: streamed reply from gpt-4o. |
-| `/agno/prebuilt-components` | `/prebuilt-components` | ✅ Working | All three components. Doc page itself is a component stub (142 bytes of raw markdown). |
-| `/agno/threads` | `/threads` | ⚠️ Partial | Premium. |
-| `/agno/prebuilt-components/copilot-threads-drawer` | `/threads/drawer` | ⚠️ Partial | Premium; renders the locked view, which is the expected unlicensed result. |
-| `/agno/headless-threads` | `/threads/headless` | ⚠️ Partial | Premium; `useThreads` returns empty. UI incl. rename fully implemented. |
-| `/agno/threads-lifecycle` | `/threads/lifecycle` | ⚠️ Partial | Mint/switch testable now; replay needs a store. |
-| `/agno/threads-import` | `/threads/import` | 📖 Reference | Premium; Agno is not a documented import source. |
-| `/agno/premium/threads-explained` | `/threads/architecture` | 📖 Reference | Premium. |
-| `/agno/programmatic-control` | `/custom-look-and-feel/programmatic-control` | ✅ Working | run/stop/state/messages. |
-| `/agno/inspector` | `/custom-look-and-feel/inspector` | ✅ Working | Dev-only by design. |
-| `/agno/custom-look-and-feel/slots` | `/custom-look-and-feel/slots` | ✅ Working | **Not in the doc sidebar**, but the page resolves (HTTP 200). |
-| `/agno/custom-look-and-feel/headless-ui` | `/custom-look-and-feel/headless-ui` | ✅ Working | **Not in the doc sidebar**; resolves. |
-| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ⚠️ Partial | Card renders and the answer streams, then the run dies — see Known issues #12. |
-| `/agno/generative-ui/your-components/interactive` | `/generative-ui/your-components/interactive` | 🚧 Not started | Upstream doc page is an empty stub — deliberately left blank. |
-| `/agno/generative-ui/tool-rendering` | `/generative-ui/tool-rendering` | ✅ Working | Named + wildcard renderers; tool call verified over the wire. |
-| `/agno/frontend-tools` | `/frontend-tools` | ⚠️ Partial | Browser tool executes and the panel updates, but the run cannot resume — see Known issues #12. |
-| `/agno/human-in-the-loop` | `/human-in-the-loop` | ✅ Working | **Not in the doc sidebar**; linked from Quickstart and resolves. |
-| `/agno/copilot-runtime` | `/backend/copilot-runtime` | ✅ Working | Two agent ids verified via the runtime's `info` method. |
-| `/agno/ag-ui` | `/backend/ag-ui` | ✅ Working | Live event panel. |
-| `/agno/troubleshooting/error-debugging` | `/troubleshooting/error-debugging` | ✅ Working | Live error log. |
+| Doc page                                           | Route                                         | Status         | Notes                                                                                  |
+| -------------------------------------------------- | --------------------------------------------- | -------------- | -------------------------------------------------------------------------------------- |
+| `/agno`                                            | `/`                                           | ✅ Working     | Server-side agent probe.                                                               |
+| `/agno/quickstart`                                 | `/quickstart`                                 | ✅ Working     | Verified end-to-end: streamed reply from gpt-4o.                                       |
+| `/agno/prebuilt-components`                        | `/prebuilt-components`                        | ✅ Working     | All three components. Doc page itself is a component stub (142 bytes of raw markdown). |
+| `/agno/threads`                                    | `/threads`                                    | ⚠️ Partial     | Premium.                                                                               |
+| `/agno/prebuilt-components/copilot-threads-drawer` | `/threads/drawer`                             | ⚠️ Partial     | Premium; renders the locked view, which is the expected unlicensed result.             |
+| `/agno/headless-threads`                           | `/threads/headless`                           | ⚠️ Partial     | Premium; `useThreads` returns empty. UI incl. rename fully implemented.                |
+| `/agno/threads-lifecycle`                          | `/threads/lifecycle`                          | ⚠️ Partial     | Mint/switch testable now; replay needs a store.                                        |
+| `/agno/threads-import`                             | `/threads/import`                             | 📖 Reference   | Premium; Agno is not a documented import source.                                       |
+| `/agno/premium/threads-explained`                  | `/threads/architecture`                       | 📖 Reference   | Premium.                                                                               |
+| `/agno/programmatic-control`                       | `/custom-look-and-feel/programmatic-control`  | ✅ Working     | run/stop/state/messages.                                                               |
+| `/agno/inspector`                                  | `/custom-look-and-feel/inspector`             | ✅ Working     | Dev-only by design.                                                                    |
+| `/agno/custom-look-and-feel/slots`                 | `/custom-look-and-feel/slots`                 | ✅ Working     | **Not in the doc sidebar**, but the page resolves (HTTP 200).                          |
+| `/agno/custom-look-and-feel/headless-ui`           | `/custom-look-and-feel/headless-ui`           | ✅ Working     | **Not in the doc sidebar**; resolves.                                                  |
+| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ✅ Working     | `useComponent`; verified over the wire. Needs no backend declaration.                  |
+| `/agno/generative-ui/your-components/interactive`  | `/generative-ui/your-components/interactive`  | 🚧 Not started | Upstream doc page is an empty stub — deliberately left blank.                          |
+| `/agno/generative-ui/tool-rendering`               | `/generative-ui/tool-rendering`               | ✅ Working     | Named + wildcard renderers; tool call verified over the wire.                          |
+| `/agno/frontend-tools`                             | `/frontend-tools`                             | ✅ Working     | Verified: tool call emitted with no result, awaiting the browser.                      |
+| `/agno/human-in-the-loop`                          | `/human-in-the-loop`                          | ✅ Working     | **Not in the doc sidebar**; linked from Quickstart and resolves.                       |
+| `/agno/copilot-runtime`                            | `/backend/copilot-runtime`                    | ✅ Working     | Two agent ids verified via the runtime's `info` method.                                |
+| `/agno/ag-ui`                                      | `/backend/ag-ui`                              | ✅ Working     | Live event panel.                                                                      |
+| `/agno/troubleshooting/error-debugging`            | `/troubleshooting/error-debugging`            | ✅ Working     | Live error log.                                                                        |
 
 **Legend:** ✅ Working · ⚠️ Partial (blocked by something outside this repo) · 📖 Reference (intentionally not a live feature) · ❌ Broken · 🚧 Not started
 
@@ -312,7 +313,7 @@ Note that #2 and #9 interact: choosing `CopilotKitProvider` to get the documente
 [Error Debugging](https://docs.copilotkit.ai/agno/troubleshooting/error-debugging) shows `event.code` on `<CopilotKit>`. But `CopilotKitProps` is `Omit<CopilotKitProviderProps, "children" | "onError">` with `onError` redeclared as the legacy `CopilotErrorHandler`, whose event is `{ type, timestamp, context, error }` — **no `code`**. Only `<CopilotKitProvider>` has the documented `{ error, code, context }` shape. This repo uses `CopilotKitProvider` for that reason.
 
 **3. Slots: a plain component isn't assignable to most slots**
-[Slots](https://docs.copilotkit.ai/agno/custom-look-and-feel/slots) shows passing an arbitrary component to `messageView.userMessage`. `SlotValue<C> = C | string | Partial<ComponentProps<C>>`, so a replacement must match the default component's *type* — including attached statics like `CopilotChatUserMessage.Container`. A bare function component fails to typecheck. It works for slots whose default is a plain function (e.g. `cursor`), which is what this repo demonstrates. Relatedly, the doc's `"data-testid"` in a props-override object isn't in `ComponentProps` and is rejected.
+[Slots](https://docs.copilotkit.ai/agno/custom-look-and-feel/slots) shows passing an arbitrary component to `messageView.userMessage`. `SlotValue<C> = C | string | Partial<ComponentProps<C>>`, so a replacement must match the default component's _type_ — including attached statics like `CopilotChatUserMessage.Container`. A bare function component fails to typecheck. It works for slots whose default is a plain function (e.g. `cursor`), which is what this repo demonstrates. Relatedly, the doc's `"data-testid"` in a props-override object isn't in `ComponentProps` and is rejected.
 
 **4. Model id in the Quickstart**
 [Quickstart](https://docs.copilotkit.ai/agno/quickstart) code uses `OpenAIChat(id="gpt-5.4")` while its own callout says "GPT-4o by default". `gpt-5.4` isn't available on every account, so this repo defaults to `gpt-4o`, overridable via `OPENAI_MODEL`.
@@ -332,52 +333,30 @@ The Quickstart's `uv add agno fastapi uvicorn openai ag-ui-protocol` is insuffic
 **9. The Inspector's on/off prop depends on which provider you use — and the provider defaults to off**
 [Inspector](https://docs.copilotkit.ai/agno/inspector) says the inspector is enabled by default and that `enableInspector={false}` disables it. That holds for `<CopilotKit>`, where `enableInspector` feeds `shouldShowDevConsole()` and defaults to on-for-localhost. `<CopilotKitProvider>` has **no `enableInspector` prop at all** — it reads `showDevConsole`, which **defaults to `false`**. Because this repo uses the provider (see #2), the inspector was silently off until it opted in with `showDevConsole="auto"`.
 
-Related, and easy to trip over: the provider already renders `<CopilotKitInspector core={copilotkit} />` itself when enabled. Mounting `<CopilotKitInspector />` by hand does *not* work — its signature is `({ core, ...rest })` and it forwards `core ?? null`, so a bare instance renders **"CopilotKit core not attached"**. Passing an explicit `null` also defeats the `window.__COPILOTKIT_CORE__` auto-attach fallback that the warning itself recommends.
+Related, and easy to trip over: the provider already renders `<CopilotKitInspector core={copilotkit} />` itself when enabled. Mounting `<CopilotKitInspector />` by hand does _not_ work — its signature is `({ core, ...rest })` and it forwards `core ?? null`, so a bare instance renders **"CopilotKit core not attached"**. Passing an explicit `null` also defeats the `window.__COPILOTKIT_CORE__` auto-attach fallback that the warning itself recommends.
 
 **10. Frontend tools do not need a Python declaration**
-[Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools) shows registering `useFrontendTool` on the client *and* declaring a matching `@tool(external_execution=True)` stub in the Agno agent. The Python stub turns out to be optional: CopilotKit forwards frontend tools to the agent in the AG-UI run input, so the model can call them regardless. Verified on this stack — a tool present only in the run input (`showWeather`, never declared in `agent.py`) was called normally, as were `offerOptions` and `addBookmark` after their Python stubs were deleted.
+[Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools) shows registering `useFrontendTool` on the client _and_ declaring a matching `@tool(external_execution=True)` stub in the Agno agent. The Python stub turns out to be optional: CopilotKit forwards frontend tools to the agent in the AG-UI run input, so the model can call them regardless. Verified on this stack — a tool present only in the run input (`showWeather`, never declared in `agent.py`) was called normally, as were `offerOptions` and `addBookmark` after their Python stubs were deleted.
 
-The stub still has a purpose — it makes the tool visible to the agent's own instructions, which is how you steer *when* the model reaches for it — but it is not required for the call to work. Note the inverse still bites: a tool declared in Python with **no** frontend handler registered will hang the run forever, which is why this repo registers all browser-executed tools at the app root.
+The stub still has a purpose — it makes the tool visible to the agent's own instructions, which is how you steer _when_ the model reaches for it — but it is not required for the call to work. Note the inverse still bites: a tool declared in Python with **no** frontend handler registered will hang the run forever, which is why this repo registers all browser-executed tools at the app root.
 
 **11. Three pages resolve but are missing from the sidebar**
 `human-in-the-loop`, `custom-look-and-feel/slots`, and `custom-look-and-feel/headless-ui` all return HTTP 200 and are linked from other pages, but none appear in the doc nav. All three are implemented here and flagged "Not in doc sidebar".
-
-**12. Resuming after a browser-executed tool needs a database Agno does not have here**
-
-Both [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools) and
-[Display-only](https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only)
-work right up to the point where the result of an externally-executed tool comes
-back. The browser half succeeds — the greeting panel fills in, the weather card
-renders — and then the Agno process logs:
-
-```
-ERROR    Error running entity: Frontend tool resume requires a database
-```
-
-`backend/agent.py` configures no `db`, so there is nowhere to persist the paused
-run, and it stops instead of resuming. Neither doc page mentions a persistence
-requirement for frontend tools. The fix is presumably to give the agent a `db`
-(e.g. `SqliteDb`); untested here, so it is recorded rather than claimed.
-
-The recordings for both pages show this deliberately: `autorecorder` puts the
-browser's own error on screen at the end of those two clips rather than cutting
-away just before the failure.
 
 ---
 
 ## 10. Troubleshooting
 
-| Symptom | Cause | Fix |
-|---|---|---|
-| Chat sends, nothing streams back | Agno process down, or `AGNO_AGENT_URL` wrong | Check the home page connection panel; run `uv run main.py`. |
-| A run starts, then hangs forever | The agent called a browser tool with no registered handler, so no result ever returns | Every `external_execution=True` tool in `backend/tools/frontend_tools.py` needs a matching `useFrontendTool`/`useHumanInTheLoop`. This repo registers all four at the app root for exactly this reason. |
-| Tool runs but custom UI doesn't render | Renderer name ≠ tool name | `useRenderTool({ name })` must equal the Python function name exactly, including case. That's why the Python frontend tools are camelCase. |
-| Connection errors mentioning `localhost` | DNS resolving to IPv6 while the server binds IPv4 | Use `127.0.0.1` in `AGNO_AGENT_URL`. |
-| Thread list empty, drawer shows a lock | No license key | Expected — not a bug. Set `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY`. |
-| Backend exits: `Form data requires "python-multipart"` | Missing transitive dep | `uv add python-multipart` (already in this repo). |
-| Backend exits: `OPENAI_API_KEY is not set` | No key | Copy `.env.example` → `backend/.env`. Failing fast is intentional. |
-| Inspector never appears | Production build | It is disabled unconditionally in production. Use `npm run dev`. |
-| Browser tool visibly runs, then the chat stops dead | Agno cannot resume a paused run without a `db` | Expected on this repo — see Known issues #12. The backend logs `Frontend tool resume requires a database`. |
+| Symptom                                                | Cause                                                                                 | Fix                                                                                                                                                                                                     |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chat sends, nothing streams back                       | Agno process down, or `AGNO_AGENT_URL` wrong                                          | Check the home page connection panel; run `uv run main.py`.                                                                                                                                             |
+| A run starts, then hangs forever                       | The agent called a browser tool with no registered handler, so no result ever returns | Every `external_execution=True` tool in `backend/tools/frontend_tools.py` needs a matching `useFrontendTool`/`useHumanInTheLoop`. This repo registers all four at the app root for exactly this reason. |
+| Tool runs but custom UI doesn't render                 | Renderer name ≠ tool name                                                             | `useRenderTool({ name })` must equal the Python function name exactly, including case. That's why the Python frontend tools are camelCase.                                                              |
+| Connection errors mentioning `localhost`               | DNS resolving to IPv6 while the server binds IPv4                                     | Use `127.0.0.1` in `AGNO_AGENT_URL`.                                                                                                                                                                    |
+| Thread list empty, drawer shows a lock                 | No license key                                                                        | Expected — not a bug. Set `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY`.                                                                                                                                         |
+| Backend exits: `Form data requires "python-multipart"` | Missing transitive dep                                                                | `uv add python-multipart` (already in this repo).                                                                                                                                                       |
+| Backend exits: `OPENAI_API_KEY is not set`             | No key                                                                                | Copy `.env.example` → `backend/.env`. Failing fast is intentional.                                                                                                                                      |
+| Inspector never appears                                | Production build                                                                      | It is disabled unconditionally in production. Use `npm run dev`.                                                                                                                                        |
 
 ---
 
@@ -389,15 +368,15 @@ Doc pages are fetched by appending `.md` to their URL, which returns the authore
 
 **Severity is decided by where the edit landed**, not how big it was:
 
-| Level | Trigger |
-|---|---|
-| **High** | a changed line inside a fenced code block, a changed fence count, or a page that now 404s and is gone from the sitemap |
-| **Medium** | a changed heading, changed frontmatter `title`/`description`, or prose in the same section as changed code |
-| **Low** | other prose |
+| Level      | Trigger                                                                                                                |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **High**   | a changed line inside a fenced code block, a changed fence count, or a page that now 404s and is gone from the sitemap |
+| **Medium** | a changed heading, changed frontmatter `title`/`description`, or prose in the same section as changed code             |
+| **Low**    | other prose                                                                                                            |
 
 **Sections checked** lists every tracked page in nav order with a mark — `✓` unchanged, `!` changed, `+` stored, `✗` 404, `~` unstable, `·` not checked. Expanding a row shows the comparison: for a changed page the diff (`−` existing snapshot, `+` newly fetched), and for an unchanged one the two matching hashes, which is the evidence the check ran.
 
-**`doc-snapshot/CHANGELOG.md`** is the record that survives a re-sync. Because syncing replaces the copy it just compared against, the run *after* a change reports nothing — so the changelog is written at the moment of discovery and never rewritten later. Only changed pages are recorded; a clean run does not touch the file. It keeps the three most recent dated entries, counted rather than aged, so a change from six weeks ago still shows if nothing has happened since.
+**`doc-snapshot/CHANGELOG.md`** is the record that survives a re-sync. Because syncing replaces the copy it just compared against, the run _after_ a change reports nothing — so the changelog is written at the moment of discovery and never rewritten later. Only changed pages are recorded; a clean run does not touch the file. It keeps the three most recent dated entries, counted rather than aged, so a change from six weeks ago still shows if nothing has happened since.
 
 **One sync date.** `syncedAt` in `doc-snapshot/manifest.json`, rewritten on every run and shown on `/`, `/status` and `/doc-sync`. There is no hand-maintained date to keep in step with it.
 
@@ -532,7 +511,6 @@ single page first — before running the full suite.
 **Generative UI** — [Your Components · Display-only](https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only) · [Your Components · Interactive](https://docs.copilotkit.ai/agno/generative-ui/your-components/interactive) † · [Tool Rendering](https://docs.copilotkit.ai/agno/generative-ui/tool-rendering)
 
 **App Control** — [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools) · [Human in the Loop](https://docs.copilotkit.ai/agno/human-in-the-loop) †
-
 
 **Backend** — [Copilot Runtime](https://docs.copilotkit.ai/agno/copilot-runtime) · [AG-UI](https://docs.copilotkit.ai/agno/ag-ui)
 
