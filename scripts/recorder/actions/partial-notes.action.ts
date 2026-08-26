@@ -40,7 +40,7 @@ export const runThreadsAction: PageActionHandler = async (page: Page) => {
   await showNotepadNote(page, 'threads_notes.txt', [
     'Threads Management Surface Test.',
     'Headless list (injectThreads) and CopilotThreadsDrawer are mounted.',
-    'Thread endpoints require Enterprise Intelligence Platform license; drawer displays locked state as expected.',
+    'Thread endpoints require a CopilotKit Intelligence license; drawer displays locked state as expected.',
   ]);
 };
 

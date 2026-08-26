@@ -39,7 +39,7 @@ export interface RouteMeta {
   statusNote?: string;
   /** Page exists in the docs but is absent from the current sidebar. */
   offNav?: boolean;
-  /** Feature requires a CopilotKit Enterprise Intelligence license. */
+  /** Feature requires a CopilotKit Intelligence license. */
   premium?: boolean;
   /**
    * This route owns a live interactive surface, which lives at
@@ -111,7 +111,7 @@ export const NAV: NavGroup[] = [
         status: "partial",
         premium: true,
         statusNote:
-          "Thread persistence is served by the Enterprise Intelligence Platform.",
+          "Thread persistence is served by CopilotKit Intelligence.",
       },
       {
         path: "/threads/drawer",

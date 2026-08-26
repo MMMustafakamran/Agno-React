@@ -107,7 +107,7 @@ export default function Page() {
 
       <Panel title="Threads are not Agno sessions">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-          CopilotKit threads live in the Enterprise Intelligence Platform and are
+          CopilotKit threads live in CopilotKit Intelligence and are
           separate from any session or checkpoint store the agent framework keeps.
           Renaming or deleting a CopilotKit thread does not touch Agno&apos;s own
           storage. If a backend needs both, it keeps a stable mapping between the

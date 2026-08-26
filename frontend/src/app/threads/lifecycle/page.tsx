@@ -75,7 +75,7 @@ export default function Page() {
       <Callout tone="premium" title="Replay needs a store">
         Pinning an id keeps it stable, but reloading will not bring the messages
         back in this install. Replay reads from a server-side store — the
-        Enterprise Intelligence Platform, or a persisting{" "}
+        CopilotKit Intelligence, or a persisting{" "}
         <code>AgentRunner</code> — and this repo configures neither. The Agno
         agent does not persist CopilotKit threads.
       </Callout>

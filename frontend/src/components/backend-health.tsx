@@ -45,7 +45,7 @@ export async function BackendHealth() {
         <Row
           ok={health.licenseKeySet}
           neutral={!health.licenseKeySet}
-          label="Enterprise Intelligence license"
+          label="CopilotKit Intelligence license"
           detail={
             health.licenseKeySet
               ? "Key present — thread routes should be fully functional."

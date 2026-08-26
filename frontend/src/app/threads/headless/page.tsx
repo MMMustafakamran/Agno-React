@@ -7,7 +7,7 @@ export default function Page() {
     <>
       <RouteHeader path="/threads/headless" />
 
-      <Callout tone="premium" title="Needs an Enterprise Intelligence license">
+      <Callout tone="premium" title="Needs a CopilotKit Intelligence license">
         Threads are stored by the platform, not by the Agno agent. Without{" "}
         <code>NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY</code> the hook returns an
         empty list and the mutations have nothing to act on. Everything else —

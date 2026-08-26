@@ -1,6 +1,6 @@
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode, SourceCodeGroup } from "@/components/source-code";
-import { Panel, TryIt } from "@/components/ui";
+import { Callout, Panel, TryIt } from "@/components/ui";
 
 export default function Page() {
   return (
@@ -43,6 +43,16 @@ export default function Page() {
             </>
           }
         />
+        <div className="mt-4">
+          <Callout tone="premium" title="Intelligence is optional here">
+            The doc's route now wires <code>CopilotKitIntelligence</code> and{" "}
+            <code>identifyUser</code> using the license key from step 1. This
+            route does the same when <code>INTELLIGENCE_API_KEY</code> is set,
+            and otherwise takes the fallback the doc describes: SSE with an
+            in-memory runner, so chat works while Threads and the Inspector stay
+            locked.
+          </Callout>
+        </div>
       </Panel>
 
       <Panel title="Provider and agent">
@@ -57,10 +67,18 @@ export default function Page() {
               <code>&lt;CopilotKit&gt;</code>. This repo uses{" "}
               <code>&lt;CopilotKitProvider&gt;</code> because only that one
               exposes the <code>{"{ error, code, context }"}</code> handler the
-              Error Debugging page documents 
+              Error Debugging page documents
             </>
           }
         />
+        <div className="mt-4">
+          <Callout title="Why the relative runtimeUrl works">
+            <code>/api/copilotkit</code> resolves because Next.js serves both
+            the app and the runtime from one origin. A client-only frontend has
+            no shared origin and needs a standalone runtime server plus an
+            absolute URL.
+          </Callout>
+        </div>
       </Panel>
     </>
   );
