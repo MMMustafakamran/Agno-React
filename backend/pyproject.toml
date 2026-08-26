@@ -8,6 +8,8 @@ dependencies = [
     "ag-ui-protocol>=0.1.19",
     "agno>=2.8.6",
     "fastapi>=0.141.1",
+    # agno imports httpx.HTTPStatusError, removed in the httpx 1.0 prereleases.
+    "httpx>=0.28.1,<1",
     "openai>=2.53.0",
     "python-dotenv>=1.2.2",
     "python-multipart>=0.0.32",

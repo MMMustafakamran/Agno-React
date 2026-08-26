@@ -12,9 +12,9 @@
   "dependencies": {
     "@ag-ui/agno": "^0.0.6",
     "@ag-ui/client": "0.0.58",
-    "@copilotkit/react-core": "^1.69.0",
-    "@copilotkit/runtime": "^1.69.0",
-    "next": "16.3.2",
+    "@copilotkit/react-core": "^1.69.2",
+    "@copilotkit/runtime": "^1.69.2",
+    "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",
@@ -31,7 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^10",
-    "eslint-config-next": "16.3.2",
+    "eslint-config-next": "16.3.3",
     "tailwindcss": "^4",
     "typescript": "^7"
   }
