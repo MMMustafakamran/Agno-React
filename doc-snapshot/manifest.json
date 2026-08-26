@@ -1,11 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-<<<<<<< HEAD
   "syncedAt": "2026-08-26T12:05:18.309Z",
-=======
-  "syncedAt": "2026-08-21T15:10:02.066Z",
->>>>>>> b665cac419d04cdaee55f728e31b920a71f3c379
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -30,11 +26,7 @@
       ],
       "status": "ok",
       "age": 0,
-<<<<<<< HEAD
       "date": "Wed, 26 Aug 2026 12:03:19 GMT"
-=======
-      "date": "Fri, 21 Aug 2026 15:10:03 GMT"
->>>>>>> b665cac419d04cdaee55f728e31b920a71f3c379
     },
     "/agno/copilot-runtime": {
       "file": "agno__copilot-runtime.md",

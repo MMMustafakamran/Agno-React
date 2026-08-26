@@ -2,5 +2,5 @@
 setlocal
 echo Starting CopilotKit Agno Daily Automation...
 cd /d "%~dp0"
-node scripts/automate.mjs %*
+node ci/automate.mjs %*
 pause

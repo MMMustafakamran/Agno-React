@@ -29,8 +29,8 @@
 
 When maintaining or porting this Agno repository, ensure these core components are in place:
 
-1. **`scripts/check-doc-drift.mjs`**: Standalone live doc hash verifier against `doc-snapshot/manifest.json`.
-2. **`scripts/automate.mjs`**: Single-process Node orchestrator (starts Agno backend & Next.js frontend, polls health, drives recorder, cleans up processes, outputs `RUN_REPORT.md`/`json`).
+1. **`ci/check-doc-drift.mjs`**: Standalone live doc hash verifier against `doc-snapshot/manifest.json`.
+2. **`ci/automate.mjs`**: Single-process Node orchestrator (starts Agno backend & Next.js frontend, polls health, drives recorder, cleans up processes, outputs `RUN_REPORT.md`/`json`).
 3. **`autorecorder/cli.ts`**: Supports `--shard=K/N`, `--only=...`, `--pages=...`, and `--limit=N` CLI flags with empty shard exit guards.
 4. **`.github/workflows/daily-recorder.yml`**: Matrix workflow (3 workers) with `xvfb-run`, interactive page checkboxes (17 pages), and artifact consolidation.
 5. **`package.json`**: Root convenience runner (`npm run automate`, `npm run record:list`, `npm run record:doctor`).
@@ -40,7 +40,7 @@ When maintaining or porting this Agno repository, ensure these core components a
 
 ## 3. Core Implementation Blueprints
 
-### Blueprint A: Single-Process Orchestrator (`scripts/automate.mjs`)
+### Blueprint A: Single-Process Orchestrator (`ci/automate.mjs`)
 * **Why:** In GitHub Actions, each YAML `run:` step executes in a separate subshell. Launching background daemons in separate steps causes them to be killed by the runner's process reaper when the step completes.
 * **Solution:** Spawn backend and frontend within a single persistent Node process:
 ```javascript
@@ -102,7 +102,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: cd autorecorder && npm install && npx playwright install --with-deps chromium
-      - run: xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" node scripts/automate.mjs --shard=${{ matrix.shard }}/3
+      - run: xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" node ci/automate.mjs --shard=${{ matrix.shard }}/3
       - uses: actions/upload-artifact@v4
         if: always()
         with:
