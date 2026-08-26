@@ -10,7 +10,10 @@
  *    recorder's preflight timeout
  */
 import { execSync } from 'node:child_process';
+import path from 'node:path';
 import {
+  BACKEND_DIR,
+  CI_DIR,
   BACKEND_PORT,
   FRONTEND_PORT,
   FRONTEND_URL,
@@ -131,6 +134,61 @@ export async function assertModelCredentials() {
   } catch (err) {
     if (err instanceof Error && /rejected by OpenAI/.test(err.message)) throw err;
     process.stdout.write('⚠️ could not reach OpenAI; continuing.\n');
+  }
+}
+
+/**
+ * Confirm the *backend* can reach OpenAI, using its own Python environment.
+ *
+ * `assertModelCredentials` above proves the key is good, but it proves it from
+ * Node. The agent calls OpenAI from Python, and those are different resolvers,
+ * TLS stacks and connection paths. A CI run has already gone green through
+ * every check here and then failed inside the demo with
+ *
+ *   ERROR  API connection error from OpenAI API: Connection error.
+ *
+ * — Node reached OpenAI, Python did not, in the same job. That cost 78 seconds
+ * and produced a broken video instead of an error. This check runs the same
+ * client the agent uses, so the failure surfaces in seconds and names itself.
+ *
+ * Must run after `uv sync`; the environment does not exist before that.
+ */
+export function assertBackendCanReachModel({ attempts = 2 } = {}) {
+  // The probe is a file, not an inlined `python -c` string. A multi-line -c
+  // argument does not survive the shell: the command silently half-runs and
+  // exits 0, so the check reported "reachable" without ever contacting OpenAI.
+  // A false green here is worse than no check at all.
+  const probePath = path.join(CI_DIR, 'lib', 'probe-openai.py');
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    process.stdout.write(
+      `⏳ [Preflight] Backend → OpenAI reachability (attempt ${attempt}/${attempts})... `,
+    );
+    try {
+      const out = execSync(`uv run --prerelease=allow python "${probePath}"`, {
+        cwd: BACKEND_DIR,
+        stdio: ['ignore', 'pipe', 'pipe'],
+        encoding: 'utf8',
+      });
+      // Belt and braces: only the probe's own success token counts.
+      if (!out.includes('OK')) {
+        throw Object.assign(new Error('probe produced no result'), {
+          stderr: 'probe did not run to completion',
+        });
+      }
+      process.stdout.write('✅ reachable\n');
+      return;
+    } catch (err) {
+      const detail = (err.stderr || '').trim().split('\n').pop() || 'unknown error';
+      process.stdout.write(`❌ ${detail}\n`);
+      if (attempt === attempts) {
+        throw new Error(
+          `The backend cannot reach OpenAI from its own Python environment: ${detail}\n` +
+            'Every recorded demo would fail with "Agent never produced a response".\n' +
+            'Node reaching OpenAI is not sufficient — the agent calls it from Python.',
+        );
+      }
+    }
   }
 }
 

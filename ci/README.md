@@ -19,6 +19,7 @@ ci/
     ├── env.mjs           loads .env files the way backend/main.py does
     ├── pages.mjs         reads page ids from the recorder's config
     ├── preflight.mjs     port, credential and warmup checks
+    ├── probe-openai.py   proves the backend's Python env can reach OpenAI
     ├── mux.mjs           voiceover muxing (the only implementation)
     └── report.mjs        RUN_REPORT.md / .json
 ```
@@ -62,12 +63,17 @@ node ci/automate.mjs --limit=3 --ignore-doc-drift
    both have cost a full run before.
 3. **Dependencies** — `uv sync` for the backend, `npm install` for the frontend
    and recorder.
-4. **Servers** — backend (Agno AgentOS) and frontend, spawned from this process,
+4. **Backend reachability** — runs `lib/probe-openai.py` through `uv run`, so the
+   check uses the same interpreter, resolver and TLS stack the agent will. It has
+   to come after `uv sync`, because the venv does not exist before that. A
+   Node-side check is not a substitute: a run passed the Node check and then
+   failed every demo with `API connection error from OpenAI API`.
+5. **Servers** — backend (Agno AgentOS) and frontend, spawned from this process,
    logging to `autorecorder/videos/logs/`.
-5. **Health + warmup** — poll until both answer, then compile the heaviest routes
+6. **Health + warmup** — poll until both answer, then compile the heaviest routes
    and `/api/copilotkit` so the recorder is not racing a cold Turbopack build.
-6. **Record** — hand off to the recorder with the forwarded flags.
-7. **Mux + report** — always runs, success or failure.
+7. **Record** — hand off to the recorder with the forwarded flags.
+8. **Mux + report** — always runs, success or failure.
 
 ## Why one process
 

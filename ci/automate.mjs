@@ -32,6 +32,7 @@ import {
 } from './lib/config.mjs';
 import { loadEnvFiles } from './lib/env.mjs';
 import {
+  assertBackendCanReachModel,
   assertModelCredentials,
   assertPortsFree,
   warmFrontendRoutes,
@@ -273,6 +274,14 @@ async function main() {
 
       runSync('npm install', FRONTEND_DIR, 'Installing Frontend Dependencies');
       runSync('npm install', RECORDER_DIR, 'Installing Autorecorder Dependencies');
+    }
+
+    // 3b. The agent calls OpenAI from Python, so prove Python can reach it.
+    // This sits after the install because the venv does not exist before it,
+    // and before the servers because a backend that cannot reach the model
+    // records a full run of demos that can only time out.
+    if (!skipCredentialCheck && !skipInstall) {
+      assertBackendCanReachModel();
     }
 
     // 4. Servers — skipped for any port already being served.
