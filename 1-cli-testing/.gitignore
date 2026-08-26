@@ -20,4 +20,3 @@ __pycache__/
 .env.*
 !.env.example
 .copilotkit/
-logs/
