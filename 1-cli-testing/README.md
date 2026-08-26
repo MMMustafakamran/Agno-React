@@ -68,7 +68,6 @@ OPENAI_API_KEY=your_openai_api_key
 
 ### 2. Install & Start Development Servers
 
-You can install dependencies and start dev servers across all package managers simultaneously using the provided multi-terminal scripts:
 You can install dependencies, start dev servers, or clean up all package manager test folders using the automation scripts:
 
 **Windows Batch (`.bat`):**
@@ -135,9 +134,39 @@ npx copilotkit@latest framework list
 
 ---
 
+## Automated Matrix Runner & Live Monitoring
+
+We have built an automated test runner (`run-matrix.ts`) that executes the entire matrix non-interactively, auto-injects required environment credentials from your root `.env`, and tests runtime health probes with live terminal monitoring:
+
+```bash
+# Run full matrix across all 4 package managers
+npx tsx run-matrix.ts
+
+# Test a single package manager
+npx tsx run-matrix.ts --npm
+npx tsx run-matrix.ts --pnpm
+npx tsx run-matrix.ts --yarn
+npx tsx run-matrix.ts --bun
+
+# Clean test directories
+npx tsx run-matrix.ts --clean-only
+
+# Live verbose stream from child processes
+npx tsx run-matrix.ts --verbose
+```
+
+### Features:
+- **Zero manual input**: Automatically passes `--channel none` and non-interactive flags.
+- **Auto Environment Injection**: Copies `OPENAI_API_KEY`, `INTELLIGENCE_API_KEY`, and `COPILOTKIT_LICENSE_TOKEN` into scaffolded `.env` files automatically.
+- **Live Terminal Dashboard**: Color-coded step timers and pass/fail summary table.
+- **Dedicated Log Files**: Streams process logs to `1-cli-testing/logs/<manager>/scaffold.log` and `server.log`.
+
+---
+
 ## Multi-Package-Manager Comparison Workflow
 
 1. Run `npx copilotkit@latest login` once to establish global machine authentication.
 2. Scaffold an app per package manager in isolated subdirectories (`npm`, `pnpm`, `yarn`, `bun`).
 3. Verify that each generated app correctly runs concurrently via its package manager `dev` command.
 4. Test that Rich Threads and basic agent interactions work identically across all four.
+

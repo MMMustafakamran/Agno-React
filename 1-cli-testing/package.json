@@ -1,0 +1,19 @@
+{
+  "name": "cli-testing-matrix",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:matrix": "tsx run-matrix.ts",
+    "test:npm": "tsx run-matrix.ts --npm",
+    "test:pnpm": "tsx run-matrix.ts --pnpm",
+    "test:yarn": "tsx run-matrix.ts --yarn",
+    "test:bun": "tsx run-matrix.ts --bun",
+    "clean": "tsx run-matrix.ts --clean-only"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.19.3",
+    "typescript": "^5"
+  }
+}
