@@ -31,7 +31,7 @@ ci/
 |---|---|
 | `npm run automate` | Full pipeline: drift → preflight → deps → servers → record |
 | `npm run automate:pull` | Same, after `git pull` |
-| `npm run automate:upgrade` | Same, upgrading dependencies first |
+| `npm run automate:locked` | Same, but installing the committed lockfiles |
 | `npm run drift` | Doc drift check on its own |
 | `npm run drift:sync` | Update `doc-snapshot/` to match live docs |
 | `npm run ci:pages` | List valid page ids |
@@ -49,7 +49,7 @@ node ci/automate.mjs --limit=3 --ignore-doc-drift
 | Flag | Effect |
 |---|---|
 | `--pull` | `git pull` first |
-| `--upgrade` | Upgrade deps instead of installing the lockfile |
+| `--use-lockfile` | Install the committed lockfiles instead of re-resolving (see below) |
 | `--skip-install` | Skip dependency installation |
 | `--ignore-doc-drift` / `--force` | Record even if the live docs moved |
 | `--allow-port-reuse` | Record against servers that are already running |
@@ -137,7 +137,7 @@ step are the nightly policy:
 | | Nightly | Manual dispatch |
 |---|---|---|
 | Pages | all 17, across 3 shards | whatever is ticked or typed |
-| Dependencies | **upgraded** (`ncu -u --peer`, `uv sync --upgrade`) | the lockfiles, unless ticked |
+| Dependencies | re-resolved from the ranges | re-resolved, unless **Install the committed lockfiles** is ticked |
 | Doc drift | **fails the run** | records anyway, unless ticked |
 
 The nightly is deliberately the strict one — it exists to catch a breaking
@@ -151,11 +151,34 @@ Two consequences worth knowing:
 - **Drift halts before anything records.** Step 0 exits with code 2 and all
   three shards fail, so a drifted night produces no videos at all. Resolve it
   with `npm run drift:sync`, or re-run manually leaving the drift box unticked.
-- **An upgraded run is not the lockfile.** `--upgrade` re-resolves on the
+- **A normal run is not the lockfile.** Dependencies are re-resolved on the
   runner, so a nightly failure may be a new dependency rather than a new bug.
-  Re-run manually with the box unticked to tell the two apart — if that passes,
-  the upgrade is the cause. `ncu --peer` already withholds anything that would
-  break a peer dependency.
+  Re-run manually with **Install the committed lockfiles** ticked to tell the
+  two apart — if that passes, a dependency is the cause.
+
+## Which versions get recorded
+
+A run re-resolves its dependencies by default: the lockfiles are dropped and
+`npm install` (plus `uv sync --upgrade` where there is a Python agent) pick the
+newest versions the ranges in `package.json` and `pyproject.toml` already allow.
+`@copilotkit/*` is a caret range, so a release is recorded the night it ships,
+and a major version still cannot arrive without someone editing the manifest.
+
+This is the same thing as deleting `node_modules` and `package-lock.json` by
+hand, which is how these demos have always been checked before a release. On CI
+there is nothing to delete beside the lockfile: every run starts on a clean
+runner.
+
+`--use-lockfile` (dispatch checkbox **Install the committed lockfiles**) opts
+back into the committed versions. Reach for it to reproduce an older run, or to
+find out whether a break came from the demo or from the tree beneath it.
+
+What no run does is rewrite the ranges. `ncu -u --peer` used to run here and was
+the largest single source of CI failures across these repos: it bumped every
+`@angular/*` package past a lockfile that still pinned the old ones, and the
+exact inter-package peer requirements made the result unsatisfiable. Raising a
+range is a reviewed edit to `package.json`, not something a nightly recording
+run should do to itself.
 
 ## CI shape
 
