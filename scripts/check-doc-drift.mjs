@@ -106,6 +106,10 @@ async function checkPage(docPath, pageMeta) {
       severity,
       oldHash: pageMeta.sha256.slice(0, 8),
       newHash: fetchedHash.slice(0, 8),
+      fetchedText,
+      fetchedHash,
+      date: res.headers.get('date') || new Date().toUTCString(),
+      age: parseInt(res.headers.get('age') || '0', 10),
       status: 'drifted',
     };
   } catch (err) {
@@ -153,6 +157,67 @@ export async function checkAllDocDrift() {
     drifted: driftedPages.length > 0,
     driftedPages,
     errors,
+    results,
+    manifest,
+  };
+}
+
+export async function syncDocSnapshot() {
+  console.log('═══════════════════════════════════════════════════════════════');
+  console.log('  🔄 Syncing Doc Snapshot with Live CopilotKit Documentation');
+  console.log('═══════════════════════════════════════════════════════════════');
+
+  const check = await checkAllDocDrift();
+  const { manifest, results } = check;
+
+  await fs.mkdir(PAGES_DIR, { recursive: true });
+
+  let updatedCount = 0;
+  let unchangedCount = 0;
+  let failedCount = 0;
+
+  for (const r of results) {
+    if (r.status === 'ok') {
+      unchangedCount++;
+      continue;
+    }
+
+    if (r.drifted && r.fetchedText) {
+      const normalized = normalizeText(r.fetchedText);
+      const filePath = path.join(PAGES_DIR, r.file);
+      await fs.writeFile(filePath, normalized, 'utf8');
+
+      manifest.pages[r.docPath] = {
+        ...manifest.pages[r.docPath],
+        file: r.file,
+        sha256: r.fetchedHash,
+        bytes: Buffer.byteLength(normalized, 'utf8'),
+        lines: normalized.split('\n').length,
+        status: 'ok',
+        age: r.age ?? 0,
+        date: r.date ?? new Date().toUTCString(),
+      };
+
+      updatedCount++;
+      console.log(` ✅ Updated: ${r.docPath} -> ${r.file} (${r.oldHash} ➔ ${r.newHash})`);
+    } else if (r.error || r.status === '404' || r.status === 'invalid-content-type') {
+      failedCount++;
+      console.error(` ❌ Failed to sync: ${r.docPath} (${r.error || r.status})`);
+    }
+  }
+
+  manifest.syncedAt = new Date().toISOString();
+  await fs.writeFile(MANIFEST_PATH, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
+
+  console.log('\n───────────────────────────────────────────────────────────────');
+  console.log(`✨ Sync Complete: ${updatedCount} updated, ${unchangedCount} up-to-date, ${failedCount} errors.`);
+  console.log(`📄 Manifest updated at: ${MANIFEST_PATH}`);
+  console.log('───────────────────────────────────────────────────────────────\n');
+
+  return {
+    updated: updatedCount,
+    unchanged: unchangedCount,
+    failed: failedCount,
   };
 }
 
@@ -166,7 +231,42 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       console.log(` • [${p.severity}] ${p.docPath}`);
       if (p.oldHash && p.newHash) {
         console.log(`   Hash: ${p.oldHash} ➔ ${p.newHash} (${p.file})`);
+  const args = process.argv.slice(2);
+  const isUpdate = args.includes('--update') || args.includes('--sync') || args.includes('-u');
+  const isHelp = args.includes('--help') || args.includes('-h');
+
+  if (isHelp) {
+    console.log('Usage: node scripts/check-doc-drift.mjs [options]');
+    console.log('');
+    console.log('Options:');
+    console.log('  --update, --sync, -u   Fetch live doc markdown and update doc-snapshot/ & manifest.json');
+    console.log('  --help, -h             Show this help message');
+    process.exit(0);
+  }
+
+  if (isUpdate) {
+    const syncRes = await syncDocSnapshot();
+    process.exit(syncRes.failed > 0 ? 1 : 0);
+  } else {
+    const result = await checkAllDocDrift();
+    if (result.drifted) {
+      console.log('🚨 [DOC DRIFT DETECTED] The following live documentation pages have changed:');
+      console.log('───────────────────────────────────────────────────────────────────────────');
+      for (const p of result.driftedPages) {
+        console.log(` • [${p.severity}] ${p.docPath}`);
+        if (p.oldHash && p.newHash) {
+          console.log(`   Hash: ${p.oldHash} ➔ ${p.newHash} (${p.file})`);
+        }
       }
+      console.log('───────────────────────────────────────────────────────────────────────────');
+      console.log('👉 Review changes on http://localhost:3000/doc-sync or run with --update to sync.');
+      process.exit(2);
+    } else {
+      console.log(`✅ [NO DOC DRIFT] All ${result.total} documentation pages match the local snapshot.`);
+      if (result.errors.length > 0) {
+        console.log(`ℹ️  Note: ${result.errors.length} page(s) could not be fetched due to network timeout.`);
+      }
+      process.exit(0);
     }
     console.log('───────────────────────────────────────────────────────────────────────────');
     console.log('👉 Review changes on http://localhost:3000/doc-sync or update doc-snapshot.');
@@ -179,3 +279,4 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exit(0);
   }
 }
+
