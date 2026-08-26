@@ -11,6 +11,11 @@ name: Daily Auto-Update and Demo Recording
 on:
   schedule:
     # Every day at 06:00 UTC (11:00 AM PKT).
+    #
+    # The nightly run is the canary: it upgrades dependencies and stops on doc
+    # drift, so a breaking release upstream or a rewritten doc page is caught
+    # here rather than by someone reading a stale video. A manual dispatch
+    # decides for itself — see the defaults in the record step.
     - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
@@ -44,12 +49,12 @@ on:
         type: string
         default: ''
       upgrade_packages:
-        description: 'Upgrade dependencies (ncu -u --peer & uv sync --upgrade)'
+        description: 'Upgrade dependencies (ncu -u --peer skips anything that would break a peer dep; uv sync --upgrade). Nightly does this.'
         required: false
         type: boolean
         default: false
       fail_on_doc_drift:
-        description: 'Fail immediately if the live docs have drifted'
+        description: 'Fail immediately if the live docs have drifted. Nightly does this.'
         required: false
         type: boolean
         default: false
@@ -183,11 +188,20 @@ jobs:
             RECORD_ARGS="--shard=${SHARD}/3"
           fi
 
+          # A scheduled run carries no inputs, so these fallbacks *are* the
+          # nightly policy: upgrade, and stop on doc drift. A manual dispatch
+          # always sends both booleans, so its checkboxes take precedence and an
+          # unticked box still means false.
+          UPGRADE="${INPUT_UPGRADE:-true}"
+          FAIL_ON_DRIFT="${INPUT_FAIL_ON_DRIFT:-true}"
+
           EXTRA_FLAGS=""
-          if [ "${INPUT_UPGRADE:-false}" = "true" ]; then
+          if [ "$UPGRADE" = "true" ]; then
             EXTRA_FLAGS="$EXTRA_FLAGS --upgrade"
           fi
-          if [ "${INPUT_FAIL_ON_DRIFT:-false}" != "true" ]; then
+          # Note the inversion: the flag suppresses the halt, so it is added
+          # only when we do *not* want drift to fail the run.
+          if [ "$FAIL_ON_DRIFT" != "true" ]; then
             EXTRA_FLAGS="$EXTRA_FLAGS --ignore-doc-drift"
           fi
 

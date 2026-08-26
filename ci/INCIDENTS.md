@@ -165,11 +165,14 @@ this one.
 
 Not incidents yet. Each one has already cost time.
 
-**`--upgrade` runs code you have never run.** The checkbox re-resolves
-dependencies on the runner instead of installing the committed lock. Today
+**`--upgrade` runs code you have never run.** It re-resolves dependencies on
+the runner instead of installing the committed lock. Today
 `uv lock --upgrade --prerelease=allow --dry-run` moves `openai` 3.3.1 → 3.4.0.
-Leave it unticked unless upgrading is the point of the run, and expect the
-result to differ from local.
+
+The nightly does this on purpose — catching a breaking upstream release is the
+point of a canary — so a nightly failure has two possible causes and they look
+identical. Re-run manually with the upgrade box unticked before debugging: if
+the locked run passes, the dependency is the story, not the code.
 
 **`openai` 3.x uses `httpx2`, agno uses `httpx`.** agno type-checks
 `http_client` against `httpx` 0.28, so handing it an `httpx.AsyncClient` passes

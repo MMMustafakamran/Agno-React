@@ -126,6 +126,37 @@ page belongs to no section, so nothing can quietly become unreachable.
 Skipping step 2 fails the run with the page named, rather than silently dropping
 it from the form.
 
+## The nightly run
+
+`0 6 * * *` — 06:00 UTC, **11:00 AM PKT**, every day. Pakistan is UTC+5 with no
+DST, so the local time never shifts.
+
+A scheduled event carries no dispatch inputs, so the fallbacks in the record
+step are the nightly policy:
+
+| | Nightly | Manual dispatch |
+|---|---|---|
+| Pages | all 17, across 3 shards | whatever is ticked or typed |
+| Dependencies | **upgraded** (`ncu -u --peer`, `uv sync --upgrade`) | the lockfiles, unless ticked |
+| Doc drift | **fails the run** | records anyway, unless ticked |
+
+The nightly is deliberately the strict one — it exists to catch a breaking
+upstream release or a rewritten doc page, so it runs against the newest
+dependencies and refuses to publish videos of docs that have since changed. A
+manual run is the lenient one, because it is usually being used to look at a
+specific page.
+
+Two consequences worth knowing:
+
+- **Drift halts before anything records.** Step 0 exits with code 2 and all
+  three shards fail, so a drifted night produces no videos at all. Resolve it
+  with `npm run drift:sync`, or re-run manually leaving the drift box unticked.
+- **An upgraded run is not the lockfile.** `--upgrade` re-resolves on the
+  runner, so a nightly failure may be a new dependency rather than a new bug.
+  Re-run manually with the box unticked to tell the two apart — if that passes,
+  the upgrade is the cause. `ncu --peer` already withholds anything that would
+  break a peer dependency.
+
 ## CI shape
 
 `prepare` resolves the run name and page list once. Three workers each record a
