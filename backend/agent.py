@@ -30,12 +30,14 @@ DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 #
 #     ERROR  API connection error from OpenAI API: Connection error.
 #
-# which is how `APIConnectionError` stringifies a wrapped `ConnectTimeout`. The
-# job runs three shards, each building the Next.js app with Turbopack,
-# installing Playwright and driving Chromium under xvfb, so the machine is
-# saturated at the moment the agent first calls out. The Node-side credential
-# check passed in the same job because it runs before any of that starts and
-# allows itself 20 seconds.
+# which is how `APIConnectionError` stringifies a wrapped `ConnectTimeout`.
+#
+# The load is one runner's own, not contention between the shards — each matrix
+# job gets its own VM. That single VM runs `uv sync`, two npm installs, a
+# Playwright browser download, an apt install of ffmpeg, a Turbopack build and
+# Chromium under xvfb, and the agent's first call goes out while it is still
+# busy with the tail of that. The Node-side credential check passed in the same
+# job because it runs before any of it starts and allows itself 20 seconds.
 #
 # Connect stays separate from read: a slow connect is worth waiting for, a hung
 # one is not, and streaming replies still need a long read budget.

@@ -28,9 +28,15 @@ gave none, so opening the socket had a 5-second budget. `APIConnectionError`
 stringifies a wrapped `ConnectTimeout` as `Connection error.`, which names
 nothing.
 
-Three shards each build the app with Turbopack, install Playwright and drive
-Chromium under `xvfb`. The runner is saturated exactly when the agent first
-calls out. Locally, connecting takes ~100ms.
+The load is one runner's own — each matrix job gets its own VM, so the shards
+never contend with each other. That single VM runs `uv sync`, two npm installs,
+a Playwright browser download, an apt install of ffmpeg, a Turbopack build and
+Chromium under `xvfb`, and the agent's first call goes out while it is still
+finishing that. Locally, connecting takes ~100ms.
+
+**Sharding is not the cause, and removing it would not have helped** — it only
+changes how many pages one VM records, not how much work it does before the
+first one.
 
 **Why the Node check passed in the same job** — it allows 20 seconds and runs
 *before* that work starts, on an idle machine. Node succeeding while Python
