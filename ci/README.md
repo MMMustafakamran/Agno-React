@@ -159,6 +159,8 @@ jobs, so all four names agree. Change the prefix via `PROJECT_SLUG` in
 | `COPILOTKIT_LICENSE_TOKEN` / `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` | secret | Unlocks the Rich Threads pages |
 | `INTELLIGENCE_API_KEY` | secret | Managed thread store |
 | `OPENAI_MODEL` | variable | Model override (default `gpt-4o`) |
+| `OPENAI_CONNECT_TIMEOUT` | variable | Seconds to wait for a socket to OpenAI (default 30) |
+| `OPENAI_REQUEST_TIMEOUT` / `OPENAI_MAX_RETRIES` | variable | Read budget and retry count (default 600 / 5) |
 | `INTELLIGENCE_API_URL` / `INTELLIGENCE_GATEWAY_WS_URL` | variable | Endpoint overrides |
 
 Without the Intelligence pair the three Rich Threads pages still record, but the
@@ -175,6 +177,15 @@ environment variables can answer instead of the new one.
 **"OPENAI_API_KEY is missing or still the placeholder"** — set a real key in
 `backend/.env` or the repo-root `.env`. Note the precedence: `backend/.env` is
 read first, so an uncommented placeholder there shadows a real key at the root.
+
+**"Agent never produced a response" and `API connection error from OpenAI API`
+in `backend.log`** — that pairing is a *connect* timeout, not a dead network.
+The OpenAI SDK defaults to a 5-second connect budget and agno only overrides it
+when asked, so on a runner busy compiling Next.js and driving Chromium the agent
+gave up before the socket opened, while the Node credential check — which runs
+earlier, on an idle machine, with a 20-second budget — passed in the same job.
+`backend/agent.py` now sets the budget explicitly; raise
+`OPENAI_CONNECT_TIMEOUT` if a slower environment still trips it.
 
 **Server died mid-run** — read `autorecorder/videos/logs/backend.log` and
 `frontend.log`. They are uploaded with the CI artifacts.

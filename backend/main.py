@@ -34,7 +34,10 @@ _ALLOWED_ORIGINS = [
     if o.strip()
 ]
 
-if not os.getenv("OPENAI_API_KEY"):
+# `.strip()` so a key pasted into a CI secret with a stray newline is caught
+# here, where the message names it, rather than much later as an illegal HTTP
+# header value reported as a generic connection error.
+if not (os.getenv("OPENAI_API_KEY") or "").strip():
     raise SystemExit(
         "OPENAI_API_KEY is not set.\n"
         f"Create {_BACKEND_ENV} (or a repo-root .env) from .env.example and add your key."
