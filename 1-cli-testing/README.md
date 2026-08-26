@@ -68,7 +68,34 @@ OPENAI_API_KEY=your_openai_api_key
 
 ### 2. Install & Start Development Servers
 
-The starter script runs both the UI and agent servers concurrently:
+You can install dependencies and start dev servers across all package managers simultaneously using the provided multi-terminal scripts:
+You can install dependencies, start dev servers, or clean up all package manager test folders using the automation scripts:
+
+**Windows Batch (`.bat`):**
+```cmd
+# 1. Install dependencies in separate windows
+install-all.bat
+
+# 2. Run all dev servers in separate windows
+run-all.bat
+
+# 3. Clean up / delete all generated project files (keeps README.md)
+delete-projects.bat
+```
+
+**PowerShell (`.ps1`):**
+```powershell
+# 1. Install dependencies in separate windows
+.\install-all.ps1
+
+# 2. Run all dev servers in separate windows
+.\run-all.ps1
+
+# 3. Clean up / delete all generated project files (keeps README.md)
+.\delete-projects.ps1
+```
+
+Or manually per project:
 
 ```bash
 # npm
