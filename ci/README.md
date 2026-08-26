@@ -9,6 +9,7 @@ GitHub requires that path.
 ```
 ci/
 ├── automate.mjs          entry point — one process, start to finish
+├── INCIDENTS.md          failures this pipeline hit, and why
 ├── check-doc-drift.mjs   compares doc-snapshot/ against the live docs
 ├── list-pages.mjs        prints the recorder's page ids
 ├── validate-pages.mjs    rejects unknown ids before a run starts
@@ -189,6 +190,10 @@ earlier, on an idle machine, with a 20-second budget — passed in the same job.
 
 **Server died mid-run** — read `autorecorder/videos/logs/backend.log` and
 `frontend.log`. They are uploaded with the CI artifacts.
+
+See [`INCIDENTS.md`](INCIDENTS.md) for the failures behind these checks —
+including the ones whose symptom named the wrong cause — and for the hypotheses
+already ruled out.
 
 **Recorder aborts on preflight** — the frontend was still compiling. The warmup
 step covers the usual routes; a page added to `WARMUP_ROUTES` in `lib/config.mjs`
