@@ -179,8 +179,15 @@ export function assertBackendCanReachModel({ attempts = 2 } = {}) {
       process.stdout.write('✅ reachable\n');
       return;
     } catch (err) {
-      const detail = (err.stderr || '').trim().split('\n').pop() || 'unknown error';
+      const stderr = (err.stderr || '').trim();
+      const detail = stderr.split('\n').pop() || 'unknown error';
       process.stdout.write(`❌ ${detail}\n`);
+      // The probe's diagnosis (resolved addresses, per-family TCP attempts,
+      // the exception chain) is the whole point of running it — print it, or a
+      // failed run costs another round trip to learn what it already knew.
+      if (stderr.includes('--- backend cannot reach OpenAI')) {
+        console.error(stderr);
+      }
       if (attempt === attempts) {
         throw new Error(
           `The backend cannot reach OpenAI from its own Python environment: ${detail}\n` +
