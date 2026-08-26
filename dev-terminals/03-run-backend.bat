@@ -5,11 +5,9 @@ set "ROOT_DIR=%~dp0.."
 
 echo ================================================================
 echo  [Step 3] Starting Backend Agent Server
-echo  [Step 3] Starting Agno Backend Agent Server
 echo ================================================================
 echo  Location:     %ROOT_DIR%\backend
 echo  Server URL:   http://127.0.0.1:8000
-echo  AG-UI Path:   http://127.0.0.1:8000/agui
 echo  Health Check: http://127.0.0.1:8000/health
 echo  API Docs:     http://127.0.0.1:8000/docs
 echo ================================================================

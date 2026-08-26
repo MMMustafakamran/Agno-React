@@ -8,7 +8,6 @@ set "ROOT_DIR=%DIR%.."
 cls
 echo ================================================================
 echo   🚀 COPILOTKIT STEP-BY-STEP TERMINAL ORCHESTRATOR
-echo   🚀 COPILOTKIT + AGNO STEP-BY-STEP TERMINAL ORCHESTRATOR
 echo ================================================================
 echo.
 echo  This launcher opens separate, dedicated terminal windows for
@@ -19,7 +18,6 @@ echo   [1]  Check Doc Drift            (doc-snapshot/ comparison)
 echo   [1B] Sync Doc Snapshot (.md)    (Fetch & overwrite changed .md files)
 echo   [2]  Update Dependencies        (backend uv sync + frontend safe install)
 echo   [3]  Run Backend Agent          (FastAPI agent on :8000)
-echo   [3]  Run Agno Backend Agent     (FastAPI agent on :8000)
 echo   [4]  Run Frontend Next.js       (Next.js app on :3000)
 echo   [5]  Run Autorecorder           (Playwright video automation)
 echo.
@@ -121,13 +119,11 @@ if /i not "%C2%"=="s" (
 echo.
 echo ----------------------------------------------------------------
 echo Step 3 of 5: Run Backend Agent Server (:8000)
-echo Step 3 of 5: Run Agno Backend Agent Server (:8000)
 echo This will open a new terminal running the FastAPI Python server.
 echo.
 set /p "C3=Press ENTER to launch Step 3 (Backend) terminal (or type 's' to skip): "
 if /i not "%C3%"=="s" (
     start "[Step 3] Backend Server :8000" cmd /k "call "%DIR%03-run-backend.bat""
-    start "[Step 3] Agno Backend Server :8000" cmd /k "call "%DIR%03-run-backend.bat""
 )
 
 echo.
