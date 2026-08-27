@@ -12,7 +12,7 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { AUDIO_DIR, VIDEOS_DIR } from './config.mjs';
+import { AUDIO_DIR, ROOT_DIR, VIDEOS_DIR } from './config.mjs';
 
 /**
  * Which audio track belongs to which video, matched on the video filename —
@@ -34,12 +34,33 @@ const AUDIO_TRACKS = [
   },
 ];
 
-function hasFfmpeg() {
+function getFfmpegCmd() {
+  if (process.env.FFMPEG_PATH && fs.existsSync(process.env.FFMPEG_PATH)) {
+    return `"${process.env.FFMPEG_PATH}"`;
+  }
   try {
     execSync('ffmpeg -version', { stdio: 'ignore' });
-    return true;
+    return 'ffmpeg';
   } catch {
-    return false;
+    // Check python imageio_ffmpeg binary in backend/.venv if installed
+    const venvBinDir = path.join(
+      ROOT_DIR,
+      'backend',
+      '.venv',
+      'Lib',
+      'site-packages',
+      'imageio_ffmpeg',
+      'binaries',
+    );
+    if (fs.existsSync(venvBinDir)) {
+      const binaries = fs
+        .readdirSync(venvBinDir)
+        .filter((f) => f.startsWith('ffmpeg') && f.endsWith('.exe'));
+      if (binaries.length > 0) {
+        return `"${path.join(venvBinDir, binaries[0])}"`;
+      }
+    }
+    return null;
   }
 }
 
@@ -62,7 +83,8 @@ export function muxAudioFiles() {
   if (tracks.length === 0) return;
   if (!fs.existsSync(VIDEOS_DIR)) return;
 
-  if (!hasFfmpeg()) {
+  const ffmpegCmd = getFfmpegCmd();
+  if (!ffmpegCmd) {
     console.log('ℹ️ [Audio Mux] ffmpeg not found in PATH; skipping (videos stay silent).');
     return;
   }
@@ -88,7 +110,7 @@ export function muxAudioFiles() {
 
     try {
       execSync(
-        `ffmpeg -y -i "${inputPath}" -i "${audioPath}" -c:v copy -c:a libopus -map 0:v:0 -map 1:a:0 -shortest "${tempPath}"`,
+        `${ffmpegCmd} -y -i "${inputPath}" -i "${audioPath}" -c:v copy -c:a libopus -map 0:v:0 -map 1:a:0 "${tempPath}"`,
         { stdio: 'ignore' },
       );
       fs.copyFileSync(tempPath, inputPath);
