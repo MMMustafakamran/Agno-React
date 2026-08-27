@@ -23,7 +23,16 @@ import { AUDIO_DIR, VIDEOS_DIR } from './config.mjs';
  * mapping is explicit rather than inferred from filenames so a renamed demo
  * fails visibly instead of quietly muxing audio onto the wrong clip.
  */
-const AUDIO_TRACKS = [];
+const AUDIO_TRACKS = [
+  {
+    audioFile: 'agno-displayonly.m4a',
+    videoMatch: 'DisplayOnly',
+  },
+  {
+    audioFile: 'agno-frontendtools.m4a',
+    videoMatch: 'FrontendTools',
+  },
+];
 
 function hasFfmpeg() {
   try {
@@ -36,9 +45,20 @@ function hasFfmpeg() {
 
 export function muxAudioFiles() {
   if (AUDIO_TRACKS.length === 0) return;
-  if (!fs.existsSync(AUDIO_DIR)) return;
 
-  const tracks = AUDIO_TRACKS.filter((t) => fs.existsSync(path.join(AUDIO_DIR, t.audioFile)));
+  const audioLookupDirs = [AUDIO_DIR, VIDEOS_DIR].filter((d) => d && fs.existsSync(d));
+  if (audioLookupDirs.length === 0) return;
+
+  const tracks = AUDIO_TRACKS.map((t) => {
+    for (const dir of audioLookupDirs) {
+      const candidate = path.join(dir, t.audioFile);
+      if (fs.existsSync(candidate)) {
+        return { ...t, resolvedAudioPath: candidate };
+      }
+    }
+    return null;
+  }).filter(Boolean);
+
   if (tracks.length === 0) return;
   if (!fs.existsSync(VIDEOS_DIR)) return;
 
@@ -50,7 +70,7 @@ export function muxAudioFiles() {
   const files = fs.readdirSync(VIDEOS_DIR);
 
   for (const track of tracks) {
-    const audioPath = path.join(AUDIO_DIR, track.audioFile);
+    const audioPath = track.resolvedAudioPath;
     const video = files.find(
       (f) => f.includes(track.videoMatch) && f.endsWith('.webm') && !f.startsWith('temp_'),
     );
