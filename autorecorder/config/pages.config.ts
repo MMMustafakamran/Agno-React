@@ -46,17 +46,27 @@ export const PAGES = definePages([
     videoName: 'Quickstart',
     docPath: 'quickstart',
     route: 'quickstart',
-    // Quickstart leads with the dependency manifest, always: a demo is only
-    // meaningful against known versions, and CopilotKit and AG-UI both move fast
-    // enough that "it worked" is not a claim you can make without them on screen.
-    // The `overrides` block is inside the range on purpose -- the @ag-ui/client
-    // pin is a real constraint, not noise.
-    ideFile: 'frontend/package.json',
-    startLine: 12,
-    endLine: 27,
-    // Then the path itself: the chat, the runtime binding, and the Python side
-    // that answers it.
+    // Quickstart leads with the versions, always: a demo is only meaningful
+    // against known ones, and CopilotKit and AG-UI both move fast enough that
+    // "it worked" is not a claim you can make without them on screen.
+    //
+    // This used to be package.json, which defeated the point -- it declares
+    // RANGES, so the clip showed "^1.69.2" while the run it documented had
+    // installed 1.69.3. VERSIONS.md is generated after install (see
+    // ci/write-versions.mjs) and names what actually resolved. package.json
+    // stays as the first tab: the range is still what a reader would write in
+    // their own project, and the `overrides` block is a real constraint.
+    ideFile: 'frontend/VERSIONS.md',
+    startLine: 6,
+    endLine: 25,
+    // Then the manifest, and the path itself: the chat, the runtime binding,
+    // and the Python side that answers it.
     extraTabs: [
+      {
+        filePath: 'frontend/package.json',
+        startLine: 12,
+        endLine: 27,
+      },
       {
         filePath: 'frontend/src/app/quickstart/demo-chat/page.tsx',
         startLine: 13,
