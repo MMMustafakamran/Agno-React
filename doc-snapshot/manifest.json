@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-08-26T12:05:18.309Z",
+  "syncedAt": "2026-08-30T13:45:08.378Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -14,7 +14,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:10:02 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/ag-ui": {
       "file": "agno__ag-ui.md",
@@ -26,7 +26,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:19 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/copilot-runtime": {
       "file": "agno__copilot-runtime.md",
@@ -38,7 +38,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:19 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/custom-look-and-feel/headless-ui": {
       "file": "agno__custom-look-and-feel__headless-ui.md",
@@ -50,7 +50,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:44 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/custom-look-and-feel/slots": {
       "file": "agno__custom-look-and-feel__slots.md",
@@ -62,19 +62,19 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:44 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/frontend-tools": {
       "file": "agno__frontend-tools.md",
-      "sha256": "40f33d5bee0188b811459696a85333f23414aab2f8fb7d2c79fb2094ed25e3a4",
-      "bytes": 4617,
-      "lines": 120,
+      "sha256": "cb510d67243b3bec589f5c9296f2dbacbbfcc21b73fe163d7749abc859d14aef",
+      "bytes": 5502,
+      "lines": 157,
       "routes": [
         "/frontend-tools"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/generative-ui/tool-rendering": {
       "file": "agno__generative-ui__tool-rendering.md",
@@ -86,55 +86,55 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/generative-ui/your-components/display-only": {
       "file": "agno__generative-ui__your-components__display-only.md",
-      "sha256": "c81490788d4863227943ea6ae8553a831528b666e1d7878749e5132d6753f0db",
-      "bytes": 2484,
-      "lines": 90,
+      "sha256": "71321ab8b99333cedacf896fbf3219720ad776fe3c09ccba92423856f8ec9525",
+      "bytes": 3260,
+      "lines": 123,
       "routes": [
         "/generative-ui/your-components/display-only"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/generative-ui/your-components/interactive": {
       "file": "agno__generative-ui__your-components__interactive.md",
-      "sha256": "5a8cf1e6258662d185ab582bc055151285e89811e6aa5a81d5b7aef7e19c7f42",
-      "bytes": 131,
-      "lines": 6,
+      "sha256": "1732c5c3374ec67818b313f28aecff90fd428718553234b924e8cd0d94ba7ae5",
+      "bytes": 907,
+      "lines": 39,
       "routes": [
         "/generative-ui/your-components/interactive"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/headless-threads": {
       "file": "agno__headless-threads.md",
-      "sha256": "9f0b94d136d616b0a4786dd9f6e6e538cdb0b1f1754939cb797ab36e1ca609cb",
-      "bytes": 10132,
-      "lines": 210,
+      "sha256": "d40623357653c061858497978308321c4b354e795427eacc39d3673485b9d086",
+      "bytes": 10020,
+      "lines": 208,
       "routes": [
         "/threads/headless"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:19 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/human-in-the-loop": {
       "file": "agno__human-in-the-loop.md",
-      "sha256": "572d2752bd2bc8c7adae79225e54159bd08e7d91a6a3adb5d2da7b0ab9e321da",
-      "bytes": 4696,
-      "lines": 126,
+      "sha256": "03a1eba28538e800dd42a9ec0337c29c8974045c063603a2c2aed77054685b3f",
+      "bytes": 5581,
+      "lines": 163,
       "routes": [
         "/human-in-the-loop"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/inspector": {
       "file": "agno__inspector.md",
@@ -146,7 +146,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/prebuilt-components": {
       "file": "agno__prebuilt-components.md",
@@ -158,7 +158,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/prebuilt-components/copilot-threads-drawer": {
       "file": "agno__prebuilt-components__copilot-threads-drawer.md",
@@ -170,19 +170,19 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:20 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/premium/threads-explained": {
       "file": "agno__premium__threads-explained.md",
-      "sha256": "462cf76a1df31f22d2477b82381aac44e703531da7198c6afdeb31d15fe872ac",
-      "bytes": 10207,
-      "lines": 159,
+      "sha256": "e20b1c8da520d0224fadf3e76fd57743cbb27404fa69503198b493622306f432",
+      "bytes": 10085,
+      "lines": 157,
       "routes": [
         "/threads/architecture"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:20 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/programmatic-control": {
       "file": "agno__programmatic-control.md",
@@ -194,31 +194,31 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:45 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/quickstart": {
       "file": "agno__quickstart.md",
-      "sha256": "cbe78b70c8e9f25fd51dcc186b1d606fe63399e290ad7a7547f1fbb21afa4c1e",
-      "bytes": 14652,
-      "lines": 419,
+      "sha256": "c39ac717603f19115ec3b8d72e216ed86eefcad693b74dff75b111c506596d4f",
+      "bytes": 14521,
+      "lines": 416,
       "routes": [
         "/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:20 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/threads": {
       "file": "agno__threads.md",
-      "sha256": "18404db95a09bfd768a1b15b23da3e9b3f84bc8a0c08cd5a062f09433de2f996",
-      "bytes": 11953,
-      "lines": 213,
+      "sha256": "b699ad61f3b7202122629b47fa2523534d5b811ff40622e879dffdd08410c94f",
+      "bytes": 11851,
+      "lines": 211,
       "routes": [
         "/threads"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:20 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/threads-import": {
       "file": "agno__threads-import.md",
@@ -230,7 +230,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:20 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/threads-lifecycle": {
       "file": "agno__threads-lifecycle.md",
@@ -242,7 +242,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 26 Aug 2026 12:03:20 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/troubleshooting/error-debugging": {
       "file": "agno__troubleshooting__error-debugging.md",
@@ -254,11 +254,11 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 24 Aug 2026 09:24:46 GMT"
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     }
   },
   "sitemap": {
-    "fetchedAt": "2026-08-24T09:24:43.735Z",
+    "fetchedAt": "2026-08-30T13:45:08.378Z",
     "urlsUnderRoot": 135,
     "knownUnmapped": [
       "https://docs.copilotkit.ai/agno/agent-config",

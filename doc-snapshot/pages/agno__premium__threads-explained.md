@@ -2,10 +2,8 @@
 
 > Architecture and mental model behind CopilotKit threads: how persistent conversations work, how reconnection replays history, and what to expect from thread lifecycle operations.
 
-<OpsPlatformCTA
-  variant="inline"
-  title="Want to see threads in your own app?"
-  body="Persistent threads ship with CopilotKit Intelligence on the free Developer tier."
+<IntelligenceOnboardingPrompt
+  feature="threads"
   surface="docs_learn_threads"
 />
 

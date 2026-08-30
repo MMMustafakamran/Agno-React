@@ -2,6 +2,7 @@
 
 > Create frontend tools and use them within your Agno agent for human-in-the-loop interactions.
 
+
 <IframeSwitcher
   id="frontend-tools-based-hitl-example"
   exampleUrl="https://feature-viewer.copilotkit.ai/agno/feature/human_in_the_loop?sidebar=false&chatDefaultOpen=false"
@@ -31,6 +32,38 @@ Use frontend tools when you need your agent to interact with client-side primiti
 
 ## Implementation
 
+<Callout type="warn" title="Configure session storage">
+  Agno must store the paused run before a frontend tool can return its result.
+  Configure a database on the `Agent` that owns the external tool.
+
+  Install the SQLite dependency:
+
+  ```bash
+  pip install sqlalchemy
+  ```
+
+  Use a project-relative SQLite file for local development:
+
+  ```python
+  from agno.agent import Agent
+  from agno.db.sqlite import SqliteDb
+
+  db = SqliteDb(db_file="tmp/agno.db")
+
+  agent = Agent(
+      # ...
+      db=db,
+  )
+  ```
+
+  The deployed showcase uses `/tmp/agno.db` because its application directory
+  is read-only to the runtime user.
+
+  For production, use durable shared storage such as `PgDb`. An ephemeral
+  container file cannot resume a run on another instance.
+</Callout>
+
+
 <Steps>
     <Step>
         ### Define the frontend tool in your Agno agent
@@ -55,14 +88,18 @@ Use frontend tools when you need your agent to interact with client-side primiti
 
         ```python title="agent.py"
         from agno.agent import Agent
+        from agno.db.sqlite import SqliteDb
         from agno.models.openai import OpenAIChat
         from agno.os import AgentOS
         from agno.os.interfaces.agui import AGUI
         from tools.frontend import offerOptions
 
+        db = SqliteDb(db_file="tmp/agno.db")
+
         agent = Agent(
             model=OpenAIChat(id="gpt-5.4"),
             tools=[offerOptions],
+            db=db,
             description="A helpful assistant that can answer questions and provide information.",
             instructions="Be helpful and friendly. Format your responses using markdown where appropriate.",
         )

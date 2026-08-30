@@ -8,6 +8,143 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-08-30
+
+### 13:45 UTC — 8 pages, highest severity high
+
+**High — Frontend Tools**
+
+`/agno/frontend-tools` · route `/frontend-tools` · under “Implementation”
+
+18 code lines, 18 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ <Callout type="warn" title="Configure session storage">
++ Agno must store the paused run before a frontend tool can return its result.
++ Configure a database on the `Agent` that owns the external tool.
++ 
++ Install the SQLite dependency:
++ 
++ ```bash
++ pip install sqlalchemy
+````
+
+**High — Your Components · Display-only**
+
+`/agno/generative-ui/your-components/display-only` · route `/generative-ui/your-components/display-only` · under “Display-only”
+
+14 code lines, 19 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ 
++ <Callout type="warn" title="Configure session storage">
++ Agno must store the paused run before a frontend tool can return its result.
++ Configure a database on the `Agent` that owns the external tool.
++ 
++ Install the SQLite dependency:
++ 
++ ```bash
+````
+
+**High — Your Components · Interactive**
+
+`/agno/generative-ui/your-components/interactive` · route `/generative-ui/your-components/interactive` · under “Interactive”
+
+14 code lines, 19 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ 
++ <Callout type="warn" title="Configure session storage">
++ Agno must store the paused run before a frontend tool can return its result.
++ Configure a database on the `Agent` that owns the external tool.
++ 
++ Install the SQLite dependency:
++ 
++ ```bash
+````
+
+**High — Human in the Loop**
+
+`/agno/human-in-the-loop` · route `/human-in-the-loop` · under “Implementation”
+
+18 code lines, 18 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ <Callout type="warn" title="Configure session storage">
++ Agno must store the paused run before a frontend tool can return its result.
++ Configure a database on the `Agent` that owns the external tool.
++ 
++ Install the SQLite dependency:
++ 
++ ```bash
++ pip install sqlalchemy
+````
+
+**Low — Headless Threads**
+
+`/agno/headless-threads` · route `/threads/headless` · under “What is this?”
+
+6 prose lines changed.
+
+````diff
+- <OpsPlatformCTA
+- variant="inline"
+- title="Threads run in CopilotKit Intelligence"
+- body="Get persistent threads and realtime sync on the free Developer tier."
++ <IntelligenceOnboardingPrompt
++ feature="threads"
+````
+
+**Low — Threads & Persistence Architecture**
+
+`/agno/premium/threads-explained` · route `/threads/architecture` · under “Threads & Persistence Architecture”
+
+6 prose lines changed.
+
+````diff
+- <OpsPlatformCTA
+- variant="inline"
+- title="Want to see threads in your own app?"
+- body="Persistent threads ship with CopilotKit Intelligence on the free Developer tier."
++ <IntelligenceOnboardingPrompt
++ feature="threads"
+````
+
+**Low — Quickstart**
+
+`/agno/quickstart` · route `/quickstart` · under “Quickstart”
+
+7 prose lines changed.
+
+````diff
+- <OpsPlatformCTA
+- variant="card"
+- title="Ship Agno to production"
+- body="Add persistent threads and the inspector with CopilotKit Intelligence."
+- ctaLabel="Create a free account"
++ <IntelligenceOnboardingPrompt
++ feature="learning"
+````
+
+**Low — Overview**
+
+`/agno/threads` · route `/threads` · under “Rich Threads”
+
+14 prose lines changed.
+
+````diff
++ <IntelligenceOnboardingPrompt
++ feature="threads"
++ surface="docs_threads_overview"
++ />
++ 
++ Open a real thread and use **Try from here** to copy it into a Playground scratch session. The stored thread does not change.
+- 
+- <OpsPlatformCTA
+````
+
+---
+
 ## 2026-08-24
 
 ### 09:24 UTC — 5 pages, highest severity high
@@ -99,6 +236,8 @@ weeks between changes does not expire anything.
 
 ---
 
+---
+
 ## 2026-08-21
 
 ### 13:15 UTC — 4 pages, highest severity medium
@@ -128,97 +267,3 @@ Updated CLI scaffolding step formatting and instructions.
 Added inspector callout guidance to overview page.
 
 ---
-
-## 2026-08-21
-
-### 15:10 UTC — 4 pages, highest severity medium
-
-**Medium — Quickstart**
-
-`/agno/quickstart` · route `/quickstart` · under “🎉 Start chatting!”
-
-1 heading, 13 prose lines changed.
-
-````diff
-+ 
-+ <Step>
-+ ### Open Inspector and confirm setup
-+ 
-+ On localhost, click the Inspector button in the corner of the app.
-+ 
-+ 1. Open **Agents**, then **Agent**. Your agent is listed.
-+ 2. Send a chat message. Open **Agents**, then **AG-UI Events**. Events are moving.
-````
-
-**Low — Headless Threads**
-
-`/agno/headless-threads` · route `/threads/headless` · under “Switch between threads”
-
-12 prose lines changed.
-
-````diff
-- <WhenFrameworkHas flag="thread_persistence_pattern" equals="langgraph">
-- <Callout type="info" title="LangGraph persistence">
-- When you pass an explicit CopilotKit `threadId`, CopilotKit forwards it to your backend as the AG-UI `threadId`. A LangGraph backend can use that value directly, or map it to its own checkpoint/thread identifier, when you implement that mapping. LangGraph Platform thread IDs must be UUIDs. CopilotKit `useThreads` manages Enterprise Intelligence Platform thread records; rename, archive, and delete operations do not update LangGraph stores unless your backend adds that bridge.
-- </Callout>
-- </WhenFrameworkHas>
-- <WhenFrameworkHas flag="thread_persistence_pattern" equals="adk-session">
-- <Callout type="info" title="ADK sessions">
-- When you pass an explicit CopilotKit `threadId`, CopilotKit forwards it to your backend as the AG-UI `threadId`. An ADK backend can map that value to an ADK session ID, but the current showcase uses in-memory ADK services, so those sessions are not durable by default. Durable ADK session persistence requires configuring a separate ADK session service. CopilotKit `useThreads` manages Enterprise Intelligence Platform thread records, not ADK's native session store.
-````
-
-**Low — Inspector**
-
-`/agno/inspector` · route `/custom-look-and-feel/inspector` · under “Showing or hiding the Inspector”
-
-7 prose lines changed.
-
-````diff
-+ `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` is a browser-visible publishable key and is
-+ a **different credential** from the server-side `INTELLIGENCE_API_KEY` that
-+ `copilotkit project select` writes into your `.env`. The server-side key is
-+ consumed by the `CopilotKitIntelligence` client described in
-+ [Runtime endpoints](/agno/backend/runtime-endpoints). Do not substitute one for the
-+ other, and never expose the server-side key to the browser.
-+ 
-````
-
-**Low — Overview**
-
-`/agno/threads` · route `/threads` · under “Rich Threads”
-
-20 prose lines changed.
-
-````diff
-+ <Callout type="info" title="See this in Inspector">
-+ Open Inspector on localhost. Stay on **Threads** (it is the default).
-+ Real threads appear when Intelligence is on. Enable Intelligence appears when it is off.
-+ 
-+ More detail: [Inspector](/agno/inspector).
-+ </Callout>
-+ 
-+ 
-````
-
----
-
-## 2026-08-17
-
-### 12:29 UTC — 1 page, highest severity high
-
-**High — Human in the Loop** · _local snapshot edit, not an upstream change_
-
-`/agno/human-in-the-loop` · route `/human-in-the-loop` · under “Define the frontend tool in your Agno agent” · in a `python` block
-
-10 code lines changed.
-
-````diff
-+ 
-+ @tool(external_execution=True)
-+ def offerOptions(option_1: str, option_2: str):
-+ """
-+ Give the user a choice between two options and have them select one.
-+ 
-+ Args:
-+ option_1: str: The first option
-````
