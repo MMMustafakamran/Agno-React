@@ -21,7 +21,6 @@ ci/
     ├── pages.mjs         reads page ids from the recorder's config
     ├── preflight.mjs     port, credential and warmup checks
     ├── probe-openai.py   proves the backend's Python env can reach OpenAI
-    ├── mux.mjs           voiceover muxing (the only implementation)
     └── report.mjs        RUN_REPORT.md / .json
 ```
 
@@ -74,7 +73,8 @@ node ci/automate.mjs --limit=3 --ignore-doc-drift
 6. **Health + warmup** — poll until both answer, then compile the heaviest routes
    and `/api/copilotkit` so the recorder is not racing a cold Turbopack build.
 7. **Record** — hand off to the recorder with the forwarded flags.
-8. **Mux + report** — always runs, success or failure.
+8. **Report** — always runs, success or failure. Clips are silent; there is no
+   audio stage.
 
 ## Why one process
 

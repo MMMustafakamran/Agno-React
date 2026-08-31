@@ -1,9 +1,10 @@
 # Autorecorder
 
 Automated screen-recording suite for CopilotKit framework integrations. It
-produces one narrated-looking demo video per documentation page: read the doc,
-switch to VS Code and show the code that implements it, switch to the browser and
-drive the live feature.
+produces one demo video per documentation page: read the doc, switch to VS Code
+and show the code that implements it, switch to the browser and drive the live
+feature. The clips are silent — the pacing carries them, and there is no audio
+stage in the pipeline.
 
 Currently configured for **Agno (Python) + React** — the 16 routes of this repo
 that have a chrome-free `demo-chat` page. The other 5 doc routes are reference
@@ -127,15 +128,25 @@ and correctness are different questions — the run summary answers the second o
 
 ## Pages that are supposed to fail
 
-Not every demo works, and some do not work for reasons outside this repo. On this
-stack `display-only` and `frontend-tools` both stream an answer, run their tool,
-and then stop: Agno needs a configured database to resume after an
-externally-executed tool, and this repo configures none.
+Not every demo works, and some do not work for reasons outside this repo. When a
+page's failure *is* the story, the handler captures what the browser reported
+during the run and surfaces it on screen — `actions/error-console.ts`. The video
+shows the feature working, and then the error that ended it. Recording such a
+page as a success would imply a working feature; failing it outright would
+produce nothing to look at.
 
-Recording those two as successes would imply a working feature; failing them
-would produce nothing to look at. Both handlers instead capture what the browser
-reported during the run and then surface it on screen — `actions/error-console.ts`.
-The video shows the feature working, and then the error that ended it.
+**Currently: none.** `display-only` and `frontend-tools` were the two. Both ran
+their tool, streamed an answer, and then stopped, because Agno needs a
+configured database to resume after an externally-executed tool and the agent
+had none. `backend/agent.py` now configures one (repo README, known issue #12)
+and both re-record clean as of 2026-08-31.
+
+Both handlers keep the overlay wired up, because the failure returns the moment
+the `db` goes away — but it is no longer scripted. The overlay renders only when
+the browser actually reports something, and renders what it reported. The old
+behaviour passed a hardcoded `message:`, which meant the two pages kept showing
+a database error for a bug they no longer had. **If you script an error message,
+you are asserting a defect the run did not have to produce — don't.**
 
 ### Next.js Dev Error Overlay (`openNextJsErrorOverlay`)
 
@@ -153,8 +164,9 @@ DevTools console along the bottom.
 
 Two rules keep that from becoming a way to hide real breakage:
 
-- The error overlay only appears when an error is captured or specified. A silent
-  page still fails the run.
+- The error overlay only appears when an error is captured or specified — with
+  nothing to show it now skips rather than falling back to a canned message. A
+  silent page still fails the run.
 - The reply is still awaited normally. A page that neither answers nor errors is
   an unexplained failure and is treated as one.
 

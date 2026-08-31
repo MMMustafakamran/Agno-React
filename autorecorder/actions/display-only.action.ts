@@ -8,14 +8,15 @@ import { captureErrors, openNextJsErrorOverlay } from './error-console';
  * `useComponent` renders a React component from a tool call — here a weather
  * card, with no handler and nothing to interact with.
  *
- * On this stack the page does not finish cleanly: the card renders, the answer
- * streams, and then the run dies with Agno's "Frontend tool resume requires a
- * database". The agent needs somewhere to persist state before it can resume
- * after an externally-executed tool, and this repo configures no `db`.
+ * This page used to die after the card rendered: `useComponent` is a
+ * `useFrontendTool` underneath, so it hits the same resume path, and the agent
+ * had no `db` to persist the paused run into — "Frontend tool resume requires a
+ * database". `backend/agent.py` now configures one, following the requirement
+ * the docs made explicit on 2026-08-30; re-recorded on 2026-08-31, the card
+ * renders and the reply completes.
  *
- * The recording shows both halves. Ending at the card would imply a working
- * feature; failing the page would produce nothing at all. Neither helps someone
- * judging whether this integration is ready, so the error goes on screen.
+ * The error overlay is still wired up, but only fires on what the browser
+ * actually reports. Scripting it would put an invented defect on screen.
  */
 export const runDisplayOnlyAction: PageActionHandler = async (
   page: Page,
@@ -50,15 +51,20 @@ export const runDisplayOnlyAction: PageActionHandler = async (
       console.log(`   ℹ️ No reply completed, but the browser reported an error — showing it.`);
     }
 
-    // The failure arrives after the answer; give it a moment to surface.
+    // A resume failure arrives after the answer; give it a moment to surface
+    // before calling the run clean.
     await sleep(3000);
 
     const captured = errors.entries();
-    console.log(`   🧾 Surfacing Next.js error overlay on screen.`);
+    if (captured.length === 0) {
+      console.log(`   ✅ Run completed with nothing reported — no error overlay.`);
+      await sleep(config.waitAfterPromptMs ?? 4000);
+      return;
+    }
+
+    console.log(`   🧾 Browser reported ${captured.length} error(s) — surfacing the overlay.`);
     await openNextJsErrorOverlay(page, captured, {
-      message: 'Frontend tool resume requires a database',
       errorType: 'Console Error',
-      versionText: 'Next.js 16.3.2 Turbopack',
       callStackFrames: 4,
       waitMs: config.waitAfterPromptMs ?? 4000,
     });

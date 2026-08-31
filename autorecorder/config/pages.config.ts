@@ -225,7 +225,10 @@ export const PAGES = definePages([
     ideFile:
       'frontend/src/app/generative-ui/your-components/interactive/page.tsx',
     startLine: 1,
-    endLine: 16,
+    endLine: 25,
+    // Still no demo to drive: the 2026-08-30 sync added only a "Configure
+    // session storage" callout to the upstream stub, so the route mirrors that
+    // and nothing else. The clip shows the doc page and the route's source.
     docOnly: true,
     docViewDurationMs: 6000,
     prompt: 'N/A',

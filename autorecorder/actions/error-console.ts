@@ -9,8 +9,31 @@
  * 4. Glides the cursor to the error message for comfortable reading.
  */
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { type Page } from 'playwright';
 import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
+
+const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
+
+/**
+ * The version badge in the overlay, read from the Next.js actually installed in
+ * `frontend/`. It used to be a hardcoded string, which meant every recorded
+ * error was stamped with whichever version was current when someone last edited
+ * this file.
+ */
+function nextVersionText(): string {
+  try {
+    const pkg = JSON.parse(
+      readFileSync(join(ROOT, 'frontend', 'node_modules', 'next', 'package.json'), 'utf8'),
+    ) as { version?: string };
+    if (pkg.version) return `Next.js ${pkg.version} Turbopack`;
+  } catch {
+    // Not installed, or a layout this does not know about.
+  }
+  return 'Next.js Turbopack';
+}
 
 /** One thing the browser complained about. */
 export interface CapturedError {
@@ -92,7 +115,7 @@ export interface NextJsErrorOverlayOptions {
   message?: string;
   /** Badge text in red chip, e.g. "Console Error", "Runtime Error" */
   errorType?: string;
-  /** Version tag on the right, defaults to "Next.js 16.3.2 Turbopack" */
+  /** Version tag on the right; defaults to the Next.js installed in `frontend/`. */
   versionText?: string;
   /** Frame count shown in Call Stack pill, defaults to 4 */
   callStackFrames?: number;
@@ -115,7 +138,7 @@ export async function openNextJsErrorOverlay(
   const {
     message,
     errorType = 'Console Error',
-    versionText = 'Next.js 16.3.2 Turbopack',
+    versionText = nextVersionText(),
     callStackFrames = 4,
     animateToastClick = true,
     waitMs = 5000,
@@ -128,10 +151,16 @@ export async function openNextJsErrorOverlay(
     });
   }).catch(() => {});
 
-  const errorText =
-    message ||
-    errors[0]?.text ||
-    'Frontend tool resume requires a database';
+  // No caller-supplied message and nothing captured means there is no error to
+  // show. Rendering one anyway would put a defect on screen that the run did
+  // not produce -- for a long time this fell back to a hardcoded
+  // "Frontend tool resume requires a database", which outlived the bug it
+  // described and kept two fixed pages looking broken.
+  const errorText = message || errors[0]?.text;
+  if (!errorText) {
+    console.warn('   ⚠️ No error captured or specified — skipping the overlay.');
+    return;
+  }
 
   const issueCount = Math.max(1, errors.length);
 

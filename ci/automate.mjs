@@ -38,7 +38,6 @@ import {
   warmFrontendRoutes,
   warmRuntimeEndpoint,
 } from './lib/preflight.mjs';
-import { muxAudioFiles } from './lib/mux.mjs';
 import { generateReport } from './lib/report.mjs';
 import { writeVersionsFile } from './write-versions.mjs';
 
@@ -372,7 +371,6 @@ async function main() {
     console.error('\n❌ Automation failed:', err.message || err);
     process.exitCode = 1;
   } finally {
-    muxAudioFiles();
     generateReport(reportData);
     cleanup();
   }

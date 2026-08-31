@@ -8,15 +8,18 @@ import { captureErrors, openNextJsErrorOverlay } from './error-console';
  * Browser-executed tools: the agent calls `sayHello`, the handler runs in this
  * tab and updates the panel beside the chat.
  *
- * The browser half works — the greeting panel fills in. The *run* does not
- * finish: returning a result from an externally-executed tool is exactly the
- * point at which Agno needs a database to resume from, and this repo configures
- * no `db`, so the backend logs "Frontend tool resume requires a database" and
- * the run stops there.
+ * This page used to end in a failure. Returning a result from an
+ * externally-executed tool is the point at which Agno needs somewhere to
+ * persist the paused run, and the agent configured none, so the run stopped
+ * with "Frontend tool resume requires a database" after the panel had already
+ * updated. The 2026-08-30 doc sync made that requirement explicit and
+ * `backend/agent.py` now sets `db=SqliteDb(...)`; re-recorded on 2026-08-31,
+ * the tool runs and the reply completes.
  *
- * That makes this the page most worth recording carefully: the feature visibly
- * half-works, and a video that stopped at the greeting would be misleading. The
- * panel effect is shown, then the error that followed it.
+ * The overlay stays wired up but is no longer scripted: it appears only if the
+ * browser actually reports something, and shows what it reported. Recording a
+ * green run under a hardcoded error message would invent a defect, which is the
+ * same failure as hiding a real one.
  */
 export const runFrontendToolsAction: PageActionHandler = async (
   page: Page,
@@ -51,14 +54,20 @@ export const runFrontendToolsAction: PageActionHandler = async (
       console.log(`   ℹ️ Run never completed, but the browser reported an error — showing it.`);
     }
 
+    // A resume failure lands after the reply, so give it a moment to arrive
+    // before deciding the run was clean.
     await sleep(3000);
 
     const captured = errors.entries();
-    console.log(`   🧾 Surfacing Next.js error overlay on screen.`);
+    if (captured.length === 0) {
+      console.log(`   ✅ Run completed with nothing reported — no error overlay.`);
+      await sleep(config.waitAfterPromptMs ?? 4000);
+      return;
+    }
+
+    console.log(`   🧾 Browser reported ${captured.length} error(s) — surfacing the overlay.`);
     await openNextJsErrorOverlay(page, captured, {
-      message: 'Frontend tool resume requires a database',
       errorType: 'Console Error',
-      versionText: 'Next.js 16.3.2 Turbopack',
       callStackFrames: 4,
       waitMs: config.waitAfterPromptMs ?? 4000,
     });

@@ -268,7 +268,7 @@ A live capture of the raw AG-UI event stream, with pause and clear. **Try:** `Wh
 
 ## 8. Testing checklist / current status
 
-Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MCP server). Doc snapshot synced 2026-08-30; the session-storage change from that sync is applied to the backend but the four affected routes have not been re-recorded since.
+Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MCP server). Doc snapshot synced 2026-08-30; `/frontend-tools` and `/generative-ui/your-components/display-only` re-recorded 2026-08-31 after the session-storage fix (#12).
 
 | Doc page                                           | Route                                         | Status         | Notes                                                                                  |
 | -------------------------------------------------- | --------------------------------------------- | -------------- | -------------------------------------------------------------------------------------- |
@@ -285,10 +285,10 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/inspector`                                  | `/custom-look-and-feel/inspector`             | ✅ Working     | Dev-only by design.                                                                    |
 | `/agno/custom-look-and-feel/slots`                 | `/custom-look-and-feel/slots`                 | ✅ Working     | **Not in the doc sidebar**, but the page resolves (HTTP 200).                          |
 | `/agno/custom-look-and-feel/headless-ui`           | `/custom-look-and-feel/headless-ui`           | ✅ Working     | **Not in the doc sidebar**; resolves.                                                  |
-| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ✅ Working     | `useComponent`; verified over the wire. Needs no backend declaration. Covered by the shared `db` (#12).            |
+| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ✅ Working     | `useComponent`; needs no backend declaration. Same resume failure as frontend-tools until `db` was configured (#12); re-recorded clean.            |
 | `/agno/generative-ui/your-components/interactive`  | `/generative-ui/your-components/interactive`  | 🚧 Not started | Upstream doc page is still a stub; its only content is the 30 Aug session-storage callout (#12), which this route mirrors.            |
 | `/agno/generative-ui/tool-rendering`               | `/generative-ui/tool-rendering`               | ✅ Working     | Named + wildcard renderers; tool call verified over the wire.                          |
-| `/agno/frontend-tools`                             | `/frontend-tools`                             | ✅ Working     | Verified: tool call emitted with no result, awaiting the browser. Agent now sets `db` per the 30 Aug session-storage callout (#12).            |
+| `/agno/frontend-tools`                             | `/frontend-tools`                             | ✅ Working     | Was dying at the resume with "requires a database"; fixed by configuring `db` (#12) and re-recorded clean.            |
 | `/agno/human-in-the-loop`                          | `/human-in-the-loop`                          | ✅ Working     | **Not in the doc sidebar**; linked from Quickstart and resolves. Covered by the shared `db` (#12).            |
 | `/agno/copilot-runtime`                            | `/backend/copilot-runtime`                    | ✅ Working     | Two agent ids verified via the runtime's `info` method.                                |
 | `/agno/ag-ui`                                      | `/backend/ag-ui`                              | ✅ Working     | Live event panel.                                                                      |
@@ -343,10 +343,14 @@ The stub still has a purpose — it makes the tool visible to the agent's own in
 **11. Three pages resolve but are missing from the sidebar**
 `human-in-the-loop`, `custom-look-and-feel/slots`, and `custom-look-and-feel/headless-ui` all return HTTP 200 and are linked from other pages, but none appear in the doc nav. All three are implemented here and flagged "Not in doc sidebar".
 
-**12. The new "Configure session storage" callout states a precondition this stack did not have**
-On 30 Aug, [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools), [Human in the Loop](https://docs.copilotkit.ai/agno/human-in-the-loop), [Display Only](https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only) and [Interactive](https://docs.copilotkit.ai/agno/generative-ui/your-components/interactive) each gained the same callout: "Agno must store the paused run before a frontend tool can return its result," prescribing `pip install sqlalchemy` and `SqliteDb(db_file="tmp/agno.db")` on the `Agent`. All four of those routes had already been recorded green here against an agent with **no `db` at all** (see the status table, and #10) on `agno` 2.8.6 / `@copilotkit/react-core` 1.66.2. The page does not say which versions make the db mandatory, so "must" is either version-specific or overstated. This repo now configures the db as published, so its own frontend-tool routes no longer prove either way.
+**12. The "Configure session storage" callout documents a real bug this repo had already hit — late**
+On 30 Aug, [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools), [Human in the Loop](https://docs.copilotkit.ai/agno/human-in-the-loop), [Display Only](https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only) and [Interactive](https://docs.copilotkit.ai/agno/generative-ui/your-components/interactive) each gained the same callout: "Agno must store the paused run before a frontend tool can return its result," prescribing `pip install sqlalchemy` and `SqliteDb(db_file="tmp/agno.db")` on the `Agent`.
 
-Three smaller problems in the same callout:
+This one is confirmed on this stack, and the confirmation predates the doc. `/frontend-tools` and `/generative-ui/your-components/display-only` both ended in **"Frontend tool resume requires a database"** — the browser tool ran, the panel updated, the answer streamed, and then the run died. Their recorder handlers were written around that failure (see `autorecorder/Reported-errors.md`). Configuring `db=SqliteDb(db_file="tmp/agno.db")` on the agent fixes both: re-recorded 2026-08-31 on `agno` 2.8.6 / `@copilotkit/react-core` 1.66.2, the tool runs, the reply completes, and the browser reports nothing.
+
+The finding is therefore about *where* the requirement was documented, not whether it is true. A prerequisite that silently kills every frontend-tool run belongs in the Quickstart that builds the agent, not in a callout added months later to four downstream pages — the Quickstart still builds an `Agent` with no `db`, so anyone following the docs in order builds the broken version first.
+
+Three smaller problems in the callout itself:
 
 - `db_file="tmp/agno.db"` is **relative to the process working directory**, which the page never states. Started from the repo root instead of `backend/`, it silently writes a second database somewhere else. This repo keeps the published path verbatim (`backend/tmp/agno.db` when run per section 6) and gitignores it.
 - `pip install sqlalchemy` contradicts the Quickstart on the same doc tree, which sets the backend up with `uv`. This repo declares `sqlalchemy` in `backend/pyproject.toml`.
