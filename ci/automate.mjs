@@ -103,24 +103,95 @@ let backendProc = null;
 let frontendProc = null;
 let logHandles = [];
 
-function killTree(proc, signal = 'SIGTERM') {
-  if (!proc || !proc.pid) return;
+/**
+ * Synchronous sleep. `cleanup()` runs from `process.on('exit')`, where the event
+ * loop is already closed and nothing async will ever resume, so a timer or an
+ * await here would simply be dropped.
+ */
+function sleepSync(ms) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+/** Is the process group still alive? Signal 0 checks without delivering. */
+function groupAlive(pid) {
   try {
-    if (isWindows) {
-      execSync(`taskkill /pid ${proc.pid} /T /F 2>nul || exit 0`, { stdio: 'ignore' });
-    } else {
-      try {
-        process.kill(-proc.pid, signal);
-      } catch {
-        proc.kill(signal);
-      }
-    }
+    process.kill(-pid, 0);
+    return true;
   } catch {
     try {
-      proc.kill(signal);
+      process.kill(pid, 0);
+      return true;
     } catch {
-      // ignore
+      return false;
     }
+  }
+}
+
+/**
+ * Kill a server and everything it spawned, and do not return until it is gone.
+ *
+ * SIGTERM alone is not enough. The backend is `uv run main.py` running uvicorn
+ * with `reload=True`, which is three processes deep -- uv, the StatReload
+ * parent, the worker -- and a SIGTERM to the group can leave the uv wrapper
+ * behind. A surviving `uv` holds a lock on the uv cache, and the job's
+ * `Post Install uv` step then blocks on `uv cache prune` until the runner kills
+ * it at five minutes and fails the job.
+ *
+ * That is exactly what reddened shard 2 of run 33369215428 while all 17 of its
+ * pages recorded green: the recordings passed, the artifact uploaded, and the
+ * job still failed in teardown. So escalate to SIGKILL and confirm the exit,
+ * rather than sending one signal and hoping.
+ */
+function killTree(proc, signal = 'SIGTERM') {
+  if (!proc || !proc.pid) return;
+  const { pid } = proc;
+
+  if (isWindows) {
+    // `/T /F` is already a forced tree kill; there is nothing to escalate to.
+    try {
+      execSync(`taskkill /pid ${pid} /T /F 2>nul || exit 0`, { stdio: 'ignore' });
+    } catch {
+      try {
+        proc.kill('SIGKILL');
+      } catch {
+        // Already gone.
+      }
+    }
+    return;
+  }
+
+  const signalGroup = (sig) => {
+    try {
+      process.kill(-pid, sig);
+    } catch {
+      try {
+        proc.kill(sig);
+      } catch {
+        // Already gone.
+      }
+    }
+  };
+
+  signalGroup(signal);
+
+  // Give it a moment to shut down on its own terms, checking as we go so a
+  // clean exit costs 100ms rather than the whole grace period.
+  for (let waited = 0; waited < 3000 && groupAlive(pid); waited += 100) {
+    sleepSync(100);
+  }
+
+  if (!groupAlive(pid)) return;
+
+  console.warn(`   ⚠️ pid ${pid} ignored ${signal}; sending SIGKILL.`);
+  signalGroup('SIGKILL');
+  for (let waited = 0; waited < 2000 && groupAlive(pid); waited += 100) {
+    sleepSync(100);
+  }
+
+  if (groupAlive(pid)) {
+    // Nothing left to try. Say so loudly -- a survivor here is what makes the
+    // uv cache prune hang, and a silent failure would be diagnosed as flake.
+    console.error(`   ❌ pid ${pid} survived SIGKILL; it may block uv cache cleanup.`);
   }
 }
 
