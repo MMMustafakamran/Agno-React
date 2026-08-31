@@ -45,7 +45,7 @@ export default function Page() {
       parentPath="/custom-look-and-feel/headless-ui"
       subtitle="hand-built chat over useAgent + useCopilotKit"
     >
-      <div className="flex flex-col h-full bg-white dark:bg-slate-950">
+      <div className="mx-auto mt-[4%] flex h-[65%] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
         {/* [10] headless UI: render messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {agent.messages.map((msg) => (

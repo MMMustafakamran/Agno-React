@@ -1,5 +1,5 @@
 import { type Page } from 'playwright';
-import { humanGlide, sleep } from '../core/overlays/cursor';
+import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { waitForAgentResponseCompletion } from '../core/actions';
 
@@ -13,19 +13,24 @@ import { waitForAgentResponseCompletion } from '../core/actions';
  * all, while this implementation streams reliably. The difference does not
  * reproduce headlessly, so the exact trigger is not pinned down yet.
  *
- * ── Why focus() and not a click ────────────────────────────────────────────
- * The input and the Send button share one flex row pinned to the bottom of a
- * `h-full` column, so at 1080p they sit at roughly y=1026..1064 -- underneath
- * the simulated taskbar, which occupies the bottom 48px and swallows clicks.
- * A real mouse click on the input therefore never lands, focus never moves, and
- * every typed character goes nowhere. The recording then shows an empty box and
- * no conversation.
+ * ── The composer used to be unreachable ────────────────────────────────────
+ * The input and Send button share one flex row at the bottom of the chat
+ * column. While that column was `h-full`, the row sat at roughly y=1026..1064
+ * at 1080p -- underneath the simulated taskbar, which owns the bottom 48px and
+ * swallows clicks. A real click never landed, focus never moved, every typed
+ * character went nowhere, and the clip showed an empty box. This handler worked
+ * around it by gliding the cursor for the camera and setting focus
+ * programmatically, then submitting via Enter because Send was buried too.
  *
- * So: glide the virtual cursor there for the camera, but move focus
- * programmatically, which no overlay can intercept. Submitting goes through the
- * form's Enter handler for the same reason.
+ * The demo page now centres the chat panel instead, so the composer sits around
+ * y=737 with ~300px of clearance. Both controls are genuinely clickable, so the
+ * recording drives them the way a person would -- which is the point of the
+ * clip. The programmatic focus survives only as a fallback, because a workaround
+ * that silently covers for a regression is how the overlap went unnoticed the
+ * first time.
  */
 const INPUT = 'input[placeholder="Type a message..."]';
+const SEND_BUTTON = 'form button[type="submit"]';
 
 /**
  * Assistant bubbles only. Both roles carry `.max-w-md`; the user's is the one
@@ -42,13 +47,24 @@ export const runHeadlessUiAction: PageActionHandler = async (
   await inputLocator.waitFor({ state: 'visible', timeout: 15000 });
   await sleep(800);
 
-  // Cursor goes to the input for the camera; focus is set programmatically
-  // because the taskbar overlay covers this row.
+  // Click it for real. If the panel ever drifts back under the taskbar the
+  // click is swallowed, so verify focus actually moved and fall back rather
+  // than typing into nothing.
   const inputBox = await inputLocator.boundingBox();
   if (inputBox) {
     await humanGlide(page, inputBox.x + 80, inputBox.y + inputBox.height / 2, 20);
+    await sleep(200);
+    await humanClick(page);
   }
-  await inputLocator.focus();
+  await sleep(300);
+
+  const focused = await inputLocator
+    .evaluate((el) => el === document.activeElement)
+    .catch(() => false);
+  if (!focused) {
+    console.warn(`   ⚠️ Click did not focus the composer; is it under the taskbar again?`);
+    await inputLocator.focus();
+  }
   await sleep(400);
 
   console.log(`   [Headless UI] Typing prompt: "${config.prompt}"...`);
@@ -72,12 +88,24 @@ export const runHeadlessUiAction: PageActionHandler = async (
     );
   }
 
-  // The form submits on Enter; the Send button is under the overlay.
-  await page.keyboard.press('Enter');
+  // Send is visible now, so click it -- the button is part of what this page
+  // demonstrates. Enter stays as the fallback: the form handles both, and a
+  // missed click should not cost the whole recording.
+  const sendBox = await page.locator(SEND_BUTTON).first().boundingBox().catch(() => null);
+  if (sendBox) {
+    await humanGlide(page, sendBox.x + sendBox.width / 2, sendBox.y + sendBox.height / 2, 18);
+    await sleep(250);
+    await humanClick(page);
+  } else {
+    await page.keyboard.press('Enter');
+  }
   await sleep(600);
 
+  // A controlled input clears on submit, so a value still sitting there means
+  // the submit did not take.
   const remaining = await inputLocator.inputValue().catch(() => '');
   if (remaining.trim().length > 0) {
+    await inputLocator.focus();
     await page.keyboard.press('Enter');
   }
 

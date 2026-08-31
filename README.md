@@ -356,6 +356,11 @@ Three smaller problems in the callout itself:
 - `pip install sqlalchemy` contradicts the Quickstart on the same doc tree, which sets the backend up with `uv`. This repo declares `sqlalchemy` in `backend/pyproject.toml`.
 - The callout's own two paths disagree — the snippet says `tmp/agno.db`, the sentence below it says the deployed showcase uses `/tmp/agno.db` — without saying which one a reader should copy.
 
+**13. `agent.threadId` is not stable across a server render, and nothing says so**
+CopilotKit mints a fresh thread id on every render, the SSR pass included — three consecutive `curl`s of the same route return three different ids. Any component that renders `agent.threadId` in server-rendered markup therefore throws *"Hydration failed because the server rendered text didn't match the client"* and has its subtree discarded and re-rendered. This repo's `/custom-look-and-feel/programmatic-control` demo hit exactly that by showing the thread id in its state panel.
+
+A thread id being client state is reasonable; the gap is that no page covering `useAgent` mentions it, while the surrounding docs are Next-App-Router-first, where every component is server-rendered by default. Fixed here with `suppressHydrationWarning` on the one element that prints it — worth knowing before you render an id, a message count, or anything else off `agent` above the fold.
+
 ---
 
 ## 10. Troubleshooting

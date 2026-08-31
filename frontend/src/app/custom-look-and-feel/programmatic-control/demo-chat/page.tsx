@@ -101,7 +101,16 @@ export default function Page() {
             </dd>
             <dt className="text-slate-500">Thread ID</dt>
             <dd className="break-all">
-              <code>{agent.threadId ?? "—"}</code>
+              {/*
+                CopilotKit mints a fresh thread id on every render, the server
+                pass included, so the id in the SSR'd HTML is never the one the
+                client ends up with. Rendering it plainly threw "Hydration
+                failed because the server rendered text didn't match the
+                client" and made React discard and re-render this subtree.
+                The value is client state by nature, so tell React the mismatch
+                is expected rather than hiding the id.
+              */}
+              <code suppressHydrationWarning>{agent.threadId ?? "—"}</code>
             </dd>
             <dt className="text-slate-500">Status</dt>
             <dd>
