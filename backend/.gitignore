@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# SQLite session storage created by SqliteDb(db_file="tmp/agno.db")
+tmp/

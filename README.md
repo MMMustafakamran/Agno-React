@@ -268,7 +268,7 @@ A live capture of the raw AG-UI event stream, with pause and clear. **Try:** `Wh
 
 ## 8. Testing checklist / current status
 
-Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MCP server).
+Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MCP server). Doc snapshot synced 2026-08-30; the session-storage change from that sync is applied to the backend but the four affected routes have not been re-recorded since.
 
 | Doc page                                           | Route                                         | Status         | Notes                                                                                  |
 | -------------------------------------------------- | --------------------------------------------- | -------------- | -------------------------------------------------------------------------------------- |
@@ -285,11 +285,11 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/inspector`                                  | `/custom-look-and-feel/inspector`             | ✅ Working     | Dev-only by design.                                                                    |
 | `/agno/custom-look-and-feel/slots`                 | `/custom-look-and-feel/slots`                 | ✅ Working     | **Not in the doc sidebar**, but the page resolves (HTTP 200).                          |
 | `/agno/custom-look-and-feel/headless-ui`           | `/custom-look-and-feel/headless-ui`           | ✅ Working     | **Not in the doc sidebar**; resolves.                                                  |
-| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ✅ Working     | `useComponent`; verified over the wire. Needs no backend declaration.                  |
-| `/agno/generative-ui/your-components/interactive`  | `/generative-ui/your-components/interactive`  | 🚧 Not started | Upstream doc page is an empty stub — deliberately left blank.                          |
+| `/agno/generative-ui/your-components/display-only` | `/generative-ui/your-components/display-only` | ✅ Working     | `useComponent`; verified over the wire. Needs no backend declaration. Covered by the shared `db` (#12).            |
+| `/agno/generative-ui/your-components/interactive`  | `/generative-ui/your-components/interactive`  | 🚧 Not started | Upstream doc page is still a stub; its only content is the 30 Aug session-storage callout (#12), which this route mirrors.            |
 | `/agno/generative-ui/tool-rendering`               | `/generative-ui/tool-rendering`               | ✅ Working     | Named + wildcard renderers; tool call verified over the wire.                          |
-| `/agno/frontend-tools`                             | `/frontend-tools`                             | ✅ Working     | Verified: tool call emitted with no result, awaiting the browser.                      |
-| `/agno/human-in-the-loop`                          | `/human-in-the-loop`                          | ✅ Working     | **Not in the doc sidebar**; linked from Quickstart and resolves.                       |
+| `/agno/frontend-tools`                             | `/frontend-tools`                             | ✅ Working     | Verified: tool call emitted with no result, awaiting the browser. Agent now sets `db` per the 30 Aug session-storage callout (#12).            |
+| `/agno/human-in-the-loop`                          | `/human-in-the-loop`                          | ✅ Working     | **Not in the doc sidebar**; linked from Quickstart and resolves. Covered by the shared `db` (#12).            |
 | `/agno/copilot-runtime`                            | `/backend/copilot-runtime`                    | ✅ Working     | Two agent ids verified via the runtime's `info` method.                                |
 | `/agno/ag-ui`                                      | `/backend/ag-ui`                              | ✅ Working     | Live event panel.                                                                      |
 | `/agno/troubleshooting/error-debugging`            | `/troubleshooting/error-debugging`            | ✅ Working     | Live error log.                                                                        |
@@ -342,6 +342,15 @@ The stub still has a purpose — it makes the tool visible to the agent's own in
 
 **11. Three pages resolve but are missing from the sidebar**
 `human-in-the-loop`, `custom-look-and-feel/slots`, and `custom-look-and-feel/headless-ui` all return HTTP 200 and are linked from other pages, but none appear in the doc nav. All three are implemented here and flagged "Not in doc sidebar".
+
+**12. The new "Configure session storage" callout states a precondition this stack did not have**
+On 30 Aug, [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools), [Human in the Loop](https://docs.copilotkit.ai/agno/human-in-the-loop), [Display Only](https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only) and [Interactive](https://docs.copilotkit.ai/agno/generative-ui/your-components/interactive) each gained the same callout: "Agno must store the paused run before a frontend tool can return its result," prescribing `pip install sqlalchemy` and `SqliteDb(db_file="tmp/agno.db")` on the `Agent`. All four of those routes had already been recorded green here against an agent with **no `db` at all** (see the status table, and #10) on `agno` 2.8.6 / `@copilotkit/react-core` 1.66.2. The page does not say which versions make the db mandatory, so "must" is either version-specific or overstated. This repo now configures the db as published, so its own frontend-tool routes no longer prove either way.
+
+Three smaller problems in the same callout:
+
+- `db_file="tmp/agno.db"` is **relative to the process working directory**, which the page never states. Started from the repo root instead of `backend/`, it silently writes a second database somewhere else. This repo keeps the published path verbatim (`backend/tmp/agno.db` when run per section 6) and gitignores it.
+- `pip install sqlalchemy` contradicts the Quickstart on the same doc tree, which sets the backend up with `uv`. This repo declares `sqlalchemy` in `backend/pyproject.toml`.
+- The callout's own two paths disagree — the snippet says `tmp/agno.db`, the sentence below it says the deployed showcase uses `/tmp/agno.db` — without saying which one a reader should copy.
 
 ---
 

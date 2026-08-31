@@ -9,6 +9,7 @@ them unprompted.
 import os
 
 from agno.agent import Agent
+from agno.db.sqlite import SqliteDb
 from agno.models.openai import OpenAIChat
 from openai import Timeout
 
@@ -72,6 +73,17 @@ def _model() -> OpenAIChat:
         },
     )
 
+# /agno/frontend-tools (and human-in-the-loop, and both your-components
+# pages) gained a "Configure session storage" callout on 30 Aug: Agno has to
+# store the paused run before a frontend tool can hand its result back, so the
+# Agent that owns the external tool needs a `db`. Four routes here call
+# frontend tools.
+#
+# The published snippet is `SqliteDb(db_file="tmp/agno.db")` -- a path relative
+# to the process working directory, which the page never states. It goes in
+# verbatim; it lands in whichever directory the server was started from.
+db = SqliteDb(db_file="tmp/agno.db")
+
 INSTRUCTIONS = """\
 You are the test agent for a CopilotKit + Agno integration harness. Each page of
 the app exercises a different part of the integration, so behave predictably.
@@ -98,6 +110,8 @@ def build_agent() -> Agent:
         name="Agno Test Harness Agent",
         model=_model(),
         tools=ALL_TOOLS,
+        # Session storage. Frontend tools cannot return a result without it.
+        db=db,
         description=(
             "A helpful assistant used to exercise every CopilotKit feature "
             "documented for the Agno integration."

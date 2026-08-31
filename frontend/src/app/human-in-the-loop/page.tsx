@@ -1,4 +1,5 @@
 import { RouteHeader } from "@/components/route-header";
+import { SessionStorageCallout } from "@/components/session-storage-callout";
 import { SourceCode, SourceCodeGroup } from "@/components/source-code";
 import { Callout, Panel, TryIt } from "@/components/ui";
 
@@ -6,6 +7,8 @@ export default function Page() {
   return (
     <>
       <RouteHeader path="/human-in-the-loop" />
+
+      <SessionStorageCallout />
 
       <Panel title="How it differs from a normal frontend tool">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
