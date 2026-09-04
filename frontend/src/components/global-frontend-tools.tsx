@@ -26,6 +26,7 @@ import { ACCENTS, isAccentName, useHarnessState } from "./harness-state";
 export function GlobalFrontendTools() {
   const { setAccent, setGreeting, addBookmark } = useHarnessState();
 
+  // #region frontend-tools
   // [7] frontend tool: execute the agent's tool call in the browser
   // [!code highlight:10]
   useFrontendTool({
@@ -73,6 +74,7 @@ export function GlobalFrontendTools() {
       return `Added bookmark "${title}".`;
     },
   });
+  // #endregion
 
   // #region governed-action
   // Governed Action Approval UI — the tool-call variant from

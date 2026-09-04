@@ -260,8 +260,8 @@ export const PAGES = definePages([
     extraTabs: [
       {
         filePath: 'frontend/src/components/global-frontend-tools.tsx',
-        startLine: 20,
-        endLine: 71,
+        startLine: 29,
+        endLine: 77,
       },
     ],
     prompt: 'Say hello to Malaika',
@@ -276,8 +276,8 @@ export const PAGES = definePages([
     // The `#region human-in-the-loop` block -- the interrupt itself, rather than
     // the chat route that merely triggers it.
     ideFile: 'frontend/src/components/global-frontend-tools.tsx',
-    startLine: 136,
-    endLine: 179,
+    startLine: 138,
+    endLine: 181,
     extraTabs: [
       {
         filePath: 'frontend/src/app/human-in-the-loop/demo-chat/page.tsx',
@@ -297,8 +297,8 @@ export const PAGES = definePages([
     // The `#region governed-action` block -- the tool registration and the
     // card it renders, rather than the chat route that merely triggers it.
     ideFile: 'frontend/src/components/global-frontend-tools.tsx',
-    startLine: 77,
-    endLine: 134,
+    startLine: 79,
+    endLine: 136,
     extraTabs: [
       {
         filePath: 'frontend/src/components/governed-action-card.tsx',
