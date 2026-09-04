@@ -7,7 +7,7 @@ const IDENTIFY_SNIPPET = `import { CopilotKitIntelligence, CopilotRuntime } from
 // \`apiKey\` is the only required field. The key scopes the project, so there is
 // no separate project or organization id to pass.
 const intelligence = new CopilotKitIntelligence({
-  apiKey: process.env.INTELLIGENCE_API_KEY!,
+  apiKey: process.env.CPK_INTELLIGENCE_API_KEY!,
 });
 
 const runtime = new CopilotRuntime({

@@ -14,10 +14,12 @@ const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8000/agui";
 const firstSet = (...values: (string | undefined)[]) =>
   values.find((v) => typeof v === "string" && v.trim().length > 0)?.trim();
 
-// CLI >= 4.9 writes CPK_INTELLIGENCE_API_KEY; older CLIs wrote INTELLIGENCE_API_KEY.
+// `CPK_INTELLIGENCE_API_KEY` is the name the docs now publish, so it is read
+// first. `INTELLIGENCE_API_KEY` is what older CLIs wrote and stays accepted —
+// the docs renamed the variable without saying the old one stopped working.
 const INTELLIGENCE_KEY = firstSet(
-  process.env.INTELLIGENCE_API_KEY,
   process.env.CPK_INTELLIGENCE_API_KEY,
+  process.env.INTELLIGENCE_API_KEY,
 );
 const LICENSE_TOKEN = firstSet(process.env.COPILOTKIT_LICENSE_TOKEN);
 

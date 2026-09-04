@@ -39,6 +39,18 @@ export default function Page() {
         licensed platform behind it.
       </Callout>
 
+      <Callout tone="warn" title="This page moved, and the old URL still answers">
+        Every doc link to it is now{" "}
+        <code>/agno/intelligence/threads-explained</code>; it used to be{" "}
+        <code>/agno/premium/threads-explained</code>. Both URLs still return{" "}
+        <strong>200 with byte-identical markdown</strong>, so the move is
+        invisible to a drift check pinned to the old path — no 404, no hash
+        change, nothing to report. This repo tracked the old path until this
+        sync and would have gone on reporting &ldquo;no drift&rdquo; however far
+        the two copies diverged. The snapshot now follows the new path; the
+        duplicate is the finding.
+      </Callout>
+
       <Panel title="Thread vs. run">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           A <strong>thread</strong> is the durable container; a <strong>run</strong>{" "}

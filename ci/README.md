@@ -212,7 +212,7 @@ jobs, so all four names agree. Change the prefix via `PROJECT_SLUG` in
 | `OPENAI_API_KEY` | secret | Model provider key |
 | `AZURE_OPENAI_API_KEY` / `AZURE_OPENAI_ENDPOINT` | secret | Azure instead of OpenAI |
 | `COPILOTKIT_LICENSE_TOKEN` / `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` | secret | Unlocks the Rich Threads pages |
-| `INTELLIGENCE_API_KEY` | secret | Managed thread store |
+| `CPK_INTELLIGENCE_API_KEY` | secret | Managed thread store (old name `INTELLIGENCE_API_KEY` still read) |
 | `OPENAI_MODEL` | variable | Model override (default `gpt-4o`) |
 | `OPENAI_CONNECT_TIMEOUT` | variable | Seconds to wait for a socket to OpenAI (default 30) |
 | `OPENAI_REQUEST_TIMEOUT` / `OPENAI_MAX_RETRIES` | variable | Read budget and retry count (default 600 / 5) |

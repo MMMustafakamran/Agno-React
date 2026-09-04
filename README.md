@@ -280,7 +280,7 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/headless-threads`                           | `/threads/headless`                           | ⚠️ Partial     | Premium; `useThreads` returns empty. UI incl. rename fully implemented.                |
 | `/agno/threads-lifecycle`                          | `/threads/lifecycle`                          | ⚠️ Partial     | Mint/switch testable now; replay needs a store.                                        |
 | `/agno/threads-import`                             | `/threads/import`                             | 📖 Reference   | Premium; Agno is not a documented import source.                                       |
-| `/agno/premium/threads-explained`                  | `/threads/architecture`                       | 📖 Reference   | Premium.                                                                               |
+| `/agno/intelligence/threads-explained`             | `/threads/architecture`                       | 📖 Reference   | Premium.                                                                               |
 | `/agno/programmatic-control`                       | `/custom-look-and-feel/programmatic-control`  | ✅ Working     | run/stop/state/messages.                                                               |
 | `/agno/inspector`                                  | `/custom-look-and-feel/inspector`             | ✅ Working     | Dev-only by design.                                                                    |
 | `/agno/custom-look-and-feel/slots`                 | `/custom-look-and-feel/slots`                 | ✅ Working     | **Not in the doc sidebar**, but the page resolves (HTTP 200).                          |
@@ -522,7 +522,7 @@ single page first — before running the full suite.
 
 **Basics** — [Prebuilt Components](https://docs.copilotkit.ai/agno/prebuilt-components)
 
-**Rich Threads** — [Overview](https://docs.copilotkit.ai/agno/threads) · [Threads Drawer](https://docs.copilotkit.ai/agno/prebuilt-components/copilot-threads-drawer) · [Headless Threads](https://docs.copilotkit.ai/agno/headless-threads) · [Thread & History Lifecycle](https://docs.copilotkit.ai/agno/threads-lifecycle) · [Synchronize Thread History](https://docs.copilotkit.ai/agno/threads-import) · [Threads & Persistence Architecture](https://docs.copilotkit.ai/agno/premium/threads-explained)
+**Rich Threads** — [Overview](https://docs.copilotkit.ai/agno/threads) · [Threads Drawer](https://docs.copilotkit.ai/agno/prebuilt-components/copilot-threads-drawer) · [Headless Threads](https://docs.copilotkit.ai/agno/headless-threads) · [Thread & History Lifecycle](https://docs.copilotkit.ai/agno/threads-lifecycle) · [Synchronize Thread History](https://docs.copilotkit.ai/agno/threads-import) · [Threads & Persistence Architecture](https://docs.copilotkit.ai/agno/intelligence/threads-explained)
 
 **Custom Look and Feel** — [Programmatic Control](https://docs.copilotkit.ai/agno/programmatic-control) · [Inspector](https://docs.copilotkit.ai/agno/inspector) · [Slots](https://docs.copilotkit.ai/agno/custom-look-and-feel/slots) † · [Headless UI](https://docs.copilotkit.ai/agno/custom-look-and-feel/headless-ui) †
 

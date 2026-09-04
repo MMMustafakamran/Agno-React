@@ -46,11 +46,13 @@ export default function Page() {
         <div className="mt-4">
           <Callout tone="premium" title="Intelligence is optional here">
             The doc's route now wires <code>CopilotKitIntelligence</code> and{" "}
-            <code>identifyUser</code> using the license key from step 1. This
-            route does the same when <code>INTELLIGENCE_API_KEY</code> is set,
-            and otherwise takes the fallback the doc describes: SSE with an
-            in-memory runner, so chat works while Threads and the Inspector stay
-            locked.
+            <code>identifyUser</code> using the project key from step 1 — this
+            sync renamed it to <code>CPK_INTELLIGENCE_API_KEY</code> and stopped
+            calling it a license key, with the placeholder going from{" "}
+            <code>your_license_key</code> to <code>cpk-...</code>. This route
+            does the same when either spelling is set, and otherwise takes the
+            fallback the doc describes: SSE with an in-memory runner, so chat
+            works while Threads and the Inspector stay locked.
           </Callout>
         </div>
       </Panel>

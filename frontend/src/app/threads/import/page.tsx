@@ -42,6 +42,23 @@ export default function Page() {
         </p>
       </Panel>
 
+      <Callout tone="warn" title="Half the env vars got renamed">
+        This sync changed the importer&apos;s exported key to{" "}
+        <code>CPK_INTELLIGENCE_API_KEY</code> but left{" "}
+        <code>INTELLIGENCE_API_URL</code> on the line above it untouched, so the
+        page now asks you to export one prefixed variable and one unprefixed one
+        for the same credential pair. Nothing says whether the URL variable was
+        missed or is deliberately unprefixed.
+      </Callout>
+
+      <Callout tone="warn" title="The example key changed shape without a word">
+        The sample value went from <code>cpk_...</code> to <code>cpk-...</code>{" "}
+        — underscore to hyphen. Elsewhere the docs describe &ldquo;a
+        project-scoped <code>cpk</code> runtime key&rdquo; without pinning the
+        separator. One of the two spellings is wrong and the page does not say
+        which, so a reader hand-typing the key has a coin flip.
+      </Callout>
+
       <Panel title="If you wanted to try it here">
         <ol className="list-decimal space-y-1.5 pl-5 text-sm text-slate-700 dark:text-slate-300">
           <li>
