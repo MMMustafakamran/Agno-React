@@ -16,12 +16,15 @@
  *
  * ── Scope, for this repo ───────────────────────────────────────────────────
  * `route` + `demoSuffix` is the only demo URL a page can have, and the doctor
- * errors on any that is not 200. This app's 21 doc routes include 5 that are
- * reference material with no `demo-chat` page — `/`, `/threads`,
- * `/threads/import`, `/threads/architecture`, and
- * `/generative-ui/your-components/interactive` (an upstream stub). They are
- * deliberately absent below rather than registered and broken. See the repo
- * README's autorecorder section.
+ * errors on any that is not 200. This app's 24 doc routes include 6 with no
+ * `demo-chat` page, deliberately absent below rather than registered and
+ * broken: `/`, `/threads`, `/threads/import` and `/threads/architecture` are
+ * reference material, and `/webmcp` and `/intelligence/quickstart` are tracked
+ * for drift with nothing implemented behind them (see the README's §8).
+ * `/generative-ui/your-components/interactive` also has no demo but *is*
+ * registered, as a `docOnly` take — the upstream page is a stub, so the clip
+ * shows the doc and this repo's source for it. See the repo README's
+ * autorecorder section.
  *
  * Everything here mirrors `frontend/src/lib/nav-config.ts`, which is the app's
  * single source of truth for route -> doc-page mapping. `docPath` is that

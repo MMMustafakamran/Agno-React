@@ -275,6 +275,16 @@ export const NAV: NavGroup[] = [
         status: "working",
         offNav: true,
       },
+      {
+        path: "/webmcp",
+        title: "WebMCP",
+        docPath: "/agno/webmcp",
+        summary:
+          "Publishing an existing frontend tool to document.modelContext so WebMCP-aware browser agents can discover and call it.",
+        status: "not-started",
+        statusNote:
+          "Tracked for drift only — no demo yet. The page’s own verification steps need Chrome 149+ with the WebMCP origin trial or chrome://flags/#enable-webmcp-testing, and CopilotKit no-ops wherever document.modelContext is absent, so there is nothing a headless Chromium run can show.",
+      },
     ],
   },
   {
@@ -311,6 +321,21 @@ export const NAV: NavGroup[] = [
         summary:
           "A live error log fed by the provider-level onError callback, plus the error-code reference.",
         status: "working",
+      },
+    ],
+  },
+  {
+    title: "Intelligence",
+    routes: [
+      {
+        path: "/intelligence/quickstart",
+        title: "Intelligence · Quickstart",
+        docPath: "/agno/intelligence/quickstart",
+        summary:
+          "Connecting an existing app to a hosted CopilotKit Intelligence project so threads persist.",
+        status: "not-started",
+        statusNote:
+          "Tracked for drift only — no demo yet. Setup starts at `npx copilotkit login` and a `CPK_INTELLIGENCE_API_KEY` from a hosted Intelligence project, which is an account-scoped resource this harness does not have.",
       },
     ],
   },

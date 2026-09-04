@@ -9,7 +9,7 @@ A navigable, working test harness covering every page of the CopilotKit Agno doc
 | **AG-UI packages**      | `@ag-ui/agno` 0.0.5 · `@ag-ui/client` 0.0.57                                                                                                                          |
 | **Frontend**            | Next.js 16.3.0 (App Router) · React 19.2 · TypeScript · Tailwind 4                                                                                                    |
 | **Backend**             | Python 3.12 · Agno 2.8.6 · FastAPI/AgentOS                                                                                                                            |
-| **Build status**        | No CI. Locally verified: 21 doc routes + 15 demo routes, live agent run ✅, rendered source byte-matches disk ✅. **Typecheck currently failing** — see Known issues. |
+| **Build status**        | No CI. Locally verified: 24 doc routes + 17 demo routes, live agent run ✅, rendered source byte-matches disk ✅. **Typecheck currently failing** — see Known issues. |
 
 ---
 
@@ -189,7 +189,7 @@ Two consequences worth knowing:
 - **The code on a page is never a re-typed approximation.** Each page reads real files from the repo (`frontend/src/lib/source.ts`), so what you compare against the doc is what actually runs. Some excerpts use `#region` markers, which stay visible in the source file and are labelled with their line numbers.
 - **Demo routes share the app-wide provider**, so a conversation started in a demo continues on any other route. That's deliberate — `/custom-look-and-feel/headless-ui/demo-chat` and `/custom-look-and-feel/programmatic-control/demo-chat` show the _same_ conversation through two completely different UIs.
 
-15 of the 21 doc routes have a demo: quickstart, prebuilt-components, the three interactive thread routes, all four Custom Look and Feel routes, display-only, tool-rendering, frontend-tools, human-in-the-loop, both Backend routes, and error-debugging. The remaining 6 are reference pages with nothing to run (or, in the case of Interactive, a doc page with nothing in it).
+17 of the 24 doc routes have a demo: quickstart, prebuilt-components, the three interactive thread routes, all four Custom Look and Feel routes, display-only, tool-rendering, frontend-tools, governed-actions, human-in-the-loop, both Backend routes, and error-debugging. The other 7 have nothing to run: `/`, `/threads`, `/threads/import` and `/threads/architecture` are reference pages; `/generative-ui/your-components/interactive` is a doc page with nothing in it; `/webmcp` and `/intelligence/quickstart` are tracked for drift with the demo deliberately not built (see below).
 
 ### Getting Started
 
@@ -247,8 +247,13 @@ A named renderer for `get_weather` plus a wildcard fallback. **Try:** `What's th
 **`/frontend-tools` — Frontend Tools**
 Three tools that run in the browser and change this page. **Try:** `Say hello to Malaika`, `Change the theme to violet`, `Bookmark the CopilotKit docs at https://docs.copilotkit.ai`. **Pass:** each panel updates the moment the call completes; the theme change follows you across every route. **Fail:** the agent claims success but nothing changes — the tool names have drifted apart.
 
+**`/human-in-the-loop/governed-actions` — Governed Action Approval**
+An approval checkpoint in front of a side-effecting action, showing the policy verdict and the exact arguments before anything runs. **Try:** `Send an invoice reminder to acme@example.com. Ask me to approve it first.` **Pass:** a card renders with the verdict and the JSON arguments, and the run holds until Approve or Reject. **Fail:** the agent reports the reminder sent with no card.
+
 **`/human-in-the-loop`** _(live but absent from the sidebar)_
 **Try:** `Can you show me two good options for a restaurant name?` **Pass:** two buttons render in the message stream and **nothing further streams until you click one**. **Fail:** two options as plain text, or the agent continues without waiting.
+
+**`/webmcp`** — 🚧 **Tracked, not implemented.** The doc adds a `webmcp` flag to a frontend tool so browser agents can discover it. Its own test procedure needs Chrome 149+ with the WebMCP origin trial (or `chrome://flags/#enable-webmcp-testing`) and Chrome's Model Context Tool Inspector; CopilotKit no-ops where `document.modelContext` is absent, so a demo here would register nothing and still look green.
 
 ### Backend
 
@@ -263,6 +268,10 @@ A live capture of the raw AG-UI event stream, with pause and clear. **Try:** `Wh
 **`/troubleshooting/error-debugging`** — A **live error log** fed by the provider-level `onError`. **Try:** stop the Agno process, send a message. **Pass:** an entry appears with an `agent_run_failed`-style code. **Fail:** silent failure with nothing logged.
 
 **`/status`** — Every route and its status in one table.
+
+### Intelligence
+
+**`/intelligence/quickstart`** — 🚧 **Tracked, not implemented.** Connecting an existing app to a hosted CopilotKit Intelligence project so threads persist. Step 1 is `npx copilotkit@latest login` plus `project select`, which writes a `CPK_INTELLIGENCE_API_KEY` — an account-scoped resource this harness does not have, so every later step has nothing to assert against. Tracked because it is a genuinely new page; the rest of `/agno/intelligence/*` is the old `/agno/premium/*` set renamed, and stays out of scope.
 
 ---
 
@@ -289,14 +298,19 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/generative-ui/your-components/interactive`  | `/generative-ui/your-components/interactive`  | 🚧 Not started | Upstream doc page is still a stub; its only content is the 30 Aug session-storage callout (#12), which this route mirrors.            |
 | `/agno/generative-ui/tool-rendering`               | `/generative-ui/tool-rendering`               | ✅ Working     | Named + wildcard renderers; tool call verified over the wire.                          |
 | `/agno/frontend-tools`                             | `/frontend-tools`                             | ✅ Working     | Was dying at the resume with "requires a database"; fixed by configuring `db` (#12) and re-recorded clean.            |
+| `/agno/human-in-the-loop/governed-actions`         | `/human-in-the-loop/governed-actions`         | ✅ Working     | Approval card with the policy verdict. Its `z.record` call had to be translated for zod 4 — see §9 #14.            |
 | `/agno/human-in-the-loop`                          | `/human-in-the-loop`                          | ✅ Working     | **Not in the doc sidebar**; linked from Quickstart and resolves. Covered by the shared `db` (#12).            |
+| `/agno/webmcp`                                     | `/webmcp`                                     | 🚧 Not started | Tracked for drift. Needs Chrome 149+ and the WebMCP origin trial.                       |
 | `/agno/copilot-runtime`                            | `/backend/copilot-runtime`                    | ✅ Working     | Two agent ids verified via the runtime's `info` method.                                |
 | `/agno/ag-ui`                                      | `/backend/ag-ui`                              | ✅ Working     | Live event panel.                                                                      |
 | `/agno/troubleshooting/error-debugging`            | `/troubleshooting/error-debugging`            | ✅ Working     | Live error log.                                                                        |
+| `/agno/intelligence/quickstart`                    | `/intelligence/quickstart`                    | 🚧 Not started | Tracked for drift. Needs a hosted Intelligence project and `CPK_INTELLIGENCE_API_KEY`.  |
 
 **Legend:** ✅ Working · ⚠️ Partial (blocked by something outside this repo) · 📖 Reference (intentionally not a live feature) · ❌ Broken · 🚧 Not started
 
 Not implemented as routes: `/agno/(other)/telemetry` (a config note, covered by `COPILOTKIT_TELEMETRY_DISABLED` in `.env.example`).
+
+**Tracked without a demo.** `/agno/webmcp` and `/agno/intelligence/quickstart` carry a route, a nav entry and a snapshot so drift is watched, but nothing is implemented behind them and the recorder does not touch them. The reason is on each route’s page and in §7. The rest of `/agno/intelligence/` is the old `/agno/premium/` set under a new prefix and stays in `doc-snapshot/manifest.json`’s `knownUnmapped` list.
 
 ---
 
@@ -360,6 +374,11 @@ Three smaller problems in the callout itself:
 CopilotKit mints a fresh thread id on every render, the SSR pass included — three consecutive `curl`s of the same route return three different ids. Any component that renders `agent.threadId` in server-rendered markup therefore throws *"Hydration failed because the server rendered text didn't match the client"* and has its subtree discarded and re-rendered. This repo's `/custom-look-and-feel/programmatic-control` demo hit exactly that by showing the thread id in its state panel.
 
 A thread id being client state is reasonable; the gap is that no page covering `useAgent` mentions it, while the surrounding docs are Next-App-Router-first, where every component is server-rendered by default. Fixed here with `suppressHydrationWarning` on the one element that prints it — worth knowing before you render an id, a message count, or anything else off `agent` above the fold.
+
+**14. Governed Actions publishes a zod 3 call into a zod 4 project**
+[Governed Actions](https://docs.copilotkit.ai/agno/human-in-the-loop/governed-actions) declares the approval schema with `arguments: z.record(z.unknown())`. That single-argument form is zod 3. This repo is on **zod 4.4.3**, where `z.record` requires a key schema *and* a value schema, so the published call is `TS2554: Expected 2 arguments, but got 1`.
+
+This is the one place in the repo where a published snippet was **not** taken verbatim: the registration lives in `frontend/src/components/global-frontend-tools.tsx`, which is mounted at the app root, so a type error there takes down every route rather than the one page being tested. It is written as `z.record(z.string(), z.unknown())` with the deviation marked in a comment beside it. The page states no zod version anywhere, and CopilotKit v2 ships zod 4 in its own peer range — so a reader following the page into a current project hits a compile error on the first snippet.
 
 ---
 
@@ -478,7 +497,7 @@ npm install && npx playwright install chromium
 npm run doctor            # static: config, files, line ranges, handlers
 npm run doctor:online     # also probes every demo route, doc URL, and selector
 npm run record -- --list  # what will be recorded
-npm run record            # all 16, in nav order
+npm run record            # all 18, in nav order
 npm run manifest          # record what was produced — run this after every recording
 ```
 
@@ -528,12 +547,16 @@ single page first — before running the full suite.
 
 **Generative UI** — [Your Components · Display-only](https://docs.copilotkit.ai/agno/generative-ui/your-components/display-only) · [Your Components · Interactive](https://docs.copilotkit.ai/agno/generative-ui/your-components/interactive) † · [Tool Rendering](https://docs.copilotkit.ai/agno/generative-ui/tool-rendering)
 
-**App Control** — [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools) · [Human in the Loop](https://docs.copilotkit.ai/agno/human-in-the-loop) †
+**App Control** — [Frontend Tools](https://docs.copilotkit.ai/agno/frontend-tools) · [Governed Actions](https://docs.copilotkit.ai/agno/human-in-the-loop/governed-actions) · [Human in the Loop](https://docs.copilotkit.ai/agno/human-in-the-loop) † · [WebMCP](https://docs.copilotkit.ai/agno/webmcp) ‡
 
 **Backend** — [Copilot Runtime](https://docs.copilotkit.ai/agno/copilot-runtime) · [AG-UI](https://docs.copilotkit.ai/agno/ag-ui)
 
 **Troubleshooting** — [Error Debugging & Observability](https://docs.copilotkit.ai/agno/troubleshooting/error-debugging)
 
+**Intelligence** — [Quickstart](https://docs.copilotkit.ai/agno/intelligence/quickstart) ‡
+
 **External** — [Agno docs](https://docs.agno.com) · [AG-UI protocol](https://ag-ui.com) · [AG-UI event types](https://docs.ag-ui.com/concepts/events)
 
 † Resolves but is absent from the doc sidebar as of the sync date.
+
+‡ Tracked for drift only — a route and a snapshot exist, the demo does not.

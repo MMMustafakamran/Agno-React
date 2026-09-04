@@ -160,6 +160,18 @@
       "age": 0,
       "date": "Fri, 04 Sep 2026 07:58:23 GMT"
     },
+    "/agno/intelligence/quickstart": {
+      "file": "agno__intelligence__quickstart.md",
+      "sha256": "3c3603ebae28d5f65e29f0e40d4026439966172efe7d2c0fc08a374c471bd183",
+      "bytes": 7227,
+      "lines": 160,
+      "routes": [
+        "/intelligence/quickstart"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 04 Sep 2026 13:40:33 GMT"
+    },
     "/agno/intelligence/threads-explained": {
       "file": "agno__intelligence__threads-explained.md",
       "sha256": "e20b1c8da520d0224fadf3e76fd57743cbb27404fa69503198b493622306f432",
@@ -267,6 +279,18 @@
       "status": "ok",
       "age": 0,
       "date": "Sun, 30 Aug 2026 13:45:09 GMT"
+    },
+    "/agno/webmcp": {
+      "file": "agno__webmcp.md",
+      "sha256": "2d475d82722956ff0cb5ac97ef10945e61566e0aca7e2df309751321e80f3321",
+      "bytes": 7477,
+      "lines": 153,
+      "routes": [
+        "/webmcp"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 04 Sep 2026 13:40:33 GMT"
     }
   },
   "sitemap": {
@@ -339,7 +363,6 @@
       "https://docs.copilotkit.ai/agno/intelligence/intelligence-platform",
       "https://docs.copilotkit.ai/agno/intelligence/managed-intelligence-platform",
       "https://docs.copilotkit.ai/agno/intelligence/overview",
-      "https://docs.copilotkit.ai/agno/intelligence/quickstart",
       "https://docs.copilotkit.ai/agno/intelligence/self-hosting",
       "https://docs.copilotkit.ai/agno/migrate/1.10.X",
       "https://docs.copilotkit.ai/agno/migrate/1.8.2",
@@ -382,7 +405,6 @@
       "https://docs.copilotkit.ai/agno/tutorials/multi-conversation-chat",
       "https://docs.copilotkit.ai/agno/voice",
       "https://docs.copilotkit.ai/agno/vs-code-extension",
-      "https://docs.copilotkit.ai/agno/webmcp",
       "https://docs.copilotkit.ai/agno/whats-new",
       "https://docs.copilotkit.ai/agno/whats-new/a2a-mcp-handshake",
       "https://docs.copilotkit.ai/agno/whats-new/a2ui-launch",
