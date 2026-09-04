@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-04T07:58:23.353Z",
+  "syncedAt": "2026-09-04T10:55:24.468Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -136,6 +136,18 @@
       "age": 0,
       "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
+    "/agno/human-in-the-loop/governed-actions": {
+      "file": "agno__human-in-the-loop__governed-actions.md",
+      "sha256": "c3ffbf2aa5a8b697765c47f5668c9ac1f3608ae778728bb504b77c18a995214b",
+      "bytes": 7168,
+      "lines": 256,
+      "routes": [
+        "/human-in-the-loop/governed-actions"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 04 Sep 2026 10:55:24 GMT"
+    },
     "/agno/inspector": {
       "file": "agno__inspector.md",
       "sha256": "9257e77b17abd341f3f122ee77468d000ff19e29defcd2220902a30c9dab391c",
@@ -147,6 +159,18 @@
       "status": "ok",
       "age": 0,
       "date": "Fri, 04 Sep 2026 07:58:23 GMT"
+    },
+    "/agno/intelligence/threads-explained": {
+      "file": "agno__intelligence__threads-explained.md",
+      "sha256": "e20b1c8da520d0224fadf3e76fd57743cbb27404fa69503198b493622306f432",
+      "bytes": 10085,
+      "lines": 157,
+      "routes": [
+        "/threads/architecture"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
     },
     "/agno/prebuilt-components": {
       "file": "agno__prebuilt-components.md",
@@ -167,18 +191,6 @@
       "lines": 142,
       "routes": [
         "/threads/drawer"
-      ],
-      "status": "ok",
-      "age": 0,
-      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
-    },
-    "/agno/intelligence/threads-explained": {
-      "file": "agno__intelligence__threads-explained.md",
-      "sha256": "e20b1c8da520d0224fadf3e76fd57743cbb27404fa69503198b493622306f432",
-      "bytes": 10085,
-      "lines": 157,
-      "routes": [
-        "/threads/architecture"
       ],
       "status": "ok",
       "age": 0,
@@ -258,8 +270,8 @@
     }
   },
   "sitemap": {
-    "fetchedAt": "2026-08-30T13:45:08.378Z",
-    "urlsUnderRoot": 135,
+    "fetchedAt": "2026-09-04T10:56:11.541Z",
+    "urlsUnderRoot": 139,
     "knownUnmapped": [
       "https://docs.copilotkit.ai/agno/agent-config",
       "https://docs.copilotkit.ai/agno/agent-spec",
@@ -322,6 +334,13 @@
       "https://docs.copilotkit.ai/agno/headless",
       "https://docs.copilotkit.ai/agno/human-in-the-loop/headless",
       "https://docs.copilotkit.ai/agno/human-in-the-loop/useInterrupt",
+      "https://docs.copilotkit.ai/agno/intelligence/connect-your-runtime",
+      "https://docs.copilotkit.ai/agno/intelligence/headless-ui",
+      "https://docs.copilotkit.ai/agno/intelligence/intelligence-platform",
+      "https://docs.copilotkit.ai/agno/intelligence/managed-intelligence-platform",
+      "https://docs.copilotkit.ai/agno/intelligence/overview",
+      "https://docs.copilotkit.ai/agno/intelligence/quickstart",
+      "https://docs.copilotkit.ai/agno/intelligence/self-hosting",
       "https://docs.copilotkit.ai/agno/migrate/1.10.X",
       "https://docs.copilotkit.ai/agno/migrate/1.8.2",
       "https://docs.copilotkit.ai/agno/migrate/v2",
@@ -331,12 +350,6 @@
       "https://docs.copilotkit.ai/agno/prebuilt-components/chat-controls",
       "https://docs.copilotkit.ai/agno/prebuilt-components/popup",
       "https://docs.copilotkit.ai/agno/prebuilt-components/sidebar",
-      "https://docs.copilotkit.ai/agno/premium/connect-your-runtime",
-      "https://docs.copilotkit.ai/agno/premium/headless-ui",
-      "https://docs.copilotkit.ai/agno/premium/intelligence-platform",
-      "https://docs.copilotkit.ai/agno/premium/managed-intelligence-platform",
-      "https://docs.copilotkit.ai/agno/premium/overview",
-      "https://docs.copilotkit.ai/agno/premium/self-hosting",
       "https://docs.copilotkit.ai/agno/reference/v2/hooks/useCapabilities",
       "https://docs.copilotkit.ai/agno/runtime-server-adapter",
       "https://docs.copilotkit.ai/agno/shared-state",
@@ -369,6 +382,7 @@
       "https://docs.copilotkit.ai/agno/tutorials/multi-conversation-chat",
       "https://docs.copilotkit.ai/agno/voice",
       "https://docs.copilotkit.ai/agno/vs-code-extension",
+      "https://docs.copilotkit.ai/agno/webmcp",
       "https://docs.copilotkit.ai/agno/whats-new",
       "https://docs.copilotkit.ai/agno/whats-new/a2a-mcp-handshake",
       "https://docs.copilotkit.ai/agno/whats-new/a2ui-launch",

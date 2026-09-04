@@ -3,16 +3,22 @@
 import { useFrontendTool, useHumanInTheLoop } from "@copilotkit/react-core/v2";
 import { z } from "zod";
 
+import { GovernedActionCard } from "./governed-action-card";
 import { ACCENTS, isAccentName, useHarnessState } from "./harness-state";
 
 /**
  * Registers every browser-executed tool once, at the app root.
  *
  * These are deliberately global rather than page-scoped. The Agno agent
- * declares all four with `external_execution=True`, so the model can call any
- * of them from any chat in the app. A tool call with no registered handler
+ * declares each of them with `external_execution=True`, so the model can call
+ * any of them from any chat in the app. A tool call with no registered handler
  * never gets a result, and the run hangs waiting for one — so registering
  * these per-page would leave every other page able to deadlock its own chat.
+ *
+ * The reverse also bites, and did: `addBookmark` and `offerOptions` were
+ * registered here but missing from `FRONTEND_TOOLS` in `backend/tools/__init__.py`,
+ * so the agent was never told they existed and simply never called them. A
+ * handler with no tool behind it fails silently — see that file.
  *
  * The pages under App Control show the *effects* and the source; this is where
  * the wiring lives.
@@ -67,6 +73,65 @@ export function GlobalFrontendTools() {
       return `Added bookmark "${title}".`;
     },
   });
+
+  // #region governed-action
+  // Governed Action Approval UI — the tool-call variant from
+  // docs.copilotkit.ai/agno/human-in-the-loop/governed-actions.
+  //
+  // Registered globally for the same reason as the others. The card itself
+  // lives on the route so the page's own component is the one on screen.
+  useHumanInTheLoop({
+    name: "approve_governed_action",
+    description:
+      "Ask the user to approve a governed side-effect action before it runs.",
+    parameters: z.object({
+      id: z.string(),
+      summary: z.string(),
+      tool: z.string(),
+      reference: z.string(),
+      verdict: z.enum(["allow", "deny", "require_approval"]),
+      // Published as `z.record(z.unknown())`. That is a zod 3 signature; this
+      // repo is on zod 4.4.3, where `z.record` requires both a key and a value
+      // schema — the single-argument form is `TS2554: Expected 2-3 arguments,
+      // but got 1`. Translated rather than left failing because this component
+      // is mounted at the app root, so the error would take down every route
+      // instead of demonstrating anything. See /human-in-the-loop/governed-actions.
+      arguments: z.record(z.string(), z.unknown()),
+    }),
+    render: ({ args, status, respond }) => {
+      if (status !== "executing" || !respond) {
+        return null;
+      }
+
+      return (
+        <GovernedActionCard
+          action={args}
+          onApprove={() =>
+            respond({
+              approved: true,
+              actionId: args.id,
+              reference: args.reference,
+            })
+          }
+          onReject={() =>
+            respond({
+              approved: false,
+              actionId: args.id,
+              reference: args.reference,
+            })
+          }
+          onBlock={() =>
+            respond({
+              approved: false,
+              actionId: args.id,
+              reference: args.reference,
+            })
+          }
+        />
+      );
+    },
+  });
+  // #endregion
 
   // #region human-in-the-loop
   // Human-in-the-loop: the run pauses here until `respond` is called, so the

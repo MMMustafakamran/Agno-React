@@ -276,8 +276,8 @@ export const PAGES = definePages([
     // The `#region human-in-the-loop` block -- the interrupt itself, rather than
     // the chat route that merely triggers it.
     ideFile: 'frontend/src/components/global-frontend-tools.tsx',
-    startLine: 71,
-    endLine: 114,
+    startLine: 136,
+    endLine: 179,
     extraTabs: [
       {
         filePath: 'frontend/src/app/human-in-the-loop/demo-chat/page.tsx',
@@ -287,6 +287,28 @@ export const PAGES = definePages([
     ],
     prompt: 'Can you show me two good options for a restaurant name?',
     waitAfterPromptMs: 4000,
+  },
+  {
+    id: 'human-in-the-loop-governed-actions',
+    name: 'App Control - Governed Action Approval',
+    videoName: 'GovernedActions',
+    docPath: 'human-in-the-loop/governed-actions',
+    route: 'human-in-the-loop/governed-actions',
+    // The `#region governed-action` block -- the tool registration and the
+    // card it renders, rather than the chat route that merely triggers it.
+    ideFile: 'frontend/src/components/global-frontend-tools.tsx',
+    startLine: 77,
+    endLine: 134,
+    extraTabs: [
+      {
+        filePath: 'frontend/src/components/governed-action-card.tsx',
+        startLine: 26,
+        endLine: 50,
+      },
+    ],
+    prompt:
+      'Send an invoice reminder to acme@example.com. Ask me to approve it first.',
+    waitAfterPromptMs: 6000,
   },
   {
     id: 'copilot-runtime',

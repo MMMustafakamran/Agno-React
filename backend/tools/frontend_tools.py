@@ -60,3 +60,27 @@ def offerOptions(option_1: str, option_2: str):  # noqa: N802 - wire identifier
         option_2: The second option.
     """
 # endregion
+
+
+# region governed-action
+@tool(external_execution=True)
+def approve_governed_action(
+    id: str,
+    summary: str,
+    tool: str,
+    reference: str,
+    verdict: str,
+    arguments: dict,
+):
+    """
+    Ask the user to approve a governed side-effect action before it runs.
+
+    Args:
+        id: Stable identifier for this proposed action.
+        summary: One line describing what the action does.
+        tool: The tool or API that would be called.
+        reference: The policy or reference that produced the verdict.
+        verdict: One of "allow", "deny", or "require_approval".
+        arguments: The exact arguments the action would run with.
+    """
+# endregion

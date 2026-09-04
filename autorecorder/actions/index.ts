@@ -35,6 +35,7 @@ import { runDisplayOnlyAction } from './display-only.action';
 import { runErrorDebuggingAction } from './error-debugging.action';
 import { runFrontendToolsAction } from './frontend-tools.action';
 import { runHeadlessUiAction } from './headless-ui.action';
+import { runGovernedActionsAction } from './governed-actions.action';
 import { runHitlAction } from './hitl.action';
 import { runInspectorAction } from './inspector.action';
 import { runPrebuiltAction } from './prebuilt.action';
@@ -63,6 +64,7 @@ export const ACTION_MAP: Record<string, PageActionHandler> = {
   'tool-rendering': runToolRenderingAction,
   'frontend-tools': runFrontendToolsAction,
   'human-in-the-loop': runHitlAction,
+  'human-in-the-loop-governed-actions': runGovernedActionsAction,
   'copilot-runtime': runRuntimeAction,
   'ag-ui': runAgUiAction,
   'error-debugging': runErrorDebuggingAction,
