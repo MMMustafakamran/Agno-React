@@ -32,7 +32,11 @@ export const PAGE_GROUPS = {
   getting_started: ['quickstart', 'prebuilt-components'],
   custom_look: ['programmatic-control', 'inspector', 'slots', 'headless-ui'],
   generative_ui: ['display-only', 'interactive', 'tool-rendering'],
-  app_control: ['frontend-tools', 'human-in-the-loop'],
+  app_control: [
+    'frontend-tools',
+    'human-in-the-loop',
+    'human-in-the-loop-governed-actions',
+  ],
   threads: ['threads-drawer', 'threads-headless', 'threads-lifecycle'],
   backend: ['copilot-runtime', 'ag-ui', 'error-debugging'],
 };
