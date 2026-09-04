@@ -160,7 +160,7 @@ export const NAV: NavGroup[] = [
       {
         path: "/threads/architecture",
         title: "Threads & Persistence Architecture",
-        docPath: "/agno/premium/threads-explained",
+        docPath: "/agno/intelligence/threads-explained",
         summary:
           "The event-replay model behind threads: durable history, live reconnect, and thread locking.",
         status: "reference",
