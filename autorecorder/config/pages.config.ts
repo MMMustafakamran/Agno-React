@@ -40,7 +40,134 @@
  * doctor recognises, so files carrying only that form are unguarded.)
  */
 
-import { definePages } from '../core/types';
+import { definePages, type PageDefinition } from '../core/types';
+
+/**
+ * The scaffolded app, running — video 3 of each package manager's set.
+ *
+ * The other two are the CLI creating the project and that manager installing
+ * it, both in `config/cli.config.ts`. This one is the payoff, and it is a
+ * recording of the real app rather than a re-enactment: the dev server filmed
+ * booting in the terminal is the same process that serves the page driven
+ * immediately afterwards.
+ *
+ * The order on screen is how someone would actually check a fresh scaffold:
+ *
+ *   1. the doc page that told them to run the CLI
+ *   2. `package.json` — what the starter declares
+ *   3. the lockfile — what this manager actually resolved, pinned
+ *   4. the app's own CopilotKit code, so the chat below has a source
+ *   5. `<pm> run dev` booting, in a terminal
+ *   6. the app open in a browser, asked a question, answering
+ *
+ * Steps 2 and 3 are the pair that matters. `package.json` carries RANGES, so on
+ * its own it cannot answer "which versions is this?" — and the resolved set is
+ * exactly where four package managers can differ. The lockfile is where that
+ * difference is written down, which is why this tab is a different file in each
+ * set.
+ *
+ * These four are appended LAST in `definePages`, after every doc page, so the
+ * matrix takes the highest order numbers and no existing page's filename index
+ * moves when they are added or removed.
+ *
+ * ── Ports ─────────────────────────────────────────────────────────────────
+ * 3131–3134, and neither 3000 nor 3121–3124.
+ *
+ * Not 3000, because this repo's own frontend holds it, and a recording that
+ * quietly used *that* would look like a pass while proving nothing about the
+ * scaffold. Not 3121–3124 either, and that is not superstition: this block
+ * ships to every framework repo, so every copy that keeps the reference's
+ * numbers picks the same ports — and a sibling repo's scaffold left running on
+ * one of them is enough for the dev server here to fail with EADDRINUSE while
+ * the browser happily records *that other framework's app*. Each repo gets its
+ * own range; this one is Agno's.
+ *
+ * ── The starter this records ──────────────────────────────────────────────
+ * Agno is a Python-agent starter. Its `dev` script is
+ *
+ *   npm run dev:infra && concurrently "npm run dev:ui" "npm run dev:agent" \
+ *     --names ui,agent --prefix-colors blue,green --kill-others
+ *
+ * so three things share one terminal: an env-var pre-check, `next dev` (Next
+ * 16, no `--turbopack` flag), and the `uv`-run Python agent. `readyPattern`
+ * therefore has to pick the UI's ready line out of interleaved output that
+ * concurrently prefixes with `[ui] ` / `[agent] `. It is matched unanchored
+ * against the terminal buffer, so the prefix sits harmlessly in front of it.
+ *
+ * `readyPattern` is UNVERIFIED against a real boot — the pipeline has not been
+ * run in this repo — and it is read off `1-cli-testing/yarn/app/package.json`
+ * plus what Next 16 prints when it binds. If a future starter changes that
+ * wording the recorder waits out the timeout and reports that the server never
+ * started, which is the right failure: it never became reachable in a way this
+ * config recognises.
+ */
+const DEMO_PAGES: PageDefinition[] = [
+  { pm: 'npm', command: 'npm', args: ['run', 'dev'], lockfile: 'package-lock.json', port: 3131 },
+  { pm: 'pnpm', command: 'pnpm', args: ['run', 'dev'], lockfile: 'pnpm-lock.yaml', port: 3132 },
+  { pm: 'yarn', command: 'yarn', args: ['run', 'dev'], lockfile: 'yarn.lock', port: 3133 },
+  // bun 1.2 writes a text `bun.lock`; older bun wrote the binary `bun.lockb`,
+  // which has nothing readable to put on screen. The doctor names this file if
+  // the installed bun produced the other one.
+  { pm: 'bun', command: 'bun', args: ['run', 'dev'], lockfile: 'bun.lock', port: 3134 },
+].map(({ pm, command, args, lockfile, port }) => {
+  const app = `1-cli-testing/${pm}/app`;
+  return {
+    id: `demo-${pm}`,
+    name: `${pm} · 3 · Scaffolded app - manifest, lockfile, dev server and a live agent`,
+    videoName: `Demo-${pm}`,
+    // Names the file as the third of this manager's set rather than by doc-nav
+    // position, so one manager's three clips sort together.
+    videoFile: `${pm}-3-Demo`,
+    docPath: 'quickstart?agent=starter',
+    // Unused for these pages — the demo URL comes from devServer — but kept
+    // meaningful so logs read sensibly.
+    route: 'quickstart',
+    generated: true,
+
+    // What the starter declares. Also the file whose absence tells the runner
+    // this manager's app has not been scaffolded and installed yet. 1-24 is the
+    // scripts block plus the pinned @copilotkit/* and @ag-ui/* dependencies —
+    // the versions the rest of the clip is about.
+    ideFile: `${app}/package.json`,
+    startLine: 1,
+    endLine: 24,
+    extraTabs: [
+      // What it resolved to. A lockfile is long and mostly uninteresting; its
+      // head is the part that identifies the tree — format version, then the
+      // first resolved entries.
+      { filePath: `${app}/${lockfile}`, startLine: 1, endLine: 26 },
+      // The CopilotKit integration itself — the imports, the agent id the
+      // threads drawer and chat provider both address, and the top of the
+      // component behind the chat that answers a few seconds later.
+      { filePath: `${app}/src/app/page.tsx`, startLine: 1, endLine: 30 },
+    ],
+
+    // The starter's own suggestion chip, and the one prompt it can demonstrably
+    // answer end to end: the agent calls `get_weather`, and `useRenderTool` in
+    // src/app/page.tsx renders src/components/weather.tsx for it. So a correct
+    // reply is visible as a weather card, not just as text.
+    prompt: "What's the weather in San Francisco?",
+    waitAfterPromptMs: 5000,
+
+    devServer: {
+      cwd: app,
+      command,
+      args,
+      env: { PORT: String(port), BROWSER: 'none' },
+      // Next 16 prints "- Local:  http://localhost:<port>" when it binds and
+      // "✓ Ready in <n>s" when the first compile lands; either means serving.
+      // Neither string is printed by dev:infra or by the uvicorn-hosted agent,
+      // so this cannot fire on the wrong half of the concurrently pair.
+      readyPattern: /Ready in \d|Local:\s+https?:\/\/localhost/i,
+      // A first `next dev` compiles the whole app; on a cold cache this is slow
+      // and a tighter cap would report a failure for a server that was fine.
+      readyTimeoutMs: 240_000,
+      originUrl: `http://localhost:${port}`,
+      demoPath: '/',
+      title: `${command} run dev`,
+    },
+  };
+});
 
 export const PAGES = definePages([
   {
@@ -370,4 +497,7 @@ export const PAGES = definePages([
     prompt: 'Testing the error reporting pipeline.',
     waitAfterPromptMs: 4000,
   },
+  // Last, always: these take the highest order numbers so adding or removing
+  // them never renumbers a doc page's video filename.
+  ...DEMO_PAGES,
 ]);

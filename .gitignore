@@ -28,6 +28,11 @@ __pycache__/
 # Autorecorder scratch & output
 autorecorder/videos/.temp_chunks/
 
+# Captured terminal sessions from `npm run capture` — build artifacts, and
+# they hold whatever the CLI printed on the machine that ran it. Commit one
+# deliberately (`git add -f`) when a run is worth keeping as a baseline.
+autorecorder/casts/
+
 # Drift reports are derived data — regenerated on every /doc-sync run.
 # The snapshot itself (doc-snapshot/pages/, manifest.json, CHANGELOG.md)
 # IS committed; it is the baseline every diff is taken against.
