@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ACTION_MAP } from '../actions';
-import { CLI_FLOWS } from '../config/cli.config';
+import { CLI_FLOWS, CLI_VIDEOS } from '../config/cli.config';
 import { PAGES } from '../config/pages.config';
 import { PROJECT, REPLACE_ME } from '../config/project.config';
 import { SELECTORS } from '../config/selectors.config';
+import { hasFfmpeg } from './cli/audio';
 import { type IdeTabConfig } from './ide/generator';
 
 /**
@@ -185,44 +186,66 @@ function checkPages(rootDir: string, problems: Problem[]): void {
       });
     }
 
-    // A docOnly page has no demo and no IDE segment — it is the doc read on
-    // camera and nothing else — so a prompt and a line range are not things it
+    // A docOnly page has no demo and no IDE segment -- it is the doc read on
+    // camera and nothing else -- so a prompt and a line range are not things it
     // is missing. Checking them would fail an entry that is correct as written.
-    if (!page.docOnly) {
-      if (!page.prompt || page.prompt.includes(REPLACE_ME)) {
-        problems.push({ scope, severity: 'error', message: 'prompt is empty or a placeholder' });
-      }
+    if (page.docOnly) continue;
 
-      if (page.prompts?.length && page.prompts[0] !== page.prompt) {
+    if (!page.prompt || page.prompt.includes(REPLACE_ME)) {
+      problems.push({ scope, severity: 'error', message: 'prompt is empty or a placeholder' });
+    }
+
+    if (page.prompts?.length && page.prompts[0] !== page.prompt) {
+      problems.push({
+        scope,
+        severity: 'warning',
+        message: 'prompts[0] differs from prompt -- one of them is stale',
+      });
+    }
+
+    // A generated page's files are produced by the CLI pipeline, so before that
+    // has run they are legitimately absent. Report the state rather than failing
+    // the whole adaptation over work that has not happened yet — but check them
+    // normally the moment they do exist, because then a bad range is a real bug.
+    const tabs = [
+      {
+        tab: { filePath: page.ideFile, startLine: page.startLine, endLine: page.endLine },
+        label: 'ideFile',
+      },
+      ...(page.extraTabs ?? []).map((tab, i) => ({ tab, label: `extraTabs[${i}]` })),
+    ];
+
+    for (const { tab, label } of tabs) {
+      if (page.generated && !existsSync(join(rootDir, tab.filePath))) {
         problems.push({
           scope,
           severity: 'warning',
-          message: 'prompts[0] differs from prompt -- one of them is stale',
+          message: `${label} ${tab.filePath} not present yet — run the CLI pipeline (capture --scaffold, --distribute) before recording this page`,
         });
+        continue;
       }
+      checkTab(rootDir, scope, tab, label, problems);
+    }
 
-      // A generated page's files are produced by the CLI pipeline, so before that
-      // has run they are legitimately absent. Report the state rather than failing
-      // the whole adaptation over work that has not happened yet — but check them
-      // normally the moment they do exist, because then a bad range is a real bug.
-      const tabs = [
-        {
-          tab: { filePath: page.ideFile, startLine: page.startLine, endLine: page.endLine },
-          label: 'ideFile',
-        },
-        ...(page.extraTabs ?? []).map((tab, i) => ({ tab, label: `extraTabs[${i}]` })),
-      ];
-
-      for (const { tab, label } of tabs) {
-        if (page.generated && !existsSync(join(rootDir, tab.filePath))) {
+    // The demo route has to exist in this repo's frontend. A page listed here
+    // with no route behind it is the "pages with no /demo route" gap from
+    // project-context.md, and it only surfaced before as an HTTP 404 at record
+    // time. Checked statically where the frontend is a Next.js App Router
+    // tree; other frontends skip it (and --online still probes the URL).
+    if (!page.devServer) {
+      const appDir = join(rootDir, 'frontend', 'src', 'app');
+      if (existsSync(appDir)) {
+        const routeDir = join(appDir, ...page.route.split('/'), ...PROJECT.demoSuffix.split('/').filter(Boolean));
+        const hasPage = ['page.tsx', 'page.ts', 'page.jsx', 'page.js', 'route.ts'].some((f) =>
+          existsSync(join(routeDir, f)),
+        );
+        if (!hasPage) {
           problems.push({
             scope,
-            severity: 'warning',
-            message: `${label} ${tab.filePath} not present yet — run the CLI pipeline (capture --scaffold, --distribute) before recording this page`,
+            severity: 'error',
+            message: `demo route /${page.route}${PROJECT.demoSuffix} has no page under frontend/src/app — the recording would 404`,
           });
-          continue;
         }
-        checkTab(rootDir, scope, tab, label, problems);
       }
     }
   }
@@ -310,6 +333,106 @@ function checkCliFlows(problems: Problem[]): void {
   }
 }
 
+/**
+ * The CLI video registry.
+ *
+ * A video that names a flow which does not exist used to be found by
+ * `cli-render.ts` throwing halfway through a render; a missing narration
+ * file was found by ffmpeg. Both are configuration, and belong here.
+ */
+function checkCliVideos(rootDir: string, problems: Problem[]): void {
+  const flowIds = new Set(CLI_FLOWS.map((f) => f.id));
+  const videoIds = new Set<string>();
+  const files = new Set<string>();
+  let anyAudio = false;
+
+  const pageIds = new Set(PAGES.map((p) => p.id));
+
+  for (const video of CLI_VIDEOS) {
+    const scope = `cli-video:${video.id}`;
+
+    for (const id of [video.id, video.onFailure?.id].filter((x): x is string => Boolean(x))) {
+      if (videoIds.has(id)) {
+        problems.push({ scope, severity: 'error', message: `duplicate video id "${id}"` });
+      }
+      videoIds.add(id);
+    }
+
+    for (const file of [video.videoFile, video.failureVideoFile].filter((x): x is string => Boolean(x))) {
+      if (files.has(file)) {
+        problems.push({
+          scope,
+          severity: 'error',
+          message: `duplicate output filename "${file}" -- one render would overwrite the other`,
+        });
+      }
+      files.add(file);
+    }
+
+    if (video.onSuccess && !pageIds.has(video.onSuccess.recordPage)) {
+      problems.push({
+        scope,
+        severity: 'error',
+        message: `onSuccess.recordPage "${video.onSuccess.recordPage}" is not a page in pages.config.ts`,
+      });
+    }
+
+    if (video.onFailure) {
+      for (const [i, tab] of (video.onFailure.ideTabs ?? []).entries()) {
+        // Generated files; absent until the pipeline has run, and possibly
+        // absent after a failed install too. The render skips missing ones.
+        if (existsSync(join(rootDir, tab.filePath))) {
+          checkTab(rootDir, `${scope} onFailure`, tab, `ideTabs[${i}]`, problems);
+        }
+      }
+      if (video.onFailure.audio) {
+        anyAudio = true;
+        if (!existsSync(join(rootDir, 'autorecorder', video.onFailure.audio))) {
+          problems.push({ scope, severity: 'error', message: `onFailure audio file ${video.onFailure.audio} does not exist` });
+        }
+      }
+    }
+
+    for (const id of video.flows) {
+      if (!flowIds.has(id)) {
+        problems.push({ scope, severity: 'error', message: `references flow "${id}", which is not registered` });
+      }
+    }
+    if (video.flows.length === 0) {
+      problems.push({ scope, severity: 'error', message: 'has no flows — nothing to film' });
+    }
+
+    for (const [i, tab] of (video.ideTabs ?? []).entries()) {
+      // Finding clips show generated files, which may not exist before the
+      // pipeline has run; that is a warning, as it is for generated pages.
+      if (!existsSync(join(rootDir, tab.filePath))) {
+        problems.push({
+          scope,
+          severity: 'warning',
+          message: `ideTabs[${i}] ${tab.filePath} not present — run the CLI pipeline before rendering this video`,
+        });
+      } else {
+        checkTab(rootDir, scope, tab, `ideTabs[${i}]`, problems);
+      }
+    }
+
+    if (video.audio) {
+      anyAudio = true;
+      if (!existsSync(join(rootDir, 'autorecorder', video.audio))) {
+        problems.push({ scope, severity: 'error', message: `audio file ${video.audio} does not exist` });
+      }
+    }
+  }
+
+  if (anyAudio && !hasFfmpeg()) {
+    problems.push({
+      scope: 'cli-video',
+      severity: 'warning',
+      message: 'a video declares narration but ffmpeg is not on PATH — the render will succeed without sound',
+    });
+  }
+}
+
 async function checkOnline(problems: Problem[]): Promise<void> {
   const get = async (url: string): Promise<number | string> => {
     try {
@@ -358,14 +481,32 @@ async function checkOnline(problems: Problem[]): Promise<void> {
     // v2, whose send button carries no type, aria-label or text. Reporting that
     // as an error would put the reference implementation permanently in the red
     // and teach everyone to ignore this command.
-    for (const key of ['chatInput', 'chatReady'] as const) {
-      const count = await p.locator(SELECTORS[key]).count().catch(() => 0);
-      if (count === 0) {
+    //
+    // Each selector is a comma list of alternatives, first match wins. Saying
+    // *which* alternative matched is the difference between "chatReady is
+    // fine" and "chatReady is matching a bare <input> that is not the chat".
+    for (const key of ['chatInput', 'chatReady', 'assistantMessage'] as const) {
+      const alternatives = SELECTORS[key].split(',').map((s) => s.trim()).filter(Boolean);
+      const hits: string[] = [];
+      for (const alt of alternatives) {
+        const n = await p.locator(alt).count().catch(() => 0);
+        if (n > 0) hits.push(`${alt} (${n})`);
+      }
+      if (hits.length === 0 && key !== 'assistantMessage') {
         problems.push({
           scope: 'selectors.config',
           severity: 'error',
           message: `${key} matched nothing on ${PAGES[0].demoUrl} -- nothing to drive`,
         });
+      } else if (hits.length > 0) {
+        console.log(`  [i] ${key} matches: ${hits.join(', ')}`);
+        if (key === 'assistantMessage' && hits.some((h) => !h.startsWith('.copilotKit') && !h.startsWith('[data-'))) {
+          problems.push({
+            scope: 'selectors.config',
+            severity: 'warning',
+            message: `assistantMessage already matches elements before any reply (${hits.join(', ')}) -- a loose alternative may make every reply look complete the instant it starts`,
+          });
+        }
       }
     }
 
@@ -399,6 +540,7 @@ export async function runDoctor(
   checkSelectors(problems);
   checkPages(rootDir, problems);
   checkCliFlows(problems);
+  checkCliVideos(rootDir, problems);
   if (opts.online) await checkOnline(problems);
 
   const errors = problems.filter((p) => p.severity === 'error');

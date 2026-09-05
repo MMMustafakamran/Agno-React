@@ -13,3 +13,4 @@
 # has changed since. That is how you tell a fresh recording from a stale one.
 *.webm
 !.gitignore
+RECORD_RESULTS.json

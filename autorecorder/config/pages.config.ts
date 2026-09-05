@@ -146,7 +146,7 @@ const DEMO_PAGES: PageDefinition[] = [
     // answer end to end: the agent calls `get_weather`, and `useRenderTool` in
     // src/app/page.tsx renders src/components/weather.tsx for it. So a correct
     // reply is visible as a weather card, not just as text.
-    prompt: "What's the weather in San Francisco?",
+    prompt: 'The install just finished. What is the weather like in San Francisco?',
     waitAfterPromptMs: 5000,
 
     devServer: {
@@ -213,7 +213,7 @@ export const PAGES = definePages([
         endLine: 53,
       },
     ],
-    prompt: 'Can you tell me a joke?',
+    prompt: 'Hey, are you connected? Tell me a quick fun fact about kites.',
     waitAfterPromptMs: 4000,
   },
   {
@@ -225,8 +225,8 @@ export const PAGES = definePages([
     ideFile: 'frontend/src/app/prebuilt-components/demo-chat/page.tsx',
     startLine: 58,
     endLine: 94,
-    prompt: 'What is CopilotKit?',
-    prompts: ['What is CopilotKit?'],
+    prompt: 'In two sentences, what does CopilotKit do?',
+    prompts: ['In two sentences, what does CopilotKit do?'],
     waitAfterPromptMs: 1500,
   },
   {
@@ -241,7 +241,7 @@ export const PAGES = definePages([
     // Threads are licensed. Unlicensed, the drawer renders its locked view --
     // which is the correct result, and what this recording shows. The chat
     // beside it is not licensed and answers normally.
-    prompt: 'Give me a one-line summary of what threads are for.',
+    prompt: 'In one line, what are threads for?',
     waitAfterPromptMs: 4000,
   },
   {
@@ -253,7 +253,7 @@ export const PAGES = definePages([
     ideFile: 'frontend/src/app/threads/headless/demo-chat/page.tsx',
     startLine: 184,
     endLine: 203,
-    prompt: 'Say hello in one short sentence.',
+    prompt: 'Say hi in one short sentence.',
     waitAfterPromptMs: 4000,
   },
   {
@@ -265,7 +265,7 @@ export const PAGES = definePages([
     ideFile: 'frontend/src/app/threads/lifecycle/demo-chat/page.tsx',
     startLine: 40,
     endLine: 67,
-    prompt: 'Remember the number 42 for me.',
+    prompt: 'Remember the number 42 for me, then I will start a new thread.',
     waitAfterPromptMs: 3000,
   },
   {
@@ -278,7 +278,7 @@ export const PAGES = definePages([
       'frontend/src/app/custom-look-and-feel/programmatic-control/demo-chat/page.tsx',
     startLine: 69,
     endLine: 85,
-    prompt: "What's the weather in Tokyo?",
+    prompt: 'Is it raining in Tokyo right now?',
     waitAfterPromptMs: 4000,
   },
   {
@@ -300,7 +300,7 @@ export const PAGES = definePages([
         endLine: 30,
       },
     ],
-    prompt: 'Hello agent! Testing inspector.',
+    prompt: 'Quick check: what is 17 times 23?',
     waitAfterPromptMs: 1500,
   },
   {
@@ -312,11 +312,11 @@ export const PAGES = definePages([
     ideFile: 'frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx',
     startLine: 66,
     endLine: 111,
-    prompt: 'Hello from customized slots level 1!',
+    prompt: 'Testing level one: the default slots. Say hi back.',
     prompts: [
-      'Hello from customized slots level 1!',
-      'Hello from slot level 2 props override!',
-      'Hello from slot level 3 custom component!',
+      'Testing level one: the default slots. Say hi back.',
+      'Level two now, with the props override. Still with me?',
+      'And level three, the custom component. Say something short.',
     ],
     waitAfterPromptMs: 1500,
   },
@@ -330,7 +330,7 @@ export const PAGES = definePages([
       'frontend/src/app/custom-look-and-feel/headless-ui/demo-chat/page.tsx',
     startLine: 21,
     endLine: 50,
-    prompt: "What's the weather in London?",
+    prompt: 'How is the weather in London today?',
     waitAfterPromptMs: 4000,
   },
   {
@@ -343,7 +343,7 @@ export const PAGES = definePages([
       'frontend/src/app/generative-ui/your-components/display-only/demo-chat/page.tsx',
     startLine: 50,
     endLine: 74,
-    prompt: 'Show the weather card for Tokyo: 77 degrees, clear',
+    prompt: 'Show me a weather card for Tokyo. It is 77 degrees and clear today.',
     waitAfterPromptMs: 4000,
   },
   {
@@ -374,7 +374,7 @@ export const PAGES = definePages([
       'frontend/src/app/generative-ui/tool-rendering/demo-chat/page.tsx',
     startLine: 45,
     endLine: 80,
-    prompt: "What's the weather in Tokyo?",
+    prompt: 'Any rain expected in Tokyo this week?',
     waitAfterPromptMs: 4000,
   },
   {
@@ -394,7 +394,7 @@ export const PAGES = definePages([
         endLine: 77,
       },
     ],
-    prompt: 'Say hello to Malaika',
+    prompt: 'Can you say hello to Malaika for me?',
     waitAfterPromptMs: 4000,
   },
   {
@@ -415,7 +415,7 @@ export const PAGES = definePages([
         endLine: 26,
       },
     ],
-    prompt: 'Can you show me two good options for a restaurant name?',
+    prompt: 'I am naming a restaurant. Can you give me two good options?',
     waitAfterPromptMs: 4000,
   },
   {
@@ -437,7 +437,7 @@ export const PAGES = definePages([
       },
     ],
     prompt:
-      'Send an invoice reminder to acme@example.com. Ask me to approve it first.',
+      'Please send an invoice reminder to acme@example.com, but check with me before it goes out.',
     waitAfterPromptMs: 6000,
   },
   {
@@ -457,10 +457,10 @@ export const PAGES = definePages([
       },
     ],
     // Two registered ids resolving to the same Agno process, one turn each.
-    prompt: 'Hello! Which agent id am I talking to?',
+    prompt: 'Hi! Which agent id am I talking to right now?',
     prompts: [
-      'Hello! Which agent id am I talking to?',
-      "What's the weather in Tokyo?",
+      'Hi! Which agent id am I talking to right now?',
+      'And what is the weather in Tokyo?',
     ],
     waitAfterPromptMs: 2000,
   },
@@ -473,7 +473,7 @@ export const PAGES = definePages([
     ideFile: 'frontend/src/app/backend/ag-ui/demo-chat/page.tsx',
     startLine: 70,
     endLine: 100,
-    prompt: "What's the weather in Tokyo?",
+    prompt: 'Any rain expected in Tokyo this week?',
     waitAfterPromptMs: 4000,
   },
   {
@@ -494,7 +494,7 @@ export const PAGES = definePages([
         endLine: 52,
       },
     ],
-    prompt: 'Testing the error reporting pipeline.',
+    prompt: 'Say anything. I am testing whether errors get reported.',
     waitAfterPromptMs: 4000,
   },
   // Last, always: these take the highest order numbers so adding or removing

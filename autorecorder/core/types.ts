@@ -103,11 +103,18 @@ export interface PageDefinition {
    */
   generated?: boolean;
 
-  /** When true, only records the doc page (e.g. for empty stub doc pages) without IDE/demo steps. */
+  /**
+   * Only record the doc page -- no IDE, no demo. For a doc section that is
+   * an empty stub: there is no source worth showing and no route to drive,
+   * and the take is the doc read on camera.
+   */
   docOnly?: boolean;
 
-  /** Duration in ms to display the doc page when docOnly is true (defaults to 6000ms). */
+  /** How long to hold on the doc page when `docOnly` (defaults to 6000ms). */
   docViewDurationMs?: number;
+
+  /** Per-page overrides of the recorder's fixed waits. See `RecorderTimeouts`. */
+  timeouts?: Partial<RecorderTimeouts>;
 }
 
 /** A page definition with everything resolved. What the engine consumes. */
@@ -142,8 +149,48 @@ export function definePages(defs: PageDefinition[]): PageRecordConfig[] {
   });
 }
 
+/**
+ * How a page handler reports what it saw, so the summary and CI see it too.
+ *
+ * Before this, a handler that noticed "the weather card never rendered" could
+ * only `console.log` it. The run still printed `[PASS]` with no asterisk, and
+ * the CI report carried nothing. `warn` puts the note on the result as `PASS*`;
+ * `fail` marks the recording failed once the handler returns, so the clip is
+ * still filmed to the end and still saved as evidence.
+ */
+export interface ActionContext {
+  /** The clip is usable but something the doc promises was not observed. */
+  warn: (message: string) => void;
+  /** The feature under test did not work. The recording finishes, then fails. */
+  fail: (message: string) => void;
+  /** Resolved timeouts for this page. */
+  timeouts: RecorderTimeouts;
+}
+
+/**
+ * Every fixed wait in the recorder, in one place.
+ *
+ * These used to be literals scattered through `core/`, and the yarn demo
+ * failed on exactly one of them: a cold turbopack compile overran the 45s
+ * demo navigation budget. Defaults live in `core/timeouts.ts`; a project sets
+ * `PROJECT.timeouts` and a page sets `timeouts` to override.
+ */
+export interface RecorderTimeouts {
+  /** Loading the external doc page. */
+  docNavMs: number;
+  /** Loading the demo route. First hit on a dev route compiles it. */
+  demoNavMs: number;
+  /** Chat surface visible after the demo route loads. */
+  chatReadyMs: number;
+  /** A reply *starting* after the prompt is sent. */
+  replyStartMs: number;
+  /** A reply finishing once it has started. */
+  replyStreamMs: number;
+}
+
 export type PageActionHandler = (
   page: Page,
   config: PageRecordConfig,
   rootPath: string,
+  ctx: ActionContext,
 ) => Promise<void>;
