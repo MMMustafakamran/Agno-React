@@ -27,7 +27,14 @@ export default function Page() {
           <dl className="grid grid-cols-[minmax(0,10rem)_1fr] gap-x-4 gap-y-1 text-xs">
             <dt className="text-slate-500">Shared agent threadId</dt>
             <dd className="break-all">
-              <code>{agent.threadId ?? "—"}</code>
+              {/*
+                Same mismatch as the Programmatic Control panel: the id is
+                minted per render, the SSR pass included, so the server HTML
+                never carries the id the client keeps. Left plain it threw
+                "Hydration failed because the server rendered text didn't
+                match the client" and React discarded this subtree.
+              */}
+              <code suppressHydrationWarning>{agent.threadId ?? "—"}</code>
             </dd>
             <dt className="text-slate-500">Explicit id passed</dt>
             <dd className="break-all">
