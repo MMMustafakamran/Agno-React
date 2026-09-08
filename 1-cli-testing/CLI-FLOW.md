@@ -8,21 +8,41 @@ The CLI is entirely keyboard-driven — no mouse anywhere in the flow.
 
 ---
 
-## ⚠ Status: PREDICTED, not observed
+## Status: OBSERVED — 2026-09-07
 
-**Nobody has run `npx copilotkit@latest create` in this repo and watched it.**
-Every prompt below is a prediction. Read the whole file that way.
+The CLI has been run in this repo and recorded. Screen text below is read off
+that recording, not predicted.
+
+**Evidence:** [`autorecorder/casts/AGNO-react-cli-02-Scaffold.cast`](../autorecorder/casts/AGNO-react-cli-02-Scaffold.cast)
+— a driven run of `npx copilotkit@latest create --project myapp1`, 143s, all
+eight steps answered, `app "app" created successfully!`. Decode it with any
+asciinema player; it is the literal screen.
 
 Each step carries one of:
 
 | Mark | Meaning |
 |---|---|
-| 🔵 **PREDICTED** | Carried over from the reference repo's real run of the *same* CLI against a *different* framework (`microsoft-agent-framework-py`), and expected to hold here because the prompt is framework-independent. Screen text has never been seen for Agno. |
-| 🟠 **PREDICTED (framework-specific)** | The answer differs per framework, and this one is inferred from `npx copilotkit@latest framework list` rather than observed. |
-| 🟢 **VERIFIED** | Checked in this repo today, by the means named in the step. |
+| 🟢 **OBSERVED** | Screen text read off the 2026-09-07 cast, or a fact checked directly in this repo by the means the step names. |
+| 🔵 **PREDICTED** | Carried over from the reference repo's run against a *different* framework (`microsoft-agent-framework-py`) and still not seen here — because this CLI version never showed it. |
 
-Nothing here is 🟢 except where it says so, and no 🟢 mark covers *screen text* —
-only facts checked outside the TUI.
+### What the real run corrected
+
+Two predictions were wrong, and both had been encoded into
+[cli.config.ts](../autorecorder/config/cli.config.ts):
+
+1. **Steps 9 and 10 were in the wrong order.** The key prompt comes *first*, then
+   the install question. The first run failed on this: the driver sat waiting for
+   an install prompt that could not appear, because the key prompt in front of it
+   was never answered. It burned its full 300s window and the flow failed.
+2. **The key prompt does not contain the string "API key".** It reads
+   `Set OPENAI_API_KEY now, or press Enter to skip and add it later.` — underscored,
+   and the only spaced "a key" on screen belongs to the URL below it. The old
+   `/API key/i` pattern could never have matched.
+
+A third bug was found in the fix: `/install the dependencies/i` also matches the
+*success banner's* next-steps list (`Install the dependencies:  npm install`), so
+the step reported ok and typed a stray `n` at a finished CLI. The pattern now
+requires the question form.
 
 ### What actually was verified, and how
 
@@ -53,14 +73,18 @@ encodes it. Details and expected screen text per step below.
 |---|---|---|---|
 | 1 | *(shell)* | `npx copilotkit@latest create --project myapp1` | 🟢 |
 | 2 | `Ok to proceed? (y)` | `y` `Enter` — only if not npx-cached | 🔵 |
-| 3 | banner | — | 🔵 |
-| 4 | `App name` | `app` `Enter` | 🔵 |
-| 5 | `Select agent framework` | walk to the row labelled **Agno**, `Enter` | 🟠 |
-| 6 | sign-in / account link | `Enter` if it asks; otherwise nothing | 🔵 |
-| 7 | `Select a project` | skipped — `--project myapp1` was passed | 🔵 |
-| 8 | `Connect this project to a chat platform?` | walk to **Not now**, `Enter` | 🟠 |
-| 9 | `Want me to install the dependencies…? [Y/n]` | `n` — **no Enter** | 🔵 |
-| 10 | model API key | `Enter` — leave empty, CLI exits | 🔵 |
+| 3 | banner | — | 🟢 |
+| 4 | `App name` | `app` `Enter` | 🟢 |
+| 5 | `Select agent framework` | walk to **🧠 Agno**, `Enter` — 16 keypresses on the 2026-09-07 list | 🟢 |
+| 6 | `A free CopilotKit account is required to link this app.` | nothing — the saved session carried it | 🟢 |
+| 7 | `Select a project` | never shown — `--project myapp1` was passed | 🟢 |
+| 8 | `Connect this project to a chat platform?` | walk to **3. Not now**, `Enter` | 🟢 |
+| 9 | `Set OPENAI_API_KEY now, or press Enter to skip and add it later.` | `Enter` — leave empty | 🟢 |
+| 10 | `Want me to install the dependencies for you now? (npm install) [Y/n]` | `n` — **no Enter** | 🟢 |
+| 11 | `🪁🤝🧠 App "app" created successfully!` | — the CLI holds the terminal open | 🟢 |
+
+**9 before 10.** The key is asked before the install question, not after. This is
+the ordering the first run got wrong; see [Status](#status-observed--2026-09-07).
 
 The model key is **not** supplied through the CLI. It is copied into the
 generated project afterwards by `npm run capture -- --distribute`, from the
@@ -271,11 +295,33 @@ copy at [yarn/app/](yarn/app/) has a `channel` script and a
 
 ---
 
-### 9 · Install dependencies 🔵
+### 9 · Model API key 🟢
+
+```
+Set OPENAI_API_KEY now, or press Enter to skip and add it later.
+Required by the agent runtime.
+Create a key:  https://platform.openai.com/api-keys
+>
+```
+
+**Input: `Enter` on an empty field.** The key is seeded into the four copies
+afterwards by `npm run capture -- --distribute`, into both `.env` and
+`agent/.env`, so no recording ever contains a secret.
+
+This is asked **before** the install question, not after — the reverse of what
+was predicted here, and the reason the first driven run failed. Match it on
+`/_API_KEY now|press Enter to skip/i`: the variable name is underscored, so a
+pattern looking for the words "API key" finds only the URL on the third line.
+
+---
+
+### 10 · Install dependencies 🟢
 
 ```
 Want me to install the dependencies for you now? (npm install) [Y/n]
 ```
+
+The predicted wording was exactly right; only its position was wrong.
 
 **Input: `n` — a single keypress, no `Enter`.** This prompt acts on the keystroke
 immediately, unlike the text fields at steps 4 and 10. A driver that sends `n` +
@@ -295,17 +341,37 @@ from.
 
 ---
 
-### 10 · Model API key 🔵 *(text uncaptured)*
+### 11 · Success banner 🟢
 
-The CLI asks for a model API key as its last question. For `agno` that is
-`OPENAI_API_KEY` 🟢.
+```
+🪁🤝🧠 App "app" created successfully!
 
-**Input: `Enter` on an empty field.** The CLI then exits. The key is seeded into
-the copies afterwards by `npm run capture -- --distribute`, into both `.env` and
-`agent/.env`, so no recording ever contains a secret.
+⚠ Skipped git init: the new app is inside the git repository at
+  C:\Users\QS\Desktop\Fiqros\Agno-react. Commit it there when you are ready.
+⚠ Recorded the selected project in
+  C:\Users\QS\Desktop\Fiqros\Agno-react/.copilotkit/project.json, so every
+  directory in that repository resolves to it.
 
-Exact prompt wording was not captured even in the reference repo, so the step
-matches a loose `/API key/i` and is `optional: true`.
+Here's how to get it running:
+  Move into your new app:  cd app
+  Install the dependencies:  npm install
+  Set OPENAI_API_KEY in .env:
+    Get a key:  https://platform.openai.com/api-keys
+    Add the line:  OPENAI_API_KEY=sk-...
+  Start the dev server:  npm run dev
+```
+
+No input. The CLI **does not exit** — it holds the terminal open, which is why
+the flow ends on `doneWhen: /created successfully/i` rather than on an exit code.
+
+Two things to note in this screen:
+
+- The next-steps list contains the line `Install the dependencies:  npm install`.
+  A step matching `/install the dependencies/i` matches *this*, not the question
+  at step 10 — it reported ok and typed a stray `n` at a CLI that had already
+  finished. The pattern must require the question form.
+- The CLI writes `.copilotkit/project.json` at the **repository** root, not in
+  the app folder, so it binds every directory in Agno-react to project `myapp1`.
 
 ---
 

@@ -149,6 +149,15 @@ const DEMO_PAGES: PageDefinition[] = [
     prompt: 'The install just finished. What is the weather like in San Francisco?',
     waitAfterPromptMs: 5000,
 
+    // `readyPattern` fires on Next's bind line, which it prints before the
+    // first route is compiled. Observed 2026-09-08: pnpm reported ready at
+    // 191s and the very next page.goto still timed out at the 45s default,
+    // because Turbopack was mid first compile. The server was fine; the cap
+    // was wrong. Raise the nav ceiling rather than loosen the ready check —
+    // a ready signal that waits for a compile would hide a server that binds
+    // and then dies.
+    timeouts: { demoNavMs: 240_000 },
+
     devServer: {
       cwd: app,
       command,

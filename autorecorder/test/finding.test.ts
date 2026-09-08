@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { buildFindingNote } from '../core/cli/finding';
+import { buildDemoFindingNote, buildFindingNote } from '../core/cli/finding';
 import { type CliFlowConfig } from '../core/cli/flow';
 
 const flow: CliFlowConfig = {
@@ -57,4 +57,50 @@ test('long screen lines are cut so they fit the Notepad window', () => {
   const line = note.split('\n').find((l) => l.includes('xxx'))!;
   assert.ok(line.length <= 112);
   assert.ok(line.endsWith('…'));
+});
+
+const demoResult = {
+  id: 'demo-pnpm',
+  name: 'pnpm · 3 · Scaffolded app',
+  filename: 'x.webm',
+  success: false,
+  durationSec: 432.7,
+  error: 'Demo step failed: locator.click: Timeout 30000ms exceeded.\n  - waiting for locator(…)\n  - retrying click action',
+  warnings: [
+    "Browser console: 7 distinct error(s), first: Access to fetch at 'http://localhost:3000/api/copilotkit' has been blocked by CORS policy",
+    'Some unrelated warning',
+  ],
+};
+
+const where = { appDir: '1-cli-testing/pnpm/app', url: 'http://localhost:3132' };
+
+test('buildDemoFindingNote leads with the app that installed and then would not serve', () => {
+  const note = buildDemoFindingNote(demoResult, where, undefined);
+  assert.match(note, /^demo-pnpm failed/);
+  assert.match(note, /1-cli-testing\/pnpm\/app/);
+  assert.match(note, /http:\/\/localhost:3132/);
+  assert.match(note, /433s/);
+});
+
+test('buildDemoFindingNote keeps only the first line of a Playwright call log', () => {
+  const note = buildDemoFindingNote(demoResult, where, undefined);
+  assert.match(note, /Timeout 30000ms exceeded/);
+  assert.ok(!note.includes('retrying click action'), 'retry bookkeeping should not reach the note');
+});
+
+test('buildDemoFindingNote reports console errors and drops unrelated warnings', () => {
+  const note = buildDemoFindingNote(demoResult, where, undefined);
+  assert.match(note, /in the browser console:/);
+  assert.match(note, /CORS policy/);
+  assert.ok(!note.includes('Some unrelated warning'));
+});
+
+test('buildDemoFindingNote appends a hand-written analysis last', () => {
+  const note = buildDemoFindingNote(demoResult, where, 'why: express dynamic require');
+  assert.ok(note.trimEnd().endsWith('why: express dynamic require'));
+});
+
+test('buildDemoFindingNote omits the console section when nothing was logged', () => {
+  const note = buildDemoFindingNote({ ...demoResult, warnings: [] }, where, undefined);
+  assert.ok(!note.includes('in the browser console:'));
 });

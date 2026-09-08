@@ -323,6 +323,36 @@ export interface CliVideoDefinition {
    * records it after rendering; `npm run record -- --<id>` does it alone.
    */
   onSuccess?: { recordPage: string };
+
+  /**
+   * What to film when `onSuccess` ran and the DEMO failed.
+   *
+   * The install report cannot see this case. An install that completes routes
+   * to `onSuccess` and the matter is closed as far as the report is concerned
+   * — but the app it installed can still fail to serve the route the CLI
+   * generated for it, and then the pipeline emits a demo clip of an error
+   * nobody explains. This is the branch that explains it: the same shape as
+   * `onFailure`, filmed from the demo's own result instead of the capture
+   * report.
+   *
+   * `segmentFlows` names casts to replay in the clip when one is worth
+   * showing — a `dev-<pm>` session, say, so the terminal on screen is the one
+   * that started the server that then broke. Omit it for a clip that is the
+   * doc page, the files, and the note.
+   */
+  onDemoFailure?: {
+    id: string;
+    name: string;
+    videoName: string;
+    ideTabs?: { filePath: string; startLine: number; endLine: number }[];
+    ideDwellMs?: number;
+    /** Hand-written analysis, appended under the generated summary. */
+    analysis?: string;
+    notepadFile?: string;
+    charDelayMs?: number;
+    audio?: string;
+    segmentFlows?: string[];
+  };
 }
 
 export interface CliVideoConfig extends CliVideoDefinition {
@@ -332,6 +362,8 @@ export interface CliVideoConfig extends CliVideoDefinition {
   docUrl?: string;
   /** Finding clip filename stem, when `onFailure` is set. */
   failureVideoFile?: string;
+  /** Demo-finding clip filename stem, when `onDemoFailure` is set. */
+  demoFailureVideoFile?: string;
 }
 
 export function defineCliVideos(defs: CliVideoDefinition[]): CliVideoConfig[] {
@@ -343,6 +375,9 @@ export function defineCliVideos(defs: CliVideoDefinition[]): CliVideoConfig[] {
       videoFile: `${PROJECT.videoPrefix}-${def.videoName}`,
       failureVideoFile: def.onFailure
         ? `${PROJECT.videoPrefix}-${def.onFailure.videoName}`
+        : undefined,
+      demoFailureVideoFile: def.onDemoFailure
+        ? `${PROJECT.videoPrefix}-${def.onDemoFailure.videoName}`
         : undefined,
       docUrl: def.docPath
         ? `${PROJECT.docBaseUrl.replace(/\/$/, '')}/${def.docPath.replace(/^\//, '')}`

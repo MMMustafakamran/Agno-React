@@ -24,13 +24,13 @@ import { copyFileSync, existsSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CLI_FLOWS, CLI_VIDEOS } from './config/cli.config';
+import { CLI_FLOWS, CLI_VIDEOS, PROVES_BROKEN, REMEDIATED_FLOWS } from './config/cli.config';
 import { PAGES } from './config/pages.config';
 import { muxAudio } from './core/cli/audio';
 import { refuseInCi } from './core/cli/ci-guard';
 import { compressCast, readCast } from './core/cli/cast';
 import { type CliRunResult } from './core/cli/driver';
-import { buildFindingNote } from './core/cli/finding';
+import { buildDemoFindingNote, buildFindingNote, type DemoRunResult } from './core/cli/finding';
 import { type CliFlowConfig, type CliVideoConfig } from './core/cli/flow';
 import { RecordingEngine, type CliRecordSegment, type RecordResult } from './core/engine';
 
@@ -52,6 +52,35 @@ function flowById(id: string): CliFlowConfig {
 }
 
 type Report = Pick<CliRunResult, 'success' | 'exitCode' | 'error' | 'missingFiles' | 'tail' | 'durationSec'>;
+
+/**
+ * The flows in a video that say the thing under test is broken.
+ *
+ * A capture report grades the *capture* — did the command behave the way its
+ * flow said it would. That is not the same question as "does this work", and
+ * the third clip turns on the second question. Two corrections, both declared
+ * in cli.config.ts beside the flows they name:
+ *
+ *   REMEDIATED_FLOWS  a failure the same video goes on to fix. pnpm's first
+ *                     install exits 1 on ignored build scripts; the clip then
+ *                     approves them and installs again. Letting that first
+ *                     exit decide would file a finding against a problem the
+ *                     viewer just watched get resolved.
+ *
+ *   PROVES_BROKEN     a flow the capture graded a pass that is a failure of
+ *                     the software. `dev-<pm>` is *expected* to die, so dying
+ *                     on cue is a successful capture — while what it proves is
+ *                     that the installed app cannot start. Without this, a
+ *                     manager whose install exits 0 gets filmed as a working
+ *                     demo when nothing it installed can run.
+ */
+function outcomeFailures<T extends { flow: CliFlowConfig; report: Report | null }>(reports: T[]): T[] {
+  return reports.filter(
+    (r) =>
+      !REMEDIATED_FLOWS.has(r.flow.id) &&
+      (r.report?.success === false || (PROVES_BROKEN.has(r.flow.id) && r.report != null)),
+  );
+}
 
 /** The capture report for a flow, or null when it has not been captured. */
 function reportFor(flow: CliFlowConfig): Report | null {
@@ -78,10 +107,10 @@ function describe(video: CliVideoConfig): string {
   const flows = video.flows.map(flowById);
   const missing = flows.filter((f) => !existsSync(join(CAST_DIR, f.castFile))).map((f) => f.id);
   if (missing.length) return `⬜ needs capture: ${missing.join(', ')}`;
-  const failed = flows.filter((f) => reportFor(f)?.success === false).map((f) => f.id);
+  const failed = outcomeFailures(flows.map((f) => ({ flow: f, report: reportFor(f) }))).map((r) => r.flow.id);
   if (failed.length) {
     return video.onFailure
-      ? `❌ install failed → will also film ${video.onFailure.videoName}`
+      ? `❌ ${failed.join(', ')} failed → will also film ${video.onFailure.videoName}`
       : `❌ capture failed (${failed.join(', ')}); no onFailure clip declared`;
   }
   return video.onSuccess
@@ -120,8 +149,100 @@ function selectVideos(args: string[]): CliVideoConfig[] {
     .filter((a) => a.startsWith('--'))
     .map((a) => a.replace(/^-+/, '').toLowerCase());
   return CLI_VIDEOS.filter(
-    (v) => ids.includes(v.id.toLowerCase()) || (v.onFailure && ids.includes(v.onFailure.id.toLowerCase())),
+    (v) => ids.includes(v.id.toLowerCase()) || ((v.onFailure && ids.includes(v.onFailure.id.toLowerCase())) ||
+      (v.onDemoFailure && ids.includes(v.onDemoFailure.id.toLowerCase()))),
   );
+}
+
+/**
+ * Film the explanation for every demo that failed.
+ *
+ * Reads the take that just ran out of `videos/RECORD_RESULTS.json` — the demo
+ * is a child process, so its outcome comes back through the file it writes
+ * rather than through a return value — and films the `onDemoFailure` clip for
+ * each failure whose video declares one.
+ *
+ * Returns how many demos failed and how many of those were explained, so the
+ * caller can tell "explained the failure" from "had nothing to say about it".
+ */
+async function filmDemoFindings(
+  demoIds: string[],
+  owners: Map<string, CliVideoConfig>,
+  film: (
+    id: string,
+    req: Parameters<RecordingEngine['recordCliFlow']>[0],
+    audio: string | undefined,
+    signature: string,
+  ) => Promise<void>,
+): Promise<{ failures: number; covered: number }> {
+  const resultsPath = join(__dirname, 'videos', 'RECORD_RESULTS.json');
+  if (!existsSync(resultsPath)) {
+    console.warn(`   ⚠️ No RECORD_RESULTS.json — cannot tell which demos failed.`);
+    return { failures: 0, covered: 0 };
+  }
+
+  const run = JSON.parse(readFileSync(resultsPath, 'utf8')) as { results: DemoRunResult[] };
+  const failures = run.results.filter((r) => demoIds.includes(r.id) && !r.success);
+  let covered = 0;
+
+  for (const result of failures) {
+    const video = owners.get(result.id);
+    const f = video?.onDemoFailure;
+    if (!video || !f || !video.demoFailureVideoFile) {
+      console.warn(
+        `   ⚠️ ${result.id} failed and has no onDemoFailure declared — ` +
+          `its clip shows an error nothing explains.`,
+      );
+      continue;
+    }
+
+    const page = PAGES.find((p) => p.id === result.id);
+    const where = {
+      appDir: page?.devServer?.cwd ?? result.id,
+      url: page?.devServer?.originUrl ?? 'the dev server',
+    };
+    const body = buildDemoFindingNote(result, where, f.analysis);
+
+    // Same rule as the install finding: only show files that exist, and say
+    // so rather than failing over one the run never produced.
+    const tabs = (f.ideTabs ?? []).filter((t) => existsSync(join(ROOT, t.filePath)));
+    const skipped = (f.ideTabs ?? []).length - tabs.length;
+    if (skipped > 0) {
+      console.warn(`   ⚠️ ${f.name}: ${skipped} IDE tab(s) skipped — file not on disk.`);
+    }
+
+    const segments: CliRecordSegment[] = (f.segmentFlows ?? [])
+      .map(flowById)
+      .filter((flow) => existsSync(join(CAST_DIR, flow.castFile)))
+      .map((flow) => ({
+        cast: compressCast(readCast(join(CAST_DIR, flow.castFile)), {
+          maxGapSec: flow.render?.maxGapSec,
+          speed: flow.render?.speed,
+        }),
+        title: flow.render?.title ?? flow.name,
+      }));
+
+    console.log(`\n📝 ${f.name}: filming the finding for ${result.id}.`);
+    await film(
+      f.id,
+      {
+        id: f.id,
+        name: f.name,
+        filename: video.demoFailureVideoFile,
+        segments,
+        docUrl: video.docUrl,
+        subdir: VIDEO_SUBDIR,
+        ideTabs: tabs.length ? tabs : undefined,
+        ideDwellMs: f.ideDwellMs,
+        notepad: { filename: f.notepadFile ?? `${f.id}.txt`, body, charDelayMs: f.charDelayMs },
+      },
+      f.audio,
+      JSON.stringify(['demo-finding', video.docUrl ?? null, f.segmentFlows ?? [], tabs, body, f.audio ?? null]),
+    );
+    covered += 1;
+  }
+
+  return { failures: failures.length, covered };
 }
 
 async function main(): Promise<void> {
@@ -153,6 +274,8 @@ async function main(): Promise<void> {
   const rendered = new Map<string, string>();
   /** Page ids to record afterwards: the demos of installs that succeeded. */
   const demosToRecord: string[] = [];
+  /** Which video owns each queued demo, so a failed one can find its finding config. */
+  const demoOwners = new Map<string, CliVideoConfig>();
 
   const film = async (
     id: string,
@@ -223,7 +346,7 @@ async function main(): Promise<void> {
     }
 
     const reports = flows.map((f) => ({ flow: f, report: reportFor(f) }));
-    const failed = reports.filter((r) => r.report?.success === false);
+    const failed = outcomeFailures(reports);
 
     // A failed capture with nothing declared for it must not be filmed and
     // handed over as a finished clip: the video would look complete while
@@ -307,6 +430,7 @@ async function main(): Promise<void> {
         console.warn(`   ⚠️ ${video.name}: onSuccess names page "${video.onSuccess.recordPage}", which is not in pages.config.ts.`);
       } else {
         demosToRecord.push(video.onSuccess.recordPage);
+        demoOwners.set(video.onSuccess.recordPage, video);
       }
     }
   }
@@ -337,6 +461,20 @@ async function main(): Promise<void> {
         { stdio: 'inherit', cwd: __dirname },
       );
       demoExit = child.status ?? 1;
+
+      // A demo that failed is the case the install report could not see: the
+      // install worked, so nothing routed this manager to `onFailure`, and
+      // without this pass the run ends on a clip of an unexplained error.
+      // Filmed here rather than inside cli.ts because the explanation is a
+      // CLI-set concern -- the note pins the app the CLI scaffolded, and the
+      // clip belongs beside that manager's other two.
+      if (demoExit !== 0) {
+        const filmed = await filmDemoFindings(demosToRecord, demoOwners, film);
+        // The findings are the deliverable for a failed demo, so producing
+        // them clears the demo's own non-zero exit. A demo that failed with
+        // no `onDemoFailure` declared still fails the run.
+        if (filmed.covered === filmed.failures && filmed.failures > 0) demoExit = 0;
+      }
     } else {
       console.log(`ℹ️ Installs that succeeded have a live demo to record:`);
       console.log(`   npm run record -- --pages=${demosToRecord.join(',')}`);
