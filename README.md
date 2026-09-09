@@ -189,7 +189,7 @@ Two consequences worth knowing:
 - **The code on a page is never a re-typed approximation.** Each page reads real files from the repo (`frontend/src/lib/source.ts`), so what you compare against the doc is what actually runs. Some excerpts use `#region` markers, which stay visible in the source file and are labelled with their line numbers.
 - **Demo routes share the app-wide provider**, so a conversation started in a demo continues on any other route. That's deliberate — `/custom-look-and-feel/headless-ui/demo-chat` and `/custom-look-and-feel/programmatic-control/demo-chat` show the _same_ conversation through two completely different UIs.
 
-17 of the 24 doc routes have a demo: quickstart, prebuilt-components, the three interactive thread routes, all four Custom Look and Feel routes, display-only, tool-rendering, frontend-tools, governed-actions, human-in-the-loop, both Backend routes, and error-debugging. The other 7 have nothing to run: `/`, `/threads`, `/threads/import` and `/threads/architecture` are reference pages; `/generative-ui/your-components/interactive` is a doc page with nothing in it; `/webmcp` and `/intelligence/quickstart` are tracked for drift with the demo deliberately not built (see below).
+18 of the 24 doc routes have a demo: quickstart, prebuilt-components, the three interactive thread routes, all four Custom Look and Feel routes, display-only, tool-rendering, frontend-tools, governed-actions, human-in-the-loop, both Backend routes, error-debugging, and intelligence/quickstart. The other 6 have nothing to run: `/`, `/threads`, `/threads/import` and `/threads/architecture` are reference pages; `/generative-ui/your-components/interactive` is a doc page with nothing in it; `/webmcp` is tracked for drift with the demo deliberately not built (see below).
 
 ### Getting Started
 
@@ -271,7 +271,7 @@ A live capture of the raw AG-UI event stream, with pause and clear. **Try:** `Wh
 
 ### Intelligence
 
-**`/intelligence/quickstart`** — 🚧 **Tracked, not implemented.** Connecting an existing app to a hosted CopilotKit Intelligence project so threads persist. Step 1 is `npx copilotkit@latest login` plus `project select`, which writes a `CPK_INTELLIGENCE_API_KEY` — an account-scoped resource this harness does not have, so every later step has nothing to assert against. Tracked because it is a genuinely new page; the rest of `/agno/intelligence/*` is the old `/agno/premium/*` set renamed, and stays out of scope.
+**`/intelligence/quickstart`** — ⚠️ **Partial.** Steps 3 and 4 are implemented; steps 1, 2 and 5 are not. The 2026-09-09 sync rewrote step 3 from the multi-route handler to `mode: "single-route"` with a single `POST` export, and step 4 from `runtimeUrl` alone to `runtimeUrl` plus `useSingleEndpoint`. Neither needs a hosted project, so both are mounted now: `/api/copilotkit-single` takes the same runtime object as the multi-route mount, and `/intelligence/quickstart/demo-chat` drives it. Steps 1, 2 and 5 still open with `npx copilotkit@latest login` plus `project select`, which writes a `CPK_INTELLIGENCE_API_KEY` — an account-scoped resource this harness does not have, so the confirmation step has nothing to assert against. Three findings came out of the half that is testable, all on the route's page: the single endpoint accepts seven envelope methods and no thread, memory or annotation method is among them; single-route mode reports `threadEndpointsEnabled: false` from `/info`, which locks the Inspector thread list the page's last step tells you to check; and the page's own coding-agent prompt still instructs the reader to do the opposite of its manual steps. Still tracked as new because it is a genuinely new page; the rest of `/agno/intelligence/*` is the old `/agno/premium/*` set renamed, and stays out of scope.
 
 ---
 
@@ -304,7 +304,7 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/copilot-runtime`                            | `/backend/copilot-runtime`                    | ✅ Working     | Two agent ids verified via the runtime's `info` method.                                |
 | `/agno/ag-ui`                                      | `/backend/ag-ui`                              | ✅ Working     | Live event panel.                                                                      |
 | `/agno/troubleshooting/error-debugging`            | `/troubleshooting/error-debugging`            | ✅ Working     | Live error log.                                                                        |
-| `/agno/intelligence/quickstart`                    | `/intelligence/quickstart`                    | 🚧 Not started | Tracked for drift. Needs a hosted Intelligence project and `CPK_INTELLIGENCE_API_KEY`.  |
+| `/agno/intelligence/quickstart`                    | `/intelligence/quickstart`                    | ⚠️ Partial     | Single-route transport implemented and exercised; the hosted-project steps still need `CPK_INTELLIGENCE_API_KEY`. |
 
 **Legend:** ✅ Working · ⚠️ Partial (blocked by something outside this repo) · 📖 Reference (intentionally not a live feature) · ❌ Broken · 🚧 Not started
 

@@ -506,6 +506,28 @@ export const PAGES = definePages([
     prompt: 'Say anything. I am testing whether errors get reported.',
     waitAfterPromptMs: 4000,
   },
+  {
+    id: 'intelligence-quickstart',
+    name: 'Intelligence - Connect Intelligence in 5 minutes',
+    videoName: 'IntelligenceQuickstart',
+    docPath: 'intelligence/quickstart',
+    route: 'intelligence/quickstart',
+    // The doc's step 3: a plain `route.ts` with `mode: "single-route"` and one
+    // verb, where the page used to publish `[[...slug]]` and four.
+    ideFile: 'frontend/src/app/api/copilotkit-single/route.ts',
+    startLine: 1,
+    endLine: 37,
+    extraTabs: [
+      // Step 4: the matching provider flag.
+      {
+        filePath: 'frontend/src/components/single-endpoint-provider.tsx',
+        startLine: 26,
+        endLine: 39,
+      },
+    ],
+    prompt: 'Tell me a one-line joke.',
+    waitAfterPromptMs: 4000,
+  },
   // Last, always: these take the highest order numbers so adding or removing
   // them never renumbers a doc page's video filename.
   ...DEMO_PAGES,
