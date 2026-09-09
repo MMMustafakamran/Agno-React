@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-04T10:55:24.468Z",
+  "syncedAt": "2026-09-09T07:58:52.147Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -162,15 +162,15 @@
     },
     "/agno/intelligence/quickstart": {
       "file": "agno__intelligence__quickstart.md",
-      "sha256": "3c3603ebae28d5f65e29f0e40d4026439966172efe7d2c0fc08a374c471bd183",
-      "bytes": 7227,
-      "lines": 160,
+      "sha256": "4b0f89adf013c4247a2796d9cb5b1013c5ee9432c5f456b354375912a900e694",
+      "bytes": 7189,
+      "lines": 159,
       "routes": [
         "/intelligence/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 04 Sep 2026 13:40:33 GMT"
+      "date": "Wed, 09 Sep 2026 07:58:52 GMT"
     },
     "/agno/intelligence/threads-explained": {
       "file": "agno__intelligence__threads-explained.md",
@@ -282,15 +282,15 @@
     },
     "/agno/webmcp": {
       "file": "agno__webmcp.md",
-      "sha256": "2d475d82722956ff0cb5ac97ef10945e61566e0aca7e2df309751321e80f3321",
-      "bytes": 7477,
-      "lines": 153,
+      "sha256": "9848d337b95bde11b127b693b4bab4a6d404d2e912592d4a4cfec34a2adbf49a",
+      "bytes": 7480,
+      "lines": 165,
       "routes": [
         "/webmcp"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 04 Sep 2026 13:40:33 GMT"
+      "date": "Wed, 09 Sep 2026 07:58:52 GMT"
     }
   },
   "sitemap": {
