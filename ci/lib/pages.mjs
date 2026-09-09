@@ -37,7 +37,7 @@ export const PAGE_GROUPS = {
     'human-in-the-loop',
     'human-in-the-loop-governed-actions',
   ],
-  threads: ['threads-drawer', 'threads-headless', 'threads-lifecycle'],
+  threads: ['threads-drawer', 'threads-headless', 'threads-lifecycle', 'intelligence-quickstart'],
   backend: ['copilot-runtime', 'ag-ui', 'error-debugging'],
 };
 
