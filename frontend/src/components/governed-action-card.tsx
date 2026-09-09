@@ -65,7 +65,7 @@ export function GovernedActionCard({
           <button
             type="button"
             onClick={onApprove}
-            className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-white"
+            className="rounded-md bg-[var(--harness-accent)] px-3 py-1.5 text-sm font-medium text-white"
           >
             Approve and run
           </button>
