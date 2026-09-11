@@ -492,6 +492,13 @@ export const PAGES = definePages([
     endLine: 100,
     prompt: 'Any rain expected in Tokyo this week?',
     waitAfterPromptMs: 4000,
+    demo: {
+      sendTimeoutMs: 8000,
+      glideTo: [
+        { x: 450, y: 300, beatMs: 1500 },
+        { x: 450, y: 550, beatMs: 1500 },
+      ],
+    },
   },
   {
     id: 'error-debugging',

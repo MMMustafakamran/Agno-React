@@ -258,5 +258,4 @@ including the ones whose symptom named the wrong cause — and for the hypothese
 already ruled out.
 
 **Recorder aborts on preflight** — the frontend was still compiling. The warmup
-step covers the usual routes; a page added to `WARMUP_ROUTES` in `lib/config.mjs`
 gets the same treatment.

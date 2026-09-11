@@ -36,7 +36,6 @@ import {
   assertBackendCanReachModel,
   assertModelCredentials,
   assertPortsFree,
-  warmFrontendRoutes,
   warmRuntimeEndpoint,
 } from './lib/preflight.mjs';
 import { generateReport } from './lib/report.mjs';
@@ -425,7 +424,6 @@ async function main() {
     ).elapsedSec;
 
     // 6. Warm routes so the recorder's own preflight is not racing a cold build.
-    await warmFrontendRoutes();
     await warmRuntimeEndpoint();
 
     // 7. Record

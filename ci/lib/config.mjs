@@ -43,13 +43,6 @@ export const BACKEND_HEALTH_URLS = [
 export const FRONTEND_URL = `http://127.0.0.1:${FRONTEND_PORT}`;
 
 /**
- * Routes compiled before recording starts. Next.js builds routes on demand, so
- * the first hit of each is slow enough to blow the recorder's preflight
- * timeout. Warming them keeps that cost out of the recording itself.
- */
-export const WARMUP_ROUTES = ['/', '/quickstart/demo-chat'];
-
-/**
  * The path the browser posts to for agent replies. A dev server compiles API
  * routes lazily and only on first request, so without this the page is ready
  * while the endpoint behind it is not, and the first prompt spends its time

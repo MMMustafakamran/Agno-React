@@ -38,7 +38,6 @@ import { type Page } from 'playwright';
 
 import { waitForPageReady } from './page-ready';
 
-import { runAgUiAction } from './ag-ui.action';
 import { runDisplayOnlyAction } from './display-only.action';
 import { runErrorDebuggingAction } from './error-debugging.action';
 import { runFrontendCardsAction } from './frontend-cards.action';
@@ -77,7 +76,6 @@ export const ACTION_MAP: Record<string, PageActionHandler> = {
   'human-in-the-loop': runHitlAction,
   'human-in-the-loop-governed-actions': runGovernedActionsAction,
   'copilot-runtime': runRuntimeAction,
-  'ag-ui': runAgUiAction,
   'error-debugging': runErrorDebuggingAction,
   'frontend-cards': runFrontendCardsAction,
   'intelligence-memories': runMemoriesAction,
