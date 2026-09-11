@@ -41,11 +41,14 @@ import { waitForPageReady } from './page-ready';
 import { runAgUiAction } from './ag-ui.action';
 import { runDisplayOnlyAction } from './display-only.action';
 import { runErrorDebuggingAction } from './error-debugging.action';
+import { runFrontendCardsAction } from './frontend-cards.action';
 import { runFrontendToolsAction } from './frontend-tools.action';
 import { runHeadlessUiAction } from './headless-ui.action';
 import { runGovernedActionsAction } from './governed-actions.action';
 import { runHitlAction } from './hitl.action';
 import { runInspectorAction } from './inspector.action';
+import { runLearningAction } from './learning.action';
+import { runMemoriesAction } from './memories.action';
 import { runPrebuiltAction } from './prebuilt.action';
 import { runProgrammaticAction } from './programmatic.action';
 import { runRuntimeAction } from './runtime.action';
@@ -76,6 +79,9 @@ export const ACTION_MAP: Record<string, PageActionHandler> = {
   'copilot-runtime': runRuntimeAction,
   'ag-ui': runAgUiAction,
   'error-debugging': runErrorDebuggingAction,
+  'frontend-cards': runFrontendCardsAction,
+  'intelligence-memories': runMemoriesAction,
+  learning: runLearningAction,
 };
 
 export async function executePageAction(

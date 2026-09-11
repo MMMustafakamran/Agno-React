@@ -242,6 +242,17 @@ export const NAV: NavGroup[] = [
           "Named tool calls rendered as custom React components, plus a catch-all renderer for everything else.",
         status: "working",
       },
+      {
+        path: "/generative-ui/frontend-cards",
+        hasDemo: true,
+        title: "Frontend-Driven Cards",
+        docPath: "/agno/generative-ui/frontend-cards",
+        summary:
+          "A card pushed into the transcript from frontend code as a `role: \"activity\"` message, which the agent never receives.",
+        status: "working",
+        statusNote:
+          "The central claim holds: with a card in the transcript the run payload carries only `user`. But a card added before the runtime connects goes to a provisional agent and is silently dropped (3/3), and step 3's component is never mounted by step 2 — see the route page.",
+      },
     ],
   },
   {
@@ -337,6 +348,30 @@ export const NAV: NavGroup[] = [
         statusNote:
           "Steps 3 and 4 are implemented against a third runtime mount at `/api/copilotkit-single`. Steps 1, 2 and 5 need a `CPK_INTELLIGENCE_API_KEY` from a hosted Intelligence project, which is an account-scoped resource this harness does not have.",
         hasDemo: true,
+      },
+      {
+        path: "/intelligence/memories",
+        hasDemo: true,
+        premium: true,
+        title: "Memories & Recall",
+        docPath: "/agno/intelligence/memories",
+        summary:
+          "Long-term memories per user or project, read and written from React with `useMemories`.",
+        status: "broken",
+        statusNote:
+          "The React snippet imports `useMemories` from the package root, which has no such export (TS2305). With the import fixed, every memory route 404s: the runtime hides them unless built with `memory: { access }`, which the page never mentions. With it, this project gets 403 MEMORY_NOT_ENTITLED and the hook reports `isAvailable: true` over an empty list.",
+      },
+      {
+        path: "/learning",
+        hasDemo: true,
+        premium: true,
+        title: "Learning",
+        docPath: "/agno/learning",
+        summary:
+          "Routing selected Threads into a Learning container from the runtime, for Insights and reviewed Skills.",
+        status: "partial",
+        statusNote:
+          "The page's runtime snippet is mounted verbatim at `/api/copilotkit-learning`. Its example container `expense-review` does not exist here, and every run on `expense-agent` then fails silently (\"Failed to initialize thread\"); `default` answers. `agents` and `identifyUser` are undefined on the page; dashboard and CLI steps are not exercised.",
       },
     ],
   },

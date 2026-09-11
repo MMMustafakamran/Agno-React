@@ -543,6 +543,87 @@ export const PAGES = definePages([
     timeouts: { replyStartMs: 90_000 },
     waitAfterPromptMs: 4000,
   },
+  // -- Added 2026-09-11: three pages new upstream, identical under every
+  // framework prefix. After every existing doc page so no clip is renumbered.
+  {
+    id: 'frontend-cards',
+    name: 'Generative UI - Frontend-Driven Cards',
+    videoName: 'FrontendCards',
+    docPath: 'generative-ui/frontend-cards',
+    route: 'generative-ui/frontend-cards',
+    // Step 1: the renderer, verbatim.
+    ideFile: 'frontend/src/app/generative-ui/frontend-cards/event-card.tsx',
+    startLine: 7,
+    endLine: 27,
+    extraTabs: [
+      // Step 2: registered on the provider, props as published.
+      {
+        filePath: 'frontend/src/app/generative-ui/frontend-cards/demo-chat/page.tsx',
+        startLine: 151,
+        endLine: 172,
+      },
+      // Step 3: addMessage with role "activity", verbatim.
+      {
+        filePath: 'frontend/src/app/generative-ui/frontend-cards/deployment-watcher.tsx',
+        startLine: 12,
+        endLine: 34,
+      },
+    ],
+    prompt:
+      'Have you been shown any deployment card in this conversation? List the roles of every message you received.',
+    waitAfterPromptMs: 4000,
+  },
+  {
+    id: 'intelligence-memories',
+    name: 'Intelligence - Memories & Recall',
+    videoName: 'Memories',
+    docPath: 'intelligence/memories',
+    route: 'intelligence/memories',
+    // The page's React component, verbatim -- with the two compiler errors its
+    // import produces acknowledged in place.
+    ideFile: 'frontend/src/app/intelligence/memories/memory-list.tsx',
+    startLine: 22,
+    endLine: 46,
+    extraTabs: [
+      // The option the page never mentions, and without which every memory
+      // route 404s at the runtime.
+      {
+        filePath: 'frontend/src/app/api/copilotkit-memory/[[...slug]]/route.ts',
+        startLine: 31,
+        endLine: 47,
+      },
+    ],
+    prompt: 'Please remember that I prefer concise status updates.',
+    waitAfterPromptMs: 3000,
+  },
+  {
+    id: 'learning',
+    name: 'Intelligence - Learning',
+    videoName: 'Learning',
+    docPath: 'learning',
+    route: 'learning',
+    // The page's runtime snippet, verbatim, and the two identifiers it leaves
+    // undefined supplied above it.
+    ideFile: 'frontend/src/lib/learning-runtime.ts',
+    startLine: 29,
+    endLine: 57,
+    extraTabs: [
+      // Where it is mounted: its own route, so the page's code cannot take
+      // down the app's main runtime.
+      {
+        filePath: 'frontend/src/app/api/copilotkit-learning/[[...slug]]/route.ts',
+        startLine: 1,
+        endLine: 23,
+      },
+    ],
+    prompt: 'Review this expense: $42 team lunch at Cafe Rio, receipt attached. Approve or flag it?',
+    // Turn 2 is the control on `default`, which the selector assigns nowhere.
+    prompts: [
+      'Review this expense: $42 team lunch at Cafe Rio, receipt attached. Approve or flag it?',
+      'Say hello in five words.',
+    ],
+    waitAfterPromptMs: 3000,
+  },
   // Last, always: these take the highest order numbers so adding or removing
   // them never renumbers a doc page's video filename.
   ...DEMO_PAGES,

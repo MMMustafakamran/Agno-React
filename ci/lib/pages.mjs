@@ -31,13 +31,20 @@ const PAGES_CONFIG = path.join(RECORDER_DIR, 'config', 'pages.config.ts');
 export const PAGE_GROUPS = {
   getting_started: ['quickstart', 'prebuilt-components'],
   custom_look: ['programmatic-control', 'inspector', 'slots', 'headless-ui'],
-  generative_ui: ['display-only', 'interactive', 'tool-rendering'],
+  generative_ui: ['display-only', 'interactive', 'tool-rendering', 'frontend-cards'],
   app_control: [
     'frontend-tools',
     'human-in-the-loop',
     'human-in-the-loop-governed-actions',
   ],
-  threads: ['threads-drawer', 'threads-headless', 'threads-lifecycle', 'intelligence-quickstart'],
+  threads: [
+    'threads-drawer',
+    'threads-headless',
+    'threads-lifecycle',
+    'intelligence-quickstart',
+    'intelligence-memories',
+    'learning',
+  ],
   backend: ['copilot-runtime', 'ag-ui', 'error-debugging'],
 };
 

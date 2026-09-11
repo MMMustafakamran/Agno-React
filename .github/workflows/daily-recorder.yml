@@ -47,7 +47,7 @@ on:
         type: boolean
         default: false
       group_generative_ui:
-        description: 'Generative UI — Display Only, Interactive, Tool Rendering'
+        description: 'Generative UI — Display Only, Interactive, Tool Rendering, Frontend-Driven Cards'
         type: boolean
         default: false
       group_app_control:
@@ -55,7 +55,7 @@ on:
         type: boolean
         default: false
       group_threads:
-        description: 'Rich Threads & Intelligence — Drawer, Headless, Lifecycle, Intelligence Quickstart'
+        description: 'Rich Threads & Intelligence — Drawer, Headless, Lifecycle, Intelligence Quickstart, Memories, Learning'
         type: boolean
         default: false
       group_backend:
@@ -383,6 +383,11 @@ jobs:
       NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY || secrets.COPILOTKIT_LICENSE_TOKEN }}
       COPILOTKIT_LICENSE_TOKEN: ${{ secrets.COPILOTKIT_LICENSE_TOKEN }}
       INTELLIGENCE_API_KEY: ${{ secrets.INTELLIGENCE_API_KEY }}
+      # The Learning page's runtime snippet reads CPK_INTELLIGENCE_API_KEY and
+      # nothing else, verbatim; without it that route throws at load and the
+      # clip shows a missing key instead of what the page does. This repo's
+      # secret is still named INTELLIGENCE_API_KEY, so it feeds both names.
+      CPK_INTELLIGENCE_API_KEY: ${{ secrets.CPK_INTELLIGENCE_API_KEY || secrets.INTELLIGENCE_API_KEY }}
       INTELLIGENCE_API_URL: ${{ vars.INTELLIGENCE_API_URL }}
       INTELLIGENCE_GATEWAY_WS_URL: ${{ vars.INTELLIGENCE_GATEWAY_WS_URL }}
 
