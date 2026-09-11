@@ -8,6 +8,17 @@
     "Browser console: \\d+ distinct error\\(s\\), first: Failed to load resource: the server responded with a status of 404 \\(Not Found\\) \\(copilotkit:0\\)"
   ],
   "pages": {
+    "ag-ui": {
+      "status": "fail",
+      "reason": "PROVISIONAL: recorded 2026-09-11 while the OpenAI account had no credits (agent silent everywhere); re-verify after topping up | accepted from run on 2026-09-11 (untracked)",
+      "errorClass": "Agent Silent",
+      "message": "Agent never produced a response within <n> -- no assistant message ever received content. Check the backend and the browser console output above.",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
+    },
     "cli:approve-pnpm": {
       "status": "pass",
       "reason": "Tested-Report 2026-09-11 §7 (Agno row): `pnpm approve-builds` itself succeeds; the Windows-incompatible `setup-agent.sh` is the failure, not this step"
@@ -52,13 +63,53 @@
       "status": "pass",
       "reason": "Tested-Report 2026-09-11 §7: `copilotkit create` (Agno, existing agent) ✅"
     },
+    "copilot-runtime": {
+      "status": "fail",
+      "reason": "PROVISIONAL: recorded 2026-09-11 while the OpenAI account had no credits (agent silent everywhere); re-verify after topping up | accepted from run on 2026-09-11 (untracked)",
+      "errorClass": "Agent Silent",
+      "message": "Agent never produced a response within <n> -- no assistant message ever received content. Check the backend and the browser console output above.",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
+    },
     "display-only": {
       "status": "pass",
-      "reason": "Tested-Report 2026-09-11: ✅"
+      "reason": "Tested-Report 2026-09-11: ✅ | accepted from run on 2026-09-11 (notes-changed)",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
+    },
+    "error-debugging": {
+      "status": "fail",
+      "reason": "PROVISIONAL: recorded 2026-09-11 while the OpenAI account had no credits (agent silent everywhere); re-verify after topping up | accepted from run on 2026-09-11 (untracked)",
+      "errorClass": "Agent Silent",
+      "message": "Agent never produced a response within <n> -- no assistant message ever received content. Check the backend and the browser console output above.",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
+    },
+    "frontend-cards": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found",
+        "console WebSocket connection to 'wss://example.com/deployments' failed: Error during Web"
+      ]
     },
     "frontend-tools": {
       "status": "pass",
-      "reason": "Tested-Report 2026-09-11: ✅"
+      "reason": "Tested-Report 2026-09-11: ✅ | accepted from run on 2026-09-11 (notes-changed)",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
     },
     "headless-ui": {
       "status": "pass",
@@ -66,17 +117,125 @@
     },
     "human-in-the-loop": {
       "status": "fail",
-      "reason": "Not in Tested-Report; CI 2026-09-11: fail [Surface Missing] HITL card never rendered — no option button within 25s (agent answered in plain text or offerOptions not registered). Review and confirm.",
+      "reason": "Not in Tested-Report; CI 2026-09-11: fail [Surface Missing] HITL card never rendered — no option button within 25s (agent answered in plain text or offerOptions not registered). Review and confirm. | accepted from run on 2026-09-11 (notes-changed)",
       "errorClass": "Surface Missing",
-      "message": "Human-in-the-loop card never rendered: no option button appeared within <n>. Either the agent answered in plain text instead of calling offerOptions, or the too"
+      "message": "Human-in-the-loop card never rendered: no option button appeared within <n>. Either the agent answered in plain text instead of calling offerOptions, or the too",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
+    },
+    "human-in-the-loop-governed-actions": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "No approval card on the \"Approve and run\" turn -- the model did not call the tool.",
+        "No approval card on the \"Reject\" turn -- the model did not call the tool.",
+        "The agent never answered after the \"Approve and run\" turn.",
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
+    },
+    "inspector": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found"
+      ]
+    },
+    "intelligence-memories": {
+      "status": "fail",
+      "reason": "PROVISIONAL: recorded 2026-09-11 while the OpenAI account had no credits (agent silent everywhere); re-verify after topping up | accepted from run on 2026-09-11 (untracked)",
+      "errorClass": "Agent Silent",
+      "message": "Agent never produced a response within <n> -- no assistant message ever received content. Check the backend and the browser console output above.",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error: You have no credits remaining. Add credits to continue using the API at <"
+      ]
+    },
+    "intelligence-quickstart": {
+      "status": "fail",
+      "reason": "PROVISIONAL: recorded 2026-09-11 while the OpenAI account had no credits (agent silent everywhere); re-verify after topping up | accepted from run on 2026-09-11 (untracked)",
+      "errorClass": "Agent Silent",
+      "message": "Agent never produced a response within <n> -- no assistant message ever received content. Check the backend and the browser console output above.",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: REST run request failed: Failed to construct 'URL",
+        "console Error: REST run request failed: Failed to construct 'URL': Invalid URL at <url> "
+      ]
     },
     "interactive": {
       "status": "pass",
       "reason": "DISAGREES with Tested-Report (❌ Page empty, only a session token note) — review"
     },
+    "learning": {
+      "status": "fail",
+      "reason": "PROVISIONAL: recorded 2026-09-11 while the OpenAI account had no credits (agent silent everywhere); re-verify after topping up | accepted from run on 2026-09-11 (untracked)",
+      "errorClass": "Agent Silent",
+      "message": "Agent never produced a response within <n> -- no assistant message ever received content. Check the backend and the browser console output above.",
+      "notes": [
+        "console 404 Not Found",
+        "console Agent execution failed: Error: REST run request failed: {\"error\":\"Failed to init",
+        "console Agent execution failed: Error: You have no credits remaining. Add credits to con",
+        "console Error (agent_run_error_event): Error: You have no credits remaining. Add credits",
+        "console Error (agent_run_failed): Error: REST run request failed: {\"error\":\"Failed to in",
+        "console Error (agent_run_failed): Error: You have no credits remaining. Add credits to c",
+        "console Error (agent_run_failed_event): Error: REST run request failed: {\"error\":\"Failed",
+        "console Error (agent_run_failed_event): Error: You have no credits remaining. Add credit",
+        "expense-agent never answered: its Thread is assigned to \"expense-review\", which does not exist, and "
+      ]
+    },
+    "prebuilt-components": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found"
+      ]
+    },
+    "programmatic-control": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found"
+      ]
+    },
+    "quickstart": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found"
+      ]
+    },
     "slots": {
       "status": "pass",
-      "reason": "Tested-Report 2026-09-11: ✅"
+      "reason": "Tested-Report 2026-09-11: ✅ | accepted from run on 2026-09-11 (notes-changed)",
+      "notes": [
+        "console 404 Not Found"
+      ]
+    },
+    "threads-drawer": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found"
+      ]
+    },
+    "threads-headless": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found"
+      ]
+    },
+    "threads-lifecycle": {
+      "status": "pass",
+      "reason": "accepted from run on 2026-09-11 (untracked)",
+      "notes": [
+        "console 404 Not Found"
+      ]
     },
     "tool-rendering": {
       "status": "pass",
