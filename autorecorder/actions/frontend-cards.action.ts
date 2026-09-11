@@ -2,6 +2,7 @@ import { type Page } from 'playwright';
 import { promptsFor, sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 import { sleep } from '../core/overlays/cursor';
 import { type ActionContext, type PageActionHandler, type PageRecordConfig } from '../core/types';
+import { copilotkitVersionLine, markServerLogs, showEvidence } from './error-evidence';
 import { glideClick, glideTo, visibleWithin, waitForText } from './glide-click';
 
 /**
@@ -21,12 +22,24 @@ import { glideClick, glideTo, visibleWithin, waitForText } from './glide-click';
 
 const CARD = '.rounded-lg.border.p-4:has-text("Deployment finished")';
 
+const NOTE = [
+  'frontend cards - works here, with two catches',
+  '',
+  'card renders, payload row says user only, agent says it saw no card',
+  'agno registers an agent called default, so the bare useAgent() finds one.',
+  'mastra and deep agents do not -> "agent default not found", route crashes',
+  '',
+  'a card added before the runtime connects just disappears, no error.',
+  'step 3 watcher is never mounted by step 2, socket url is a placeholder',
+];
+
 export const runFrontendCardsAction: PageActionHandler = async (
   page: Page,
   config: PageRecordConfig,
-  _rootPath: string,
+  rootPath: string,
   ctx: ActionContext,
 ) => {
+  const logs = markServerLogs(rootPath);
   const state = page.locator('[data-testid=agent-state]');
   const ready = await waitForText(state, (t) => t.includes('isReady true'), 60_000);
   if (!ready.includes('isReady true')) {
@@ -56,4 +69,9 @@ export const runFrontendCardsAction: PageActionHandler = async (
     ctx.fail(`The activity message reached the agent: payload roles were "${roles}"`);
   }
   await glideTo(page, payload, 2500);
+
+  await showEvidence(page, logs, {
+    fileName: 'frontend-cards.txt',
+    text: [...NOTE, '', copilotkitVersionLine(rootPath)].join('\n'),
+  }, { relevant: /activity|app-event-card|frontend-cards|\/agent\/[^/]+\/run/ });
 };

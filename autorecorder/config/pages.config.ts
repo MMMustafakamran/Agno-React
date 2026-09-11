@@ -559,8 +559,8 @@ export const PAGES = definePages([
       // Step 2: registered on the provider, props as published.
       {
         filePath: 'frontend/src/app/generative-ui/frontend-cards/demo-chat/page.tsx',
-        startLine: 151,
-        endLine: 172,
+        startLine: 145,
+        endLine: 166,
       },
       // Step 3: addMessage with role "activity", verbatim.
       {
@@ -606,7 +606,7 @@ export const PAGES = definePages([
     // undefined supplied above it.
     ideFile: 'frontend/src/lib/learning-runtime.ts',
     startLine: 29,
-    endLine: 57,
+    endLine: 56,
     extraTabs: [
       // Where it is mounted: its own route, so the page's code cannot take
       // down the app's main runtime.
