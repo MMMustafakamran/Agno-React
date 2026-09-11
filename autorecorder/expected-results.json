@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "project": "Agno-react",
+  "updatedAt": "2026-09-11",
+  "source": "Seeded from the 2026-09-11 CI package; reasons from C:/Users/QS/Desktop/Fiqros/Tested-Report.md (React Guides table, 2026-09-11)",
+  "ignoreNotes": [
+    "net::ERR_ABORTED",
+    "Browser console: \\d+ distinct error\\(s\\), first: Failed to load resource: the server responded with a status of 404 \\(Not Found\\) \\(copilotkit:0\\)"
+  ],
+  "pages": {
+    "cli:approve-pnpm": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7 (Agno row): `pnpm approve-builds` itself succeeds; the Windows-incompatible `setup-agent.sh` is the failure, not this step"
+    },
+    "cli:dev-pnpm": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7 (Agno row): pnpm ❌ Windows scripts — this capture booted the dev server anyway; status follows the capture, re-check when it changes"
+    },
+    "cli:install-bun": {
+      "status": "fail",
+      "reason": "Tested-Report 2026-09-11 §7 (Agno row): bun ❌ `command not found: ./scripts/setup-agent` — Windows-incompatible shell script in postinstall",
+      "errorClass": "CLI Exit 1",
+      "message": "error: postinstall script from \"agno-starter\" exited with 1"
+    },
+    "cli:install-npm": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7 (Agno row): npm ✅"
+    },
+    "cli:install-pnpm": {
+      "status": "fail",
+      "reason": "Tested-Report 2026-09-11 §7 (Agno row): pnpm ❌ — ignored build scripts; `setup-agent.sh` fails on Windows ('.' is not recognized)",
+      "errorClass": "CLI Exit 1",
+      "message": "[ERR_PNPM_IGNORED_BUILDS] Ignored build scripts: @scarf/scarf@1.4.0, esbuild@0.<n>.2, sharp@0.<n>.5"
+    },
+    "cli:install-yarn": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7 (Agno row): yarn ✅"
+    },
+    "cli:login": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7 (CLI auth state): login ✅"
+    },
+    "cli:project-select": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7: `copilotkit create` project selection ✅"
+    },
+    "cli:reinstall-pnpm": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7 (Agno row): pnpm ❌ `setup-agent.sh` fails on Windows — this capture's reinstall after approving builds exited 0; status follows the capture, re-check when it changes"
+    },
+    "cli:scaffold": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11 §7: `copilotkit create` (Agno, existing agent) ✅"
+    },
+    "display-only": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11: ✅"
+    },
+    "frontend-tools": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11: ✅"
+    },
+    "headless-ui": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11: ✅"
+    },
+    "human-in-the-loop": {
+      "status": "fail",
+      "reason": "Not in Tested-Report; CI 2026-09-11: fail [Surface Missing] HITL card never rendered — no option button within 25s (agent answered in plain text or offerOptions not registered). Review and confirm.",
+      "errorClass": "Surface Missing",
+      "message": "Human-in-the-loop card never rendered: no option button appeared within <n>. Either the agent answered in plain text instead of calling offerOptions, or the too"
+    },
+    "interactive": {
+      "status": "pass",
+      "reason": "DISAGREES with Tested-Report (❌ Page empty, only a session token note) — review"
+    },
+    "slots": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11: ✅"
+    },
+    "tool-rendering": {
+      "status": "pass",
+      "reason": "Tested-Report 2026-09-11: ✅"
+    }
+  }
+}
