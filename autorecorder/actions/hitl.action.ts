@@ -1,5 +1,5 @@
 import { type Page } from 'playwright';
-import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
+import { beat, humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 
@@ -38,7 +38,7 @@ export const runHitlAction: PageActionHandler = async (
   }
 
   // Let the options sit on screen long enough to be readable before clicking.
-  await sleep(2000);
+  await beat(2000);
 
   const label = (await firstOption.textContent().catch(() => ''))?.trim();
   const box = await firstOption.boundingBox();

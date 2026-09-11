@@ -1,5 +1,5 @@
 import { type Page } from 'playwright';
-import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
+import { beat, humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 
@@ -69,7 +69,7 @@ export const runThreadsHeadlessAction: PageActionHandler = async (
   // "Show archived" re-queries with includeArchived -- visible proof the list is
   // ours and not a prebuilt component, even while the list itself is empty.
   await clickIfVisible(page, 'input[type="checkbox"]', 'toggled "Show archived"', 2500);
-  await sleep(1200);
+  await beat(1200);
 
   const msgCount = await sendPrompt(page, config.prompt, { timeoutMs: 12000 });
   await waitForAgentResponseCompletion(page, config.waitAfterPromptMs ?? 4000, msgCount);
@@ -87,7 +87,7 @@ export const runThreadsLifecycleAction: PageActionHandler = async (
   // is silently replaced. This is the failure mode the doc page is about.
   console.log(`   Remounting with no pinned id -- the conversation should vanish...`);
   await clickIfVisible(page, 'button:has-text("Remount chat")', 'clicked "Remount chat"');
-  await sleep(2500);
+  await beat(2500);
 
   // Then the fix: pin an explicit id and remount again -- it survives.
   console.log(`   Pinning an explicit threadId, then remounting again...`);
@@ -96,9 +96,9 @@ export const runThreadsLifecycleAction: PageActionHandler = async (
     'button:has-text("Mint + pin an explicit id")',
     'clicked "Mint + pin an explicit id"',
   );
-  await sleep(1500);
+  await beat(1500);
   await clickIfVisible(page, 'button:has-text("Remount chat")', 'clicked "Remount chat"');
-  await sleep(1500);
+  await beat(1500);
 
   // The id readout at the top is the thing to look at, not the chat.
   await dwell(page, 480, 200, config.waitAfterPromptMs ?? 3000);

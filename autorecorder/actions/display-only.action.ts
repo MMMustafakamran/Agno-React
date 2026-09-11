@@ -1,5 +1,5 @@
 import { type Page } from 'playwright';
-import { humanGlide, sleep } from '../core/overlays/cursor';
+import { beat, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 import { captureErrors, openNextJsErrorOverlay } from './error-console';
@@ -37,7 +37,7 @@ export const runDisplayOnlyAction: PageActionHandler = async (
       if (box) {
         console.log(`   🎯 Card rendered at (${Math.round(box.x)}, ${Math.round(box.y)})`);
         await humanGlide(page, box.x + box.width / 2, box.y + box.height / 2, 22);
-        await sleep(1500);
+        await beat(1500);
       }
     }
 
@@ -53,7 +53,7 @@ export const runDisplayOnlyAction: PageActionHandler = async (
 
     // A resume failure arrives after the answer; give it a moment to surface
     // before calling the run clean.
-    await sleep(3000);
+    await beat(3000);
 
     const captured = errors.entries();
     if (captured.length === 0) {

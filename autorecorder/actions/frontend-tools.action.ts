@@ -1,5 +1,5 @@
 import { type Page } from 'playwright';
-import { humanGlide, sleep } from '../core/overlays/cursor';
+import { beat, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 import { captureErrors, openNextJsErrorOverlay } from './error-console';
@@ -41,7 +41,7 @@ export const runFrontendToolsAction: PageActionHandler = async (
       if (box) {
         console.log(`   🎯 Browser tool ran — greeting panel updated.`);
         await humanGlide(page, box.x + Math.min(box.width / 2, 200), box.y + box.height / 2, 22);
-        await sleep(2000);
+        await beat(2000);
       }
     } else {
       console.warn(`   ⚠️ Greeting panel never updated — the browser tool may not have run.`);
@@ -56,7 +56,7 @@ export const runFrontendToolsAction: PageActionHandler = async (
 
     // A resume failure lands after the reply, so give it a moment to arrive
     // before deciding the run was clean.
-    await sleep(3000);
+    await beat(3000);
 
     const captured = errors.entries();
     if (captured.length === 0) {

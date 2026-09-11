@@ -1,5 +1,5 @@
 import { type Page } from 'playwright';
-import { humanGlide, sleep } from '../core/overlays/cursor';
+import { beat, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 
@@ -19,12 +19,12 @@ export const runErrorDebuggingAction: PageActionHandler = async (
   console.log(`   [Error Debugging] Showing the live onError log beside the chat...`);
   // Left column is the log, right column is the chat.
   await humanGlide(page, 420, 260, 22);
-  await sleep(1800);
+  await beat(1800);
 
   const msgCount = await sendPrompt(page, config.prompt, { timeoutMs: 12000 });
   await waitForAgentResponseCompletion(page, config.waitAfterPromptMs ?? 4000, msgCount);
 
   // Back to the log to close on it: still empty, which is the point.
   await humanGlide(page, 420, 380, 22);
-  await sleep(2000);
+  await beat(2000);
 };

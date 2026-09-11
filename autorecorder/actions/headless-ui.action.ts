@@ -1,5 +1,5 @@
 import { type Page } from 'playwright';
-import { humanClick, humanGlide, sleep } from '../core/overlays/cursor';
+import { beat, humanClick, humanGlide, sleep } from '../core/overlays/cursor';
 import { type PageActionHandler, type PageRecordConfig } from '../core/types';
 import { waitForAgentResponseCompletion } from '../core/actions';
 
@@ -45,7 +45,7 @@ export const runHeadlessUiAction: PageActionHandler = async (
   console.log(`   [Headless UI] Waiting for the hand-built interface to settle...`);
   const inputLocator = page.locator(INPUT).first();
   await inputLocator.waitFor({ state: 'visible', timeout: 15000 });
-  await sleep(800);
+  await beat(800);
 
   // Click it for real. If the panel ever drifts back under the taskbar the
   // click is swallowed, so verify focus actually moved and fall back rather
