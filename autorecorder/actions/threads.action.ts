@@ -62,6 +62,8 @@ export const runThreadsDrawerAction: PageActionHandler = async (
 export const runThreadsHeadlessAction: PageActionHandler = async (
   page: Page,
   config: PageRecordConfig,
+  _rootPath,
+  ctx,
 ) => {
   console.log(`   [Headless Threads] Showing the hand-built useThreads list...`);
   await dwell(page, 240, 280, 2000);
@@ -73,6 +75,25 @@ export const runThreadsHeadlessAction: PageActionHandler = async (
 
   const msgCount = await sendPrompt(page, config.prompt, { timeoutMs: 12000 });
   await waitForAgentResponseCompletion(page, config.waitAfterPromptMs ?? 4000, msgCount);
+
+  // The section the page added under the four steps -- one agent per thread.
+  // Two `useAgent({ agentId, runtimeAgentId, threadId })` hooks mount here,
+  // each pinned to its own thread; a panel that never paints means the private
+  // proxied agent did not register, which is the claim being tested.
+  console.log(`   [ThreadsHeadless] Resting on the per-thread agents...`);
+  const perThread = page.locator('[data-testid="per-thread-agents"]');
+  if (await perThread.first().isVisible({ timeout: 8000 }).catch(() => false)) {
+    await dwell(page, 640, 620, 2500);
+    const ready = await page
+      .locator('[data-testid="thread-agent-run"]')
+      .first()
+      .isEnabled({ timeout: 4000 })
+      .catch(() => false);
+    if (ready) console.log(`   ✅ Thread-scoped agent is ready; runAgent() addresses its own thread.`);
+    else ctx.warn('The thread-scoped agent never became ready (isReady stayed false), so runAgent() could not address its thread.');
+  } else {
+    ctx.fail('The per-thread agent panel never rendered -- useAgent({ agentId, runtimeAgentId, threadId }) did not mount.');
+  }
 };
 
 export const runThreadsLifecycleAction: PageActionHandler = async (
