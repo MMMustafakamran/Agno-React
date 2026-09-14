@@ -405,7 +405,7 @@ jobs:
       # not scaled. See autorecorder/core/overlays/human.ts (PACE).
       AUTORECORD_PACE: '0.85'
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o' }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-luna' }}
       AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
       AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
       NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY || secrets.COPILOTKIT_LICENSE_TOKEN }}
