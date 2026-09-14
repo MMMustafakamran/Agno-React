@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-11T08:54:34.324Z",
+  "syncedAt": "2026-09-14T07:09:36.194Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -114,15 +114,15 @@
     },
     "/agno/headless-threads": {
       "file": "agno__headless-threads.md",
-      "sha256": "fbb584a0e85d78e1c8d0d5f03ef98d5dd09e9e399376946cde5d3329b33d6c1e",
-      "bytes": 10487,
-      "lines": 222,
+      "sha256": "e4bb6605c1c49153eb0defdc724ab437673fb42170e0b9f15f455c67cb5d2558",
+      "bytes": 11683,
+      "lines": 249,
       "routes": [
         "/threads/headless"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 04 Sep 2026 07:58:23 GMT"
+      "date": "Mon, 14 Sep 2026 07:09:36 GMT"
     },
     "/agno/human-in-the-loop": {
       "file": "agno__human-in-the-loop.md",
@@ -150,27 +150,27 @@
     },
     "/agno/inspector": {
       "file": "agno__inspector.md",
-      "sha256": "9257e77b17abd341f3f122ee77468d000ff19e29defcd2220902a30c9dab391c",
-      "bytes": 5960,
-      "lines": 126,
+      "sha256": "4cd4ee593ba885bd178f940e92a3f45110b39021758c6abe61c51526c265c1ef",
+      "bytes": 9513,
+      "lines": 187,
       "routes": [
         "/custom-look-and-feel/inspector"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 04 Sep 2026 07:58:23 GMT"
+      "date": "Mon, 14 Sep 2026 07:09:36 GMT"
     },
     "/agno/intelligence/quickstart": {
       "file": "agno__intelligence__quickstart.md",
-      "sha256": "4b0f89adf013c4247a2796d9cb5b1013c5ee9432c5f456b354375912a900e694",
-      "bytes": 7189,
-      "lines": 159,
+      "sha256": "732692b37f3f71f5e2fe0a6b197e9d69582a2b9e071f8c22080ec6ede4de84be",
+      "bytes": 5992,
+      "lines": 157,
       "routes": [
         "/intelligence/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 09 Sep 2026 07:58:52 GMT"
+      "date": "Mon, 14 Sep 2026 07:09:36 GMT"
     },
     "/agno/intelligence/threads-explained": {
       "file": "agno__intelligence__threads-explained.md",
@@ -318,15 +318,15 @@
     },
     "/agno/learning": {
       "file": "agno__learning.md",
-      "sha256": "360a94171b35c40a220e692f2cdd2997cb16d9c220c57e80fa3940241a7197c6",
-      "bytes": 7777,
-      "lines": 138,
+      "sha256": "902439c0d0a08cd877ff8feee7380937e30eb3c5f6724908d2ca5302afcf961d",
+      "bytes": 7002,
+      "lines": 152,
       "routes": [
         "/learning"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 11 Sep 2026 08:54:34 GMT"
+      "date": "Mon, 14 Sep 2026 07:09:36 GMT"
     }
   },
   "sitemap": {
