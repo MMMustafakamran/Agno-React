@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-14T07:09:36.194Z",
+  "syncedAt": "2026-09-15T09:09:56.087Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -198,15 +198,15 @@
     },
     "/agno/prebuilt-components/copilot-threads-drawer": {
       "file": "agno__prebuilt-components__copilot-threads-drawer.md",
-      "sha256": "97c041e12cae10ff620522eed9dbb7fb9dc106212bc04febb9a94351c8dc380e",
-      "bytes": 6212,
-      "lines": 142,
+      "sha256": "7e71bed39f1779e3e22eff52706d75445f1f15fa7b692b9559162dd7c1240464",
+      "bytes": 7262,
+      "lines": 160,
       "routes": [
         "/threads/drawer"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
+      "date": "Tue, 15 Sep 2026 09:09:56 GMT"
     },
     "/agno/programmatic-control": {
       "file": "agno__programmatic-control.md",
@@ -318,15 +318,15 @@
     },
     "/agno/learning": {
       "file": "agno__learning.md",
-      "sha256": "902439c0d0a08cd877ff8feee7380937e30eb3c5f6724908d2ca5302afcf961d",
-      "bytes": 7002,
-      "lines": 152,
+      "sha256": "0b6534d765fb92792a5a7b3ec76f866f306d8bc00d6744b83b974b3f88b2a870",
+      "bytes": 7211,
+      "lines": 154,
       "routes": [
         "/learning"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 14 Sep 2026 07:09:36 GMT"
+      "date": "Tue, 15 Sep 2026 09:09:56 GMT"
     }
   },
   "sitemap": {
