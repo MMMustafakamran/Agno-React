@@ -48,8 +48,8 @@ export async function BackendHealth() {
           label="CopilotKit Intelligence license"
           detail={
             health.licenseKeySet
-              ? "Key present — thread routes should be fully functional."
-              : "Not set — Rich Threads routes will show their locked state."
+              ? "Runtime credential present — thread routes should be fully functional."
+              : "Not set — the Runtime reports no entitlement, so Rich Threads routes show their locked state."
           }
         />
       </ul>

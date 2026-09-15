@@ -66,6 +66,16 @@ export default function Page() {
         older runtimes have instead.
       </Callout>
 
+      <Callout tone="info" title="Automatic skill delivery is documented elsewhere">
+        The 2026-09-15 sync added a line pointing at{" "}
+        <code>/agno/intelligence/learned-skills</code> for &ldquo;automatic
+        learned skill delivery&rdquo; through a framework-native adapter, and
+        reframes the CLI workflow below as the manual/offline path. That page is
+        new, is not in this repo&apos;s snapshot, and has no route here — the
+        adapter it describes is untested, so nothing on this route exercises the
+        automatic path.
+      </Callout>
+
       <Callout tone="premium" title="Not exercised here">
         Creating a container, Run Learning, reviewing Insights, approving a
         Skill, and <code>copilotkit skills download</code> are dashboard and CLI

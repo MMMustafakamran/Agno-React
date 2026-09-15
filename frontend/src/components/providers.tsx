@@ -13,7 +13,7 @@ import { HarnessStateProvider, useHarnessState } from "./harness-state";
  * conversation ask for one with a `threadId`, not a second provider.
  *
  * `CopilotKitProvider` rather than `CopilotKit`: both exist in v2 and take the
- * same runtimeUrl/publicLicenseKey, but their `onError` signatures differ.
+ * same runtimeUrl, but their `onError` signatures differ.
  * `CopilotKit` hands back the legacy `CopilotErrorEvent` ({type, timestamp,
  * context, error}), while `CopilotKitProvider` gives the {error, code, context}
  * shape the Error Debugging doc actually documents. The error log route needs
@@ -23,9 +23,15 @@ import { HarnessStateProvider, useHarnessState } from "./harness-state";
 
 const RUNTIME_URL = "/api/copilotkit";
 
-// Optional. Threads are a licensed feature; without a key the app still runs
-// and those routes render their locked state.
-const LICENSE_KEY = process.env.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY;
+// No `publicLicenseKey`. As of the 2026-09-15 sync the Threads Drawer page
+// publishes the provider with `runtimeUrl` alone and states the drawer resolves
+// its entitlement through the Runtime, so the credential is server-side
+// configuration rather than a prop here. See `lib/intelligence-runtime.ts`.
+//
+// Note the docs disagree with themselves: /agno/inspector still publishes
+// `publicLicenseKey={process.env.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY}` on the
+// provider and calls it the key that unlocks Threads. Following the newer page
+// so the server-side claim is the one actually under test.
 
 function CopilotProviders({ children }: { children: ReactNode }) {
   const { logError } = useHarnessState();
@@ -37,7 +43,6 @@ function CopilotProviders({ children }: { children: ReactNode }) {
       // [1] CopilotKit provider: connect the app to the runtime
       // [!code highlight]
       runtimeUrl={RUNTIME_URL}
-      {...(LICENSE_KEY ? { publicLicenseKey: LICENSE_KEY } : {})}
       // Mounts the inspector, with its core wired up, on localhost only (disabled on /ide).
       showDevConsole={isIde ? false : "auto"}
       // Feeds the live log on /troubleshooting/error-debugging: every runtime,
