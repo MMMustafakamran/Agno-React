@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-15T09:09:56.087Z",
+  "syncedAt": "2026-09-16T06:11:00.919Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -30,15 +30,15 @@
     },
     "/agno/copilot-runtime": {
       "file": "agno__copilot-runtime.md",
-      "sha256": "86be6829e1da90f93ffb7b5a7578a36ab058d8dc454dc00bc5a604092d498092",
-      "bytes": 8072,
-      "lines": 210,
+      "sha256": "95f7ddc10a012b5a1364764f9e68f69ca9f7a25a4d7bb87f9cc457bb60375ebd",
+      "bytes": 8133,
+      "lines": 212,
       "routes": [
         "/backend/copilot-runtime"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
+      "date": "Wed, 16 Sep 2026 06:11:00 GMT"
     },
     "/agno/custom-look-and-feel/headless-ui": {
       "file": "agno__custom-look-and-feel__headless-ui.md",
@@ -222,15 +222,15 @@
     },
     "/agno/quickstart": {
       "file": "agno__quickstart.md",
-      "sha256": "557df498554d67b3a855a9fb4400910f508fce1208f4c8d6116598971c586e8a",
-      "bytes": 14529,
-      "lines": 416,
+      "sha256": "fab9dd5dfa25a15fd5590b483532a4c1b9761c5f931760af028484e9b2c985e9",
+      "bytes": 15144,
+      "lines": 435,
       "routes": [
         "/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 04 Sep 2026 07:58:23 GMT"
+      "date": "Wed, 16 Sep 2026 06:11:00 GMT"
     },
     "/agno/threads": {
       "file": "agno__threads.md",
