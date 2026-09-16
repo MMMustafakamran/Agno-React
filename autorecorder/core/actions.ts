@@ -1,6 +1,6 @@
 import { type Page } from 'playwright';
 import { SELECTORS } from '../config/selectors.config';
-import { fatalConsoleError } from './console-capture';
+import { consoleMark, fatalConsoleError } from './console-capture';
 import { dismissAlertOverlay, installAlertOverlay } from './overlays/alert-dialog';
 import { beat, humanClick, humanGlide, idleNudge, sleep } from './overlays/cursor';
 import { chance, humanType, pause } from './overlays/human';
@@ -98,6 +98,9 @@ export async function waitForAgentResponseCompletion(
   // Step 1: Wait until a new assistant message starts receiving content
   let hasStarted = false;
   const startTime = Date.now();
+  // Only this turn's errors count: an earlier cancelled fetch or failed turn
+  // would otherwise end the wait before it starts.
+  const consoleSince = consoleMark(page);
   const baseCount = initialMessageCount ?? 0;
   const observed: ReplyObservation = { startedAfterMs: 0, chars: 0, streamTimedOut: false };
 
@@ -134,7 +137,7 @@ export async function waitForAgentResponseCompletion(
     // client logged that the agent run failed, or the request itself did.
     // Sitting out the rest of the start window (30-90s per page, three to
     // seven pages in a row on a bad morning) only delays the same verdict.
-    const fatal = fatalConsoleError(page);
+    const fatal = fatalConsoleError(page, consoleSince);
     if (fatal) {
       throw new AgentSilentError(
         `Agent run failed before any reply text appeared (${Math.round((Date.now() - startTime) / 1000)}s in): ${fatal}`,
