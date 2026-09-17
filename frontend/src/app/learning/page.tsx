@@ -61,9 +61,8 @@ export default function Page() {
         <code>getLearningContainerId</code> exists on{" "}
         <code>CopilotKitIntelligence</code> from runtime 1.70; on the 1.69.2
         this repo&apos;s lockfile pins, the option is a type error. The page
-        names no version, and its coding-agent prompt tells you not to use the
-        deprecated <code>ɵlearning</code> option without saying that is what
-        older runtimes have instead.
+        names no version and never mentions the deprecated{" "}
+        <code>ɵlearning</code> option that older runtimes have instead.
       </Callout>
 
       <Callout tone="info" title="Automatic skill delivery is documented elsewhere">
