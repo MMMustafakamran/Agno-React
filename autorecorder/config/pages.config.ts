@@ -16,11 +16,11 @@
  *
  * ── Scope, for this repo ───────────────────────────────────────────────────
  * `route` + `demoSuffix` is the only demo URL a page can have, and the doctor
- * errors on any that is not 200. This app's 24 doc routes include 6 with no
- * `demo-chat` page, deliberately absent below rather than registered and
- * broken: `/`, `/threads`, `/threads/import` and `/threads/architecture` are
- * reference material, and `/webmcp` and `/intelligence/quickstart` are tracked
- * for drift with nothing implemented behind them (see the README's §8).
+ * errors on any that is not 200. Some doc routes have no `demo-chat` page and
+ * are deliberately absent below rather than registered and broken: `/`,
+ * `/threads`, `/threads/import` and `/threads/architecture` are reference
+ * material, and `/webmcp` is tracked for drift with nothing implemented behind
+ * it (see the README's §8).
  * `/generative-ui/your-components/interactive` also has no demo but *is*
  * registered, as a `docOnly` take — the upstream page is a stub, so the clip
  * shows the doc and this repo's source for it. See the repo README's
@@ -574,35 +574,6 @@ export const PAGES = definePages([
       expectsNoResponse: false,
       note: "learned-skills - agno isnt in the adapter table, on the agno page\n\ntable lists langgraph py/ts, mastra, google adk, ms agent framework\nno agno row. page still says \"attach an adapter to the agents that need skills\"\n\nthe generic python client it names doesnt exist either:\ncopilotkit-intelligence-runtime -> 404 on pypi\n\nTS ones are real (1.71.2, 14 Sep) so its the python side thats missing\n\nso the two tools never get registered, agent just answers normally",
     },
-  },
-  {
-    id: 'intelligence-quickstart',
-    name: 'Intelligence - Connect Intelligence in 5 minutes',
-    videoName: 'IntelligenceQuickstart',
-    docPath: 'intelligence/quickstart',
-    route: 'intelligence/quickstart',
-    // The doc's step 3: a plain `route.ts` with `mode: "single-route"` and one
-    // verb, where the page used to publish `[[...slug]]` and four.
-    ideFile: 'frontend/src/app/api/copilotkit-single/route.ts',
-    startLine: 1,
-    endLine: 37,
-    extraTabs: [
-      // Step 4: the matching provider flag.
-      {
-        filePath: 'frontend/src/components/single-endpoint-provider.tsx',
-        startLine: 26,
-        endLine: 39,
-      },
-    ],
-    prompt: 'Tell me a one-line joke.',
-    // The only page in this suite whose runtime route is never touched by any
-    // other take, so its first request is also the first time `next dev`
-    // compiles `/api/copilotkit-single`. On a cold CI runner that lands past
-    // the 30s default and the take fails with the agent apparently silent.
-    // `core/timeouts.ts` says the defaults suit a warm dev server and that a
-    // legitimately slow page should say so here; this is that page.
-    timeouts: { replyStartMs: 90_000 },
-    waitAfterPromptMs: 4000,
   },
   // -- Added 2026-09-11: three pages new upstream, identical under every
   // framework prefix. After every existing doc page so no clip is renumbered.

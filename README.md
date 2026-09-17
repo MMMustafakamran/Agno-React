@@ -190,7 +190,7 @@ Two consequences worth knowing:
 - **The code on a page is never a re-typed approximation.** Each page reads real files from the repo (`frontend/src/lib/source.ts`), so what you compare against the doc is what actually runs. Some excerpts use `#region` markers, which stay visible in the source file and are labelled with their line numbers.
 - **Demo routes share the app-wide provider**, so a conversation started in a demo continues on any other route. That's deliberate — `/custom-look-and-feel/headless-ui/demo-chat` and `/custom-look-and-feel/programmatic-control/demo-chat` show the _same_ conversation through two completely different UIs.
 
-21 of the 27 doc routes have a demo: quickstart, prebuilt-components, the three interactive thread routes, all four Custom Look and Feel routes, display-only, tool-rendering, frontend-cards, frontend-tools, governed-actions, human-in-the-loop, both Backend routes, error-debugging, intelligence/quickstart, intelligence/memories, and learning. The other 6 have nothing to run: `/`, `/threads`, `/threads/import` and `/threads/architecture` are reference pages; `/generative-ui/your-components/interactive` is a doc page with nothing in it; `/webmcp` is tracked for drift with the demo deliberately not built (see below).
+20 of the 26 doc routes have a demo: quickstart, prebuilt-components, the three interactive thread routes, all four Custom Look and Feel routes, display-only, tool-rendering, frontend-cards, frontend-tools, governed-actions, human-in-the-loop, both Backend routes, error-debugging, intelligence/memories, and learning. The other 6 have nothing to run: `/`, `/threads`, `/threads/import` and `/threads/architecture` are reference pages; `/generative-ui/your-components/interactive` is a doc page with nothing in it; `/webmcp` is tracked for drift with the demo deliberately not built (see below).
 
 ### Getting Started
 
@@ -274,8 +274,6 @@ A live capture of the raw AG-UI event stream, with pause and clear. **Try:** `Wh
 
 ### Intelligence
 
-**`/intelligence/quickstart`** — ⚠️ **Partial.** Steps 3 and 4 are implemented; steps 1, 2 and 5 are not. The 2026-09-09 sync rewrote step 3 from the multi-route handler to `mode: "single-route"` with a single `POST` export, and step 4 from `runtimeUrl` alone to `runtimeUrl` plus `useSingleEndpoint`. Neither needs a hosted project, so both are mounted now: `/api/copilotkit-single` takes the same runtime object as the multi-route mount, and `/intelligence/quickstart/demo-chat` drives it. Steps 1, 2 and 5 still open with `npx copilotkit@latest login` plus `project select`, which writes a `CPK_INTELLIGENCE_API_KEY` — an account-scoped resource this harness does not have, so the confirmation step has nothing to assert against. Three findings came out of the half that is testable, all on the route's page: the single endpoint accepts seven envelope methods and no thread, memory or annotation method is among them; single-route mode reports `threadEndpointsEnabled: false` from `/info`, which locks the Inspector thread list the page's last step tells you to check; and the page's own coding-agent prompt still instructs the reader to do the opposite of its manual steps. Still tracked as new because it is a genuinely new page; the rest of `/agno/intelligence/*` is the old `/agno/premium/*` set renamed, and stays out of scope.
-
 **`/intelligence/memories`** — ❌ **Broken as documented.** New upstream 2026-09-11. **Try:** `Please remember that I prefer concise status updates.`, then **Save**, then switch to the second runtime and **Save** again. **What happens:** on the documented runtime the list reads "Memory is not available for this runtime." and the save 404s — at this repo's runtime, not the platform, because memory routes are off unless the runtime is built with `memory: { access }`, which the page never mentions. On the second runtime (the same one plus that option) the platform answers `403 MEMORY_NOT_ENTITLED`, the hook reports `isAvailable: true`, and the page's `MemoryList` renders an empty list. The page's React snippet itself does not compile — see §9 #16.
 
 **`/learning`** — ⚠️ **Partial.** New upstream 2026-09-11. The page's runtime snippet, verbatim, on its own mount at `/api/copilotkit-learning`. **Try:** on `expense-agent`, `Review this expense: $42 team lunch, receipt attached.`; then on `default`, `Say hello in five words.` **What happens:** `expense-agent` never answers — its Thread is assigned to the page's example container `expense-review`, which does not exist in this project, and the run fails with "Failed to initialize thread" while the chat shows nothing. `default` answers. The dashboard and CLI half of the page (create a container, Run Learning, approve a Skill, `copilotkit skills download`) is behind a login and not exercised. See §9 #17.
@@ -312,7 +310,6 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/copilot-runtime`                            | `/backend/copilot-runtime`                    | ✅ Working     | Two agent ids verified via the runtime's `info` method.                                |
 | `/agno/ag-ui`                                      | `/backend/ag-ui`                              | ✅ Working     | Live event panel.                                                                      |
 | `/agno/troubleshooting/error-debugging`            | `/troubleshooting/error-debugging`            | ✅ Working     | Live error log.                                                                        |
-| `/agno/intelligence/quickstart`                    | `/intelligence/quickstart`                    | ⚠️ Partial     | Single-route transport implemented and exercised; the hosted-project steps still need `CPK_INTELLIGENCE_API_KEY`. |
 | `/agno/intelligence/memories`                     | `/intelligence/memories`                     | ❌ Broken      | New 2026-09-11. Import path wrong; routes 404 without an undocumented runtime option; unentitled shows as an empty list — §9 #16. |
 | `/agno/learning`                                  | `/learning`                                  | ⚠️ Partial     | New 2026-09-11. A missing container ID makes every run on the assigned agent fail silently; dashboard/CLI steps not exercised — §9 #17. |
 
@@ -320,7 +317,7 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 
 Not implemented as routes: `/agno/(other)/telemetry` (a config note, covered by `COPILOTKIT_TELEMETRY_DISABLED` in `.env.example`).
 
-**Tracked without a demo.** `/agno/webmcp` and `/agno/intelligence/quickstart` carry a route, a nav entry and a snapshot so drift is watched, but nothing is implemented behind them and the recorder does not touch them. The reason is on each route’s page and in §7. The rest of `/agno/intelligence/` is the old `/agno/premium/` set under a new prefix and stays in `doc-snapshot/manifest.json`’s `knownUnmapped` list.
+**Tracked without a demo.** `/agno/webmcp` carries a route, a nav entry and a snapshot so drift is watched, but nothing is implemented behind it and the recorder does not touch it. The reason is on the route’s page and in §7. The rest of `/agno/intelligence/` (including `/agno/intelligence/quickstart`, whose route was removed on 2026-09-17) is the old `/agno/premium/` set under a new prefix and stays in `doc-snapshot/manifest.json`’s `knownUnmapped` list.
 
 ---
 
@@ -571,8 +568,6 @@ single page first — before running the full suite.
 **Backend** — [Copilot Runtime](https://docs.copilotkit.ai/agno/copilot-runtime) · [AG-UI](https://docs.copilotkit.ai/agno/ag-ui)
 
 **Troubleshooting** — [Error Debugging & Observability](https://docs.copilotkit.ai/agno/troubleshooting/error-debugging)
-
-**Intelligence** — [Quickstart](https://docs.copilotkit.ai/agno/intelligence/quickstart) ‡
 
 **External** — [Agno docs](https://docs.agno.com) · [AG-UI protocol](https://ag-ui.com) · [AG-UI event types](https://docs.ag-ui.com/concepts/events)
 

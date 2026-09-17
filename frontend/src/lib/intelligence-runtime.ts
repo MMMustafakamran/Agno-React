@@ -8,21 +8,13 @@ import {
 import { AgnoAgent } from "@ag-ui/agno";
 
 /**
- * The Intelligence runtime, built once and mounted twice.
+ * The Intelligence runtime behind `/api/copilotkit-threads`.
  *
- * The Intelligence Quickstart builds a runtime in "Connect your runtime" and
- * exposes it in "Expose one Runtime route". That second step used to prescribe
- * the multi-route handler; as of the 2026-09-09 sync it prescribes
- * `mode: "single-route"`, and the frontend step gained `useSingleEndpoint`.
- * Both mounts are kept so the only variable under test is the transport:
+ * That mount is multi-route: it drives the Rich Threads routes, and multi-route
+ * is the only mode that dispatches the thread REST subtree.
  *
- *   `/api/copilotkit-threads` — multi-route, drives the Rich Threads routes and
- *                               is the only mode that dispatches the thread
- *                               REST subtree.
- *   `/api/copilotkit-single`  — single-route, drives `/intelligence/quickstart`.
- *
- * A factory rather than a shared instance: each route builds its own so neither
- * mount can be affected by the other's channel activation.
+ * A factory rather than a shared instance, so a mount's channel activation
+ * stays its own.
  */
 
 const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8000/agui";

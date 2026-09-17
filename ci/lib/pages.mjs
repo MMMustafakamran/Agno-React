@@ -41,7 +41,6 @@ export const PAGE_GROUPS = {
     'threads-drawer',
     'threads-headless',
     'threads-lifecycle',
-    'intelligence-quickstart',
     'intelligence-learned-skills',
     'intelligence-memories',
     'learning',
