@@ -178,6 +178,14 @@ const DEMO_PAGES: PageDefinition[] = [
   };
 });
 
+/**
+ * Page ids that stay registered but are never recorded -- not by `npm run
+ * record`, not by a named id, not in CI. The route and its demo remain.
+ */
+export const SKIP_RECORDING: Record<string, string> = {
+  'intelligence-memories': 'memory is not entitled on this CopilotKit org (403 MEMORY_NOT_ENTITLED)',
+};
+
 export const PAGES = definePages([
   {
     id: 'quickstart',

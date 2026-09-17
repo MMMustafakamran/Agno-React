@@ -22,15 +22,13 @@ import { glideClick, glideTo, visibleWithin, waitForText } from './glide-click';
 
 /** The fixed part of the note; what the saves returned is appended per take. */
 const NOTE = [
-  'memories - never works the way the page says',
+  'memories - blocked on entitlement',
   '',
-  'page imports useMemories from @copilotkit/react-core. not exported there, only /v2',
-  'as documented: GET /memories is a 404 from our own runtime.',
-  'the runtime hides those routes unless it gets memory: { access } - page never says',
-  '',
-  'with that option the platform answers 403 MEMORY_NOT_ENTITLED,',
-  'but the hook still says isAvailable true and the list renders empty.',
-  'page says unentitled shows as isAvailable false. it does not',
+  'as documented: /api/copilotkit/memories -> 404',
+  'runtime needs memory: { access }, page never says',
+  'with it: 403 MEMORY_NOT_ENTITLED, org has no memory',
+  'managed platform, so no embedder config needed',
+  'useMemories only exported from /v2, not the root',
 ];
 
 async function save(page: Page, ctx: ActionContext, label: string): Promise<string> {
