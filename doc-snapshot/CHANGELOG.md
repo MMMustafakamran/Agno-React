@@ -9,6 +9,62 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-09-18
+
+### 07:46 UTC — 3 pages, highest severity high · _npm run drift:sync_
+
+**Medium — /agno/intelligence/threads-explained**
+
+`/agno/intelligence/threads-explained` · route `/threads/architecture` · `agno__intelligence__threads-explained.md`
+
+Headings / Structure changed. Hash e20b1c8d ➔ 6d1c9a5e.
+
+````diff
+- Threads are a platform-level concept, not tied to any specific agent framework. Whether your backend uses LangGraph, Mastra, CrewAI, or any other framework, threads work the same way.
+- ## Key concepts
+- ### Thread vs. Run
+- A **thread** is the durable container. A **run** is a single agent execution within that thread. One thread can have many runs. Each time the user sends a message and the agent responds, that is a new run, and the thread accumulates events across all of its runs.
++ CopilotKit threads are a platform-level concept that works across agent frameworks.
++ ## How Rich Threads complement framework persistence
++ Starting fresh? CopilotKit Intelligence provides conversation persistence: it stores interaction events so users can reopen rich conversations across sessions and devices, reconnect to active runs, and manage their threads.
++ Already using framework persistence? Keep it configured. [LangGraph threads](https://docs.langchain.com/oss/python/langgraph/persistence) retain graph state and checkpoints; [Google ADK sessions](https://google.github.io/adk-docs/sessions/session/) retain conversation events and state. Intelligence adds the event history and synchronization used to restore the user's interactive conversation. Replaying that history is distinct from resuming framework execution from a checkpoint; framework-specific execution recovery remains with the framework.
+  … region truncated
+````
+
+**Medium — /agno/threads**
+
+`/agno/threads` · route `/threads` · `agno__threads.md`
+
+Headings / Structure changed. Hash a857ea89 ➔ 071567f5.
+
+````diff
++ ## Persistent, rich conversations for your agents
++ CopilotKit Intelligence provides the persistence and conversation management behind Rich Threads: rich history, continuity across devices, reconnection to active runs, and ready-made thread controls.
++ **Starting fresh?** Intelligence stores your conversation history and restores messages, generative UI, tool interactions, and multimodal inputs when users return.
++ **Already using LangGraph or ADK persistence?** Keep it. Rich Threads complement your existing setup with a consistent, interactive conversation experience for your users.
++ Use [Threads Drawer](/agno/prebuilt-components/copilot-threads-drawer) for conversation switching, pagination, and archive/delete controls, or [Headless Threads](/agno/headless-threads) to build your own UI. For how Intelligence and framework persistence work together, see [Threads & Persistence Architecture](/agno/intelligence/threads-explained#how-rich-threads-complement-framework-persistence).
+````
+
+**High — /agno/threads-import**
+
+`/agno/threads-import` · route `/threads/import` · `agno__threads-import.md`
+
+Code block content changed. Hash b481e043 ➔ c8048d79.
+
+````diff
+- Import and synchronization bring existing conversations into CopilotKit Intelligence as Rich Threads without replacing the native storage or analytics you already use. Import supported history once, then continue running those conversations through CopilotKit so users can resume them through the same thread UI as new conversations.
+- Built-in import currently supports Google ADK and LangGraph, with more sources coming soon. You can keep LangSmith, LangGraph, or ADK storage and analytics in place. For future CopilotKit-mediated runs, CopilotKit Intelligence persists the Rich Thread event history. When your agent remains connected to a durable LangGraph checkpointer or durable ADK session service with appropriate retention, those future runs continue through the native persistence path as well.
+- New to the feature? Read the [Rich Threads overview](/agno/threads) first to understand the shared thread store and choose between the prebuilt Drawer and a custom headless UI.
+- ## Supported sources
++ Import brings existing conversations into CopilotKit Intelligence as Rich Threads while you keep the native storage or analytics you already use. Import supported history once, then continue running those conversations through CopilotKit so users can resume them through the same thread UI as new conversations.
++ Built-in import currently supports Google ADK and LangGraph, with more sources coming soon. You can keep LangSmith, LangGraph, or ADK storage and analytics in place. For future CopilotKit-mediated runs, CopilotKit Intelligence persists the Rich Thread event history. When your agent remains connected to a durable LangGraph checkpointer or durable ADK session service with appropriate retention, those future runs continue through the native persistence path as well.
++ New to the feature? Read the [Rich Threads overview](/agno/threads) first to understand the shared thread store and choose between the prebuilt Drawer and a custom headless UI.
++ ## Supported sources
+  … region truncated
+````
+
+---
+
 ## 2026-09-17
 
 ### 07:24 UTC — 6 pages, highest severity high · _npm run drift:sync_
@@ -104,6 +160,8 @@ Code block content changed. Hash 0b6534d7 ➔ 810b6c31.
 + ```text
   … region truncated
 ````
+
+---
 
 ---
 
@@ -203,145 +261,6 @@ Code block content changed. Hash 0b6534d7 ➔ 810b6c31.
 + - **Understand the architecture:** [Threads & Persistence Architecture](/agno/intelligence/threads-explained) — event replay, live reconnection, synchronization, locking, and lifecycle behavior
 + - **Use the hosted platform:** [Cloud-hosted CopilotKit Intelligence](/agno/intelligence/managed-intelligence-platform) — create and manage the project where your app stores threads and runtime credentials
 + - **Plan production self-hosting:** [Self-host CopilotKit Intelligence](/agno/intelligence/self-hosting) — work with CopilotKit Engineering to run the Threads platform in your Kubernetes environment
-````
-
----
-
----
-
-## 2026-08-30
-
-### 13:45 UTC — 8 pages, highest severity high
-
-**High — Frontend Tools**
-
-`/agno/frontend-tools` · route `/frontend-tools` · under “Implementation”
-
-18 code lines, 18 prose lines changed. The number of fenced code blocks changed.
-
-````diff
-+ <Callout type="warn" title="Configure session storage">
-+ Agno must store the paused run before a frontend tool can return its result.
-+ Configure a database on the `Agent` that owns the external tool.
-+ 
-+ Install the SQLite dependency:
-+ 
-+ ```bash
-+ pip install sqlalchemy
-````
-
-**High — Your Components · Display-only**
-
-`/agno/generative-ui/your-components/display-only` · route `/generative-ui/your-components/display-only` · under “Display-only”
-
-14 code lines, 19 prose lines changed. The number of fenced code blocks changed.
-
-````diff
-+ 
-+ <Callout type="warn" title="Configure session storage">
-+ Agno must store the paused run before a frontend tool can return its result.
-+ Configure a database on the `Agent` that owns the external tool.
-+ 
-+ Install the SQLite dependency:
-+ 
-+ ```bash
-````
-
-**High — Your Components · Interactive**
-
-`/agno/generative-ui/your-components/interactive` · route `/generative-ui/your-components/interactive` · under “Interactive”
-
-14 code lines, 19 prose lines changed. The number of fenced code blocks changed.
-
-````diff
-+ 
-+ <Callout type="warn" title="Configure session storage">
-+ Agno must store the paused run before a frontend tool can return its result.
-+ Configure a database on the `Agent` that owns the external tool.
-+ 
-+ Install the SQLite dependency:
-+ 
-+ ```bash
-````
-
-**High — Human in the Loop**
-
-`/agno/human-in-the-loop` · route `/human-in-the-loop` · under “Implementation”
-
-18 code lines, 18 prose lines changed. The number of fenced code blocks changed.
-
-````diff
-+ <Callout type="warn" title="Configure session storage">
-+ Agno must store the paused run before a frontend tool can return its result.
-+ Configure a database on the `Agent` that owns the external tool.
-+ 
-+ Install the SQLite dependency:
-+ 
-+ ```bash
-+ pip install sqlalchemy
-````
-
-**Low — Headless Threads**
-
-`/agno/headless-threads` · route `/threads/headless` · under “What is this?”
-
-6 prose lines changed.
-
-````diff
-- <OpsPlatformCTA
-- variant="inline"
-- title="Threads run in CopilotKit Intelligence"
-- body="Get persistent threads and realtime sync on the free Developer tier."
-+ <IntelligenceOnboardingPrompt
-+ feature="threads"
-````
-
-**Low — Threads & Persistence Architecture**
-
-`/agno/premium/threads-explained` · route `/threads/architecture` · under “Threads & Persistence Architecture”
-
-6 prose lines changed.
-
-````diff
-- <OpsPlatformCTA
-- variant="inline"
-- title="Want to see threads in your own app?"
-- body="Persistent threads ship with CopilotKit Intelligence on the free Developer tier."
-+ <IntelligenceOnboardingPrompt
-+ feature="threads"
-````
-
-**Low — Quickstart**
-
-`/agno/quickstart` · route `/quickstart` · under “Quickstart”
-
-7 prose lines changed.
-
-````diff
-- <OpsPlatformCTA
-- variant="card"
-- title="Ship Agno to production"
-- body="Add persistent threads and the inspector with CopilotKit Intelligence."
-- ctaLabel="Create a free account"
-+ <IntelligenceOnboardingPrompt
-+ feature="learning"
-````
-
-**Low — Overview**
-
-`/agno/threads` · route `/threads` · under “Rich Threads”
-
-14 prose lines changed.
-
-````diff
-+ <IntelligenceOnboardingPrompt
-+ feature="threads"
-+ surface="docs_threads_overview"
-+ />
-+ 
-+ Open a real thread and use **Try from here** to copy it into a Playground scratch session. The stored thread does not change.
-- 
-- <OpsPlatformCTA
 ````
 
 ---
