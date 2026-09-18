@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-17T07:24:54.852Z",
+  "syncedAt": "2026-09-18T08:13:38.383Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -162,15 +162,15 @@
     },
     "/agno/intelligence/threads-explained": {
       "file": "agno__intelligence__threads-explained.md",
-      "sha256": "e20b1c8da520d0224fadf3e76fd57743cbb27404fa69503198b493622306f432",
-      "bytes": 10085,
-      "lines": 157,
+      "sha256": "6d1c9a5ef0e617999f5522d48518ca3b3771ebdbd0e0f0fdefc910c4052ba5cd",
+      "bytes": 10693,
+      "lines": 152,
       "routes": [
         "/threads/architecture"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Sun, 30 Aug 2026 13:45:09 GMT"
+      "date": "Fri, 18 Sep 2026 08:13:38 GMT"
     },
     "/agno/prebuilt-components": {
       "file": "agno__prebuilt-components.md",
@@ -222,27 +222,27 @@
     },
     "/agno/threads": {
       "file": "agno__threads.md",
-      "sha256": "a857ea893d7e2a210007af001c5502b4545d49b6519649cb3b095573e911e797",
-      "bytes": 11390,
-      "lines": 203,
+      "sha256": "071567f5a06316bb27fc79380aca8db1e911b609a76cac1926352ccb854ca110",
+      "bytes": 12381,
+      "lines": 213,
       "routes": [
         "/threads"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Thu, 17 Sep 2026 07:24:54 GMT"
+      "date": "Fri, 18 Sep 2026 08:13:38 GMT"
     },
     "/agno/threads-import": {
       "file": "agno__threads-import.md",
-      "sha256": "b481e043531f0fe49cdb1517f684fc4964135bb91e458dcbdd906fcbce04963f",
-      "bytes": 6823,
-      "lines": 136,
+      "sha256": "c8048d79df7be23e6e90798bfbbb017d137d9622427d8a7f9bcdc417eafeeb42",
+      "bytes": 7037,
+      "lines": 138,
       "routes": [
         "/threads/import"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 04 Sep 2026 07:58:23 GMT"
+      "date": "Fri, 18 Sep 2026 08:13:38 GMT"
     },
     "/agno/threads-lifecycle": {
       "file": "agno__threads-lifecycle.md",
