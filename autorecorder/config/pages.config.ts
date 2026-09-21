@@ -3,7 +3,10 @@
  *  ADAPT THIS FILE — 3 of 3
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * One entry per doc page, in the order the doc nav lists them.
+ * One entry per doc page, in the order the project owner wants the clips
+ * numbered: Basics, Custom Look and Feel, Human in the Loop, Generative UI,
+ * App Control, Threads, Backend, then the pages that are not filmed. Position
+ * here is the NN in each filename, so moving an entry renumbers its clip.
  *
  * Entries are deliberately short. `docUrl`, `demoUrl` and the output filename
  * are derived from `project.config.ts` plus the fields below, so no entry can
@@ -266,6 +269,216 @@ export const PAGES = definePages([
     waitAfterPromptMs: 1500,
   },
   {
+    id: 'slots',
+    name: 'Custom Look and Feel - Slots',
+    videoName: 'Slots',
+    docPath: 'custom-look-and-feel/slots',
+    route: 'custom-look-and-feel/slots',
+    ideFile: 'frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx',
+    startLine: 66,
+    endLine: 111,
+    prompt: 'Testing level one: the default slots. Say hi back.',
+    prompts: [
+      'Testing level one: the default slots. Say hi back.',
+      'Level two now, with the props override. Still with me?',
+      'And level three, the custom component. Say something short.',
+    ],
+    waitAfterPromptMs: 1500,
+  },
+  {
+    id: 'headless-ui',
+    name: 'Custom Look and Feel - Headless UI',
+    videoName: 'HeadlessUI',
+    docPath: 'custom-look-and-feel/headless-ui',
+    route: 'custom-look-and-feel/headless-ui',
+    ideFile:
+      'frontend/src/app/custom-look-and-feel/headless-ui/demo-chat/page.tsx',
+    startLine: 21,
+    endLine: 50,
+    prompt: 'How is the weather in London today?',
+    waitAfterPromptMs: 4000,
+  },
+  {
+    id: 'programmatic-control',
+    name: 'Custom Look and Feel - Programmatic Control',
+    videoName: 'ProgrammaticControl',
+    docPath: 'programmatic-control',
+    route: 'custom-look-and-feel/programmatic-control',
+    ideFile:
+      'frontend/src/app/custom-look-and-feel/programmatic-control/demo-chat/page.tsx',
+    startLine: 69,
+    endLine: 85,
+    prompt: 'Is it raining in Tokyo right now?',
+    waitAfterPromptMs: 4000,
+  },
+  {
+    id: 'inspector',
+    name: 'Custom Look and Feel - Inspector',
+    videoName: 'Inspector',
+    docPath: 'inspector',
+    route: 'custom-look-and-feel/inspector',
+    // The inspector is mounted by the provider, never by the page -- which is
+    // the thing worth showing, so the provider leads and the demo follows.
+    ideFile: 'frontend/src/components/providers.tsx',
+    startLine: 36,
+    endLine: 52,
+    extraTabs: [
+      {
+        filePath:
+          'frontend/src/app/custom-look-and-feel/inspector/demo-chat/page.tsx',
+        startLine: 17,
+        endLine: 30,
+      },
+    ],
+    prompt: 'Quick check: what is 17 times 23?',
+    waitAfterPromptMs: 1500,
+  },
+  {
+    id: 'human-in-the-loop-governed-actions',
+    name: 'App Control - Governed Action Approval',
+    videoName: 'GovernedActions',
+    docPath: 'human-in-the-loop/governed-actions',
+    route: 'human-in-the-loop/governed-actions',
+    // The `#region governed-action` block -- the tool registration and the
+    // card it renders, rather than the chat route that merely triggers it.
+    ideFile: 'frontend/src/components/global-frontend-tools.tsx',
+    startLine: 79,
+    endLine: 136,
+    extraTabs: [
+      {
+        filePath: 'frontend/src/components/governed-action-card.tsx',
+        startLine: 26,
+        endLine: 50,
+      },
+    ],
+    prompt:
+      'Please send an invoice reminder to acme@example.com, but check with me before it goes out.',
+    // Two turns, because the card has two answers and only one of them was
+    // ever filmed. The first request is harmless and gets approved; the second
+    // is destructive and gets rejected, which is the half that shows the
+    // policy actually stopping something.
+    prompts: [
+      'Please send an invoice reminder to acme@example.com, but check with me before it goes out.',
+      'Now permanently delete the acme@example.com customer record, but check with me before it goes through.',
+    ],
+    waitAfterPromptMs: 6000,
+  },
+  {
+    id: 'human-in-the-loop',
+    name: 'App Control - Human in the Loop',
+    videoName: 'HumanInTheLoop',
+    docPath: 'human-in-the-loop',
+    route: 'human-in-the-loop',
+    // The `#region human-in-the-loop` block -- the interrupt itself, rather than
+    // the chat route that merely triggers it.
+    ideFile: 'frontend/src/components/global-frontend-tools.tsx',
+    startLine: 138,
+    endLine: 181,
+    extraTabs: [
+      {
+        filePath: 'frontend/src/app/human-in-the-loop/demo-chat/page.tsx',
+        startLine: 13,
+        endLine: 26,
+      },
+    ],
+    prompt: 'I am naming a restaurant. Can you give me two good options?',
+    waitAfterPromptMs: 4000,
+  },
+  {
+    id: 'display-only',
+    name: 'Generative UI - Display Only Component',
+    videoName: 'DisplayOnly',
+    docPath: 'generative-ui/your-components/display-only',
+    route: 'generative-ui/your-components/display-only',
+    ideFile:
+      'frontend/src/app/generative-ui/your-components/display-only/demo-chat/page.tsx',
+    startLine: 50,
+    endLine: 74,
+    prompt: 'Show me a weather card for Tokyo. It is 77 degrees and clear today.',
+    waitAfterPromptMs: 4000,
+  },
+  {
+    id: 'interactive',
+    name: 'Generative UI - Interactive Component (Empty Doc)',
+    videoName: 'Interactive',
+    docPath: 'generative-ui/your-components/interactive',
+    route: 'generative-ui/your-components/interactive',
+    ideFile:
+      'frontend/src/app/generative-ui/your-components/interactive/page.tsx',
+    startLine: 1,
+    endLine: 25,
+    // Still no demo to drive: the 2026-08-30 sync added only a "Configure
+    // session storage" callout to the upstream stub, so the route mirrors that
+    // and nothing else. The clip shows the doc page and the route's source.
+    docOnly: true,
+    docViewDurationMs: 6000,
+    prompt: 'N/A',
+    waitAfterPromptMs: 6000,
+  },
+  {
+    id: 'tool-rendering',
+    name: 'Generative UI - Tool Rendering',
+    videoName: 'ToolRendering',
+    docPath: 'generative-ui/tool-rendering',
+    route: 'generative-ui/tool-rendering',
+    ideFile:
+      'frontend/src/app/generative-ui/tool-rendering/demo-chat/page.tsx',
+    startLine: 45,
+    endLine: 80,
+    prompt: 'Any rain expected in Tokyo this week?',
+    waitAfterPromptMs: 4000,
+  },
+  // -- Added 2026-09-11: three pages new upstream, identical under every
+  // framework prefix. After every existing doc page so no clip is renumbered.
+  {
+    id: 'frontend-cards',
+    name: 'Generative UI - Frontend-Driven Cards',
+    videoName: 'FrontendCards',
+    docPath: 'generative-ui/frontend-cards',
+    route: 'generative-ui/frontend-cards',
+    // Step 1: the renderer, verbatim.
+    ideFile: 'frontend/src/app/generative-ui/frontend-cards/event-card.tsx',
+    startLine: 7,
+    endLine: 27,
+    extraTabs: [
+      // Step 2: registered on the provider, props as published.
+      {
+        filePath: 'frontend/src/app/generative-ui/frontend-cards/demo-chat/page.tsx',
+        startLine: 145,
+        endLine: 166,
+      },
+      // Step 3: addMessage with role "activity", verbatim.
+      {
+        filePath: 'frontend/src/app/generative-ui/frontend-cards/deployment-watcher.tsx',
+        startLine: 12,
+        endLine: 34,
+      },
+    ],
+    prompt:
+      'Have you been shown any deployment card in this conversation? List the roles of every message you received.',
+    waitAfterPromptMs: 4000,
+  },
+  {
+    id: 'frontend-tools',
+    name: 'App Control - Frontend Tools',
+    videoName: 'FrontendTools',
+    docPath: 'frontend-tools',
+    route: 'frontend-tools',
+    ideFile: 'frontend/src/app/frontend-tools/demo-chat/page.tsx',
+    startLine: 24,
+    endLine: 63,
+    // The page shows the effects; the registrations live at the app root.
+    extraTabs: [
+      {
+        filePath: 'frontend/src/components/global-frontend-tools.tsx',
+        startLine: 29,
+        endLine: 77,
+      },
+    ],
+    prompt: 'Can you say hello to Malaika for me?',
+    waitAfterPromptMs: 4000,
+  },
+  {
     id: 'threads-drawer',
     name: 'Rich Threads - Threads Drawer',
     videoName: 'ThreadsDrawer',
@@ -327,191 +540,22 @@ export const PAGES = definePages([
     videoName: 'ThreadsLifecycle',
     docPath: 'threads-lifecycle',
     route: 'threads/lifecycle',
+    // The page's own ThreadControls, then the readout that proves each step.
     ideFile: 'frontend/src/app/threads/lifecycle/demo-chat/page.tsx',
-    startLine: 40,
-    endLine: 67,
-    prompt: 'Remember the number 42 for me, then I will start a new thread.',
+    startLine: 70,
+    endLine: 112,
+    extraTabs: [
+      {
+        filePath: 'frontend/src/app/threads/lifecycle/demo-chat/page.tsx',
+        startLine: 114,
+        endLine: 141,
+      },
+    ],
+    // Deliberately about nothing: the take is about the threadId, not the
+    // model. The old prompt asked it to "remember 42" across a thread and the
+    // clip filmed its opinion instead of anything the page says.
+    prompt: 'Say hello in one short sentence.',
     waitAfterPromptMs: 3000,
-  },
-  {
-    id: 'programmatic-control',
-    name: 'Custom Look and Feel - Programmatic Control',
-    videoName: 'ProgrammaticControl',
-    docPath: 'programmatic-control',
-    route: 'custom-look-and-feel/programmatic-control',
-    ideFile:
-      'frontend/src/app/custom-look-and-feel/programmatic-control/demo-chat/page.tsx',
-    startLine: 69,
-    endLine: 85,
-    prompt: 'Is it raining in Tokyo right now?',
-    waitAfterPromptMs: 4000,
-  },
-  {
-    id: 'inspector',
-    name: 'Custom Look and Feel - Inspector',
-    videoName: 'Inspector',
-    docPath: 'inspector',
-    route: 'custom-look-and-feel/inspector',
-    // The inspector is mounted by the provider, never by the page -- which is
-    // the thing worth showing, so the provider leads and the demo follows.
-    ideFile: 'frontend/src/components/providers.tsx',
-    startLine: 36,
-    endLine: 52,
-    extraTabs: [
-      {
-        filePath:
-          'frontend/src/app/custom-look-and-feel/inspector/demo-chat/page.tsx',
-        startLine: 17,
-        endLine: 30,
-      },
-    ],
-    prompt: 'Quick check: what is 17 times 23?',
-    waitAfterPromptMs: 1500,
-  },
-  {
-    id: 'slots',
-    name: 'Custom Look and Feel - Slots',
-    videoName: 'Slots',
-    docPath: 'custom-look-and-feel/slots',
-    route: 'custom-look-and-feel/slots',
-    ideFile: 'frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx',
-    startLine: 66,
-    endLine: 111,
-    prompt: 'Testing level one: the default slots. Say hi back.',
-    prompts: [
-      'Testing level one: the default slots. Say hi back.',
-      'Level two now, with the props override. Still with me?',
-      'And level three, the custom component. Say something short.',
-    ],
-    waitAfterPromptMs: 1500,
-  },
-  {
-    id: 'headless-ui',
-    name: 'Custom Look and Feel - Headless UI',
-    videoName: 'HeadlessUI',
-    docPath: 'custom-look-and-feel/headless-ui',
-    route: 'custom-look-and-feel/headless-ui',
-    ideFile:
-      'frontend/src/app/custom-look-and-feel/headless-ui/demo-chat/page.tsx',
-    startLine: 21,
-    endLine: 50,
-    prompt: 'How is the weather in London today?',
-    waitAfterPromptMs: 4000,
-  },
-  {
-    id: 'display-only',
-    name: 'Generative UI - Display Only Component',
-    videoName: 'DisplayOnly',
-    docPath: 'generative-ui/your-components/display-only',
-    route: 'generative-ui/your-components/display-only',
-    ideFile:
-      'frontend/src/app/generative-ui/your-components/display-only/demo-chat/page.tsx',
-    startLine: 50,
-    endLine: 74,
-    prompt: 'Show me a weather card for Tokyo. It is 77 degrees and clear today.',
-    waitAfterPromptMs: 4000,
-  },
-  {
-    id: 'interactive',
-    name: 'Generative UI - Interactive Component (Empty Doc)',
-    videoName: 'Interactive',
-    docPath: 'generative-ui/your-components/interactive',
-    route: 'generative-ui/your-components/interactive',
-    ideFile:
-      'frontend/src/app/generative-ui/your-components/interactive/page.tsx',
-    startLine: 1,
-    endLine: 25,
-    // Still no demo to drive: the 2026-08-30 sync added only a "Configure
-    // session storage" callout to the upstream stub, so the route mirrors that
-    // and nothing else. The clip shows the doc page and the route's source.
-    docOnly: true,
-    docViewDurationMs: 6000,
-    prompt: 'N/A',
-    waitAfterPromptMs: 6000,
-  },
-  {
-    id: 'tool-rendering',
-    name: 'Generative UI - Tool Rendering',
-    videoName: 'ToolRendering',
-    docPath: 'generative-ui/tool-rendering',
-    route: 'generative-ui/tool-rendering',
-    ideFile:
-      'frontend/src/app/generative-ui/tool-rendering/demo-chat/page.tsx',
-    startLine: 45,
-    endLine: 80,
-    prompt: 'Any rain expected in Tokyo this week?',
-    waitAfterPromptMs: 4000,
-  },
-  {
-    id: 'frontend-tools',
-    name: 'App Control - Frontend Tools',
-    videoName: 'FrontendTools',
-    docPath: 'frontend-tools',
-    route: 'frontend-tools',
-    ideFile: 'frontend/src/app/frontend-tools/demo-chat/page.tsx',
-    startLine: 24,
-    endLine: 63,
-    // The page shows the effects; the registrations live at the app root.
-    extraTabs: [
-      {
-        filePath: 'frontend/src/components/global-frontend-tools.tsx',
-        startLine: 29,
-        endLine: 77,
-      },
-    ],
-    prompt: 'Can you say hello to Malaika for me?',
-    waitAfterPromptMs: 4000,
-  },
-  {
-    id: 'human-in-the-loop',
-    name: 'App Control - Human in the Loop',
-    videoName: 'HumanInTheLoop',
-    docPath: 'human-in-the-loop',
-    route: 'human-in-the-loop',
-    // The `#region human-in-the-loop` block -- the interrupt itself, rather than
-    // the chat route that merely triggers it.
-    ideFile: 'frontend/src/components/global-frontend-tools.tsx',
-    startLine: 138,
-    endLine: 181,
-    extraTabs: [
-      {
-        filePath: 'frontend/src/app/human-in-the-loop/demo-chat/page.tsx',
-        startLine: 13,
-        endLine: 26,
-      },
-    ],
-    prompt: 'I am naming a restaurant. Can you give me two good options?',
-    waitAfterPromptMs: 4000,
-  },
-  {
-    id: 'human-in-the-loop-governed-actions',
-    name: 'App Control - Governed Action Approval',
-    videoName: 'GovernedActions',
-    docPath: 'human-in-the-loop/governed-actions',
-    route: 'human-in-the-loop/governed-actions',
-    // The `#region governed-action` block -- the tool registration and the
-    // card it renders, rather than the chat route that merely triggers it.
-    ideFile: 'frontend/src/components/global-frontend-tools.tsx',
-    startLine: 79,
-    endLine: 136,
-    extraTabs: [
-      {
-        filePath: 'frontend/src/components/governed-action-card.tsx',
-        startLine: 26,
-        endLine: 50,
-      },
-    ],
-    prompt:
-      'Please send an invoice reminder to acme@example.com, but check with me before it goes out.',
-    // Two turns, because the card has two answers and only one of them was
-    // ever filmed. The first request is harmless and gets approved; the second
-    // is destructive and gets rejected, which is the half that shows the
-    // policy actually stopping something.
-    prompts: [
-      'Please send an invoice reminder to acme@example.com, but check with me before it goes out.',
-      'Now permanently delete the acme@example.com customer record, but check with me before it goes through.',
-    ],
-    waitAfterPromptMs: 6000,
   },
   {
     id: 'copilot-runtime',
@@ -613,36 +657,6 @@ export const PAGES = definePages([
       expectsNoResponse: false,
       note: "learned-skills - agno isnt in the adapter table, on the agno page\n\ntable lists builtinagent (new), langgraph py/ts, mastra, google adk, ms agent framework\nno agno row. page still says \"attach an adapter to the agents that need skills\"\n\nthe generic python client it names doesnt exist either:\ncopilotkit-intelligence-runtime -> 404 on pypi\n\nTS ones are real (1.71.2, 14 Sep) so its the python side thats missing\n\nso the two tools never get registered, agent just answers normally\n\nnew builtinagent row: learnedSkills is not an option on runtime 1.72.0\nTS2353 / TS2339 / TS2724, all three land in 1.73.0, page names no floor",
     },
-  },
-  // -- Added 2026-09-11: three pages new upstream, identical under every
-  // framework prefix. After every existing doc page so no clip is renumbered.
-  {
-    id: 'frontend-cards',
-    name: 'Generative UI - Frontend-Driven Cards',
-    videoName: 'FrontendCards',
-    docPath: 'generative-ui/frontend-cards',
-    route: 'generative-ui/frontend-cards',
-    // Step 1: the renderer, verbatim.
-    ideFile: 'frontend/src/app/generative-ui/frontend-cards/event-card.tsx',
-    startLine: 7,
-    endLine: 27,
-    extraTabs: [
-      // Step 2: registered on the provider, props as published.
-      {
-        filePath: 'frontend/src/app/generative-ui/frontend-cards/demo-chat/page.tsx',
-        startLine: 145,
-        endLine: 166,
-      },
-      // Step 3: addMessage with role "activity", verbatim.
-      {
-        filePath: 'frontend/src/app/generative-ui/frontend-cards/deployment-watcher.tsx',
-        startLine: 12,
-        endLine: 34,
-      },
-    ],
-    prompt:
-      'Have you been shown any deployment card in this conversation? List the roles of every message you received.',
-    waitAfterPromptMs: 4000,
   },
   {
     id: 'intelligence-memories',
