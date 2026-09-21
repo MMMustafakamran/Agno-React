@@ -57,6 +57,17 @@ export default function Page() {
         </div>
       </Panel>
 
+      <Callout tone="warn" title="The one change this sync made points somewhere this section cannot follow">
+        The whole 2026-09-21 diff for this page is one table cell: the{" "}
+        <code>markdownRenderer</code> row gained &ldquo;See [Markdown
+        Rendering](/agno/custom-look-and-feel/markdown)&rdquo;. That page is live
+        upstream and is tracked nowhere in this repo: it has no snapshot, no
+        route and no recorder entry, and the drift gate reports it as a new
+        upstream page. The slot itself is unchanged and is still demonstrated
+        below, so nothing here breaks; the link just leads out of the tested
+        set.
+      </Callout>
+
       <Panel title="Source">
         <SourceCode file="frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx" />
       </Panel>

@@ -2,12 +2,42 @@ import Link from "next/link";
 
 import { BackendHealth } from "@/components/backend-health";
 import { RouteHeader } from "@/components/route-header";
-import { Callout, KeyValue, Panel, TryIt } from "@/components/ui";
+import { Callout, CodeBlock, KeyValue, Panel, TryIt } from "@/components/ui";
 import { DOCS_ROOT, NAV } from "@/lib/nav-config";
 import { DocDriftPanel } from "@/components/doc-drift-panel";
 
 /** Dynamic: the doc-sync readouts below read the snapshot off disk. */
 export const dynamic = "force-dynamic";
+
+/**
+ * The landing page's "connect" snippet, added 2026-09-21, the first code the
+ * section's front door has ever published. Verbatim, and quoted rather than
+ * shipped: its filename is `app/api/copilotkit/route.ts`, a plain route file in
+ * the same folder where every other page publishes the optional catch-all
+ * `app/api/copilotkit/[[...slug]]/route.ts`. Next.js cannot serve both from one
+ * folder, so this harness cannot hold the two filenames at once. The catch-all
+ * is the one that is shipped, because it is what the Quickstart and the Copilot
+ * Runtime page build and what the runtime's sub-routes need.
+ */
+const LANDING_ROUTE_SNIPPET = `import {
+  CopilotRuntime,
+  createCopilotRuntimeHandler,
+} from "@copilotkit/runtime/v2";
+import { AgnoAgent } from "@ag-ui/agno";
+
+const runtime = new CopilotRuntime({
+  agents: {
+    my_agent: new AgnoAgent({ url: "http://localhost:8000/agui" }),
+  },
+});
+
+const handler = createCopilotRuntimeHandler({
+  runtime,
+  basePath: "/api/copilotkit",
+});
+
+export const GET = handler;
+export const POST = handler;`;
 
 export default function Page() {
   const counts = NAV.flatMap((g) => g.routes).reduce<Record<string, number>>(
@@ -53,6 +83,45 @@ export default function Page() {
         description="Both processes must be up before any chat route will respond."
       >
         <BackendHealth />
+      </Panel>
+
+      <Panel
+        title="What the landing page now publishes"
+        description="The /agno front door carried no code until 2026-09-21. It carries this."
+      >
+        <CodeBlock
+          filename="app/api/copilotkit/route.ts"
+          language="ts"
+          code={LANDING_ROUTE_SNIPPET}
+        />
+        <div className="mt-4">
+          <Callout tone="warn" title="Two filenames for one route, and Next.js takes only one">
+            This block is titled{" "}
+            <code>app/api/copilotkit/route.ts</code>. The Quickstart, the
+            Copilot Runtime page and Thread Lifecycle all title the same file{" "}
+            <code>app/api/copilotkit/[[...slug]]/route.ts</code>, and the
+            Copilot Runtime page is explicit that it &ldquo;lives at a{" "}
+            <strong>catch-all</strong> path&rdquo; so the runtime can serve{" "}
+            <code>/info</code>, agent runs and threads. A plain{" "}
+            <code>route.ts</code> cannot sit beside an optional catch-all in the
+            same folder, so a reader who starts at the landing page and then
+            follows the Quickstart has to notice the difference and delete one.
+            This repo ships the catch-all at{" "}
+            <code>frontend/src/app/api/copilotkit/[[...slug]]/route.ts</code>.
+          </Callout>
+        </div>
+        <div className="mt-4">
+          <Callout tone="warn" title="It also drops the handlers and the key the other pages require">
+            The snippet exports <code>GET</code> and <code>POST</code> only,
+            while the Copilot Runtime page publishes four exports including{" "}
+            <code>PATCH</code> and <code>DELETE</code>. It registers{" "}
+            <code>my_agent</code>, while the Quickstart&apos;s provider snippet
+            asks for <code>my_agent</code> but its runtime is also wired with{" "}
+            <code>intelligence</code> and <code>identifyUser</code>, neither of
+            which appears here. The landing page never says it is showing a
+            reduced version.
+          </Callout>
+        </div>
       </Panel>
 
       <Panel title="How a message travels">

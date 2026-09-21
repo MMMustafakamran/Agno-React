@@ -2,11 +2,13 @@ import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
 import { Callout, Panel, TryIt } from "@/components/ui";
 
-const TSC_OUTPUT = `$ npx tsc --noEmit        # memory-list.tsx with the @ts-expect-error lines removed
-src/app/intelligence/memories/memory-list.tsx: error TS2305:
-  Module '"@copilotkit/react-core"' has no exported member 'useMemories'.
-src/app/intelligence/memories/memory-list.tsx: error TS7006:
-  Parameter 'memory' implicitly has an 'any' type.`;
+const IMPORT_FIX = `- import { useMemories } from "@copilotkit/react-core";       # until 2026-09-21
++ import { useMemories } from "@copilotkit/react-core/v2";    # published now
+
+Before: TS2305 (no such export at the package root), plus TS7006 on the
+        .map callback, plus a Turbopack compile error under Next 16 for any
+        route importing the file.
+After:  the file compiles and the demo mounts it directly.`;
 
 const PROBE = `As documented   GET  /api/copilotkit/memories          → 404 (runtime)
                 POST /api/copilotkit/memories          → 404
@@ -41,17 +43,16 @@ export default function Page() {
         </div>
       </Panel>
 
-      <Callout tone="warn" title="The React snippet imports a hook that is not there">
-        <code>import {"{ useMemories }"} from &quot;@copilotkit/react-core&quot;</code>{" "}
-        — the package root is the v1 surface and has no such export, on the
-        lockfile&apos;s 1.69.2 or CI&apos;s 1.71.0. It ships only from{" "}
-        <code>@copilotkit/react-core/v2</code>. Under Next 16 a missing named
-        export is a Turbopack compile error, so a route that imports the file
-        does not build at all. The verbatim file is kept, errors acknowledged,
-        and imported by nothing; the demo runs the same component with the
-        import moved to <code>/v2</code>.
+      <Callout tone="success" title="Fixed upstream: the import now points at /v2">
+        The React snippet used to import <code>useMemories</code> from{" "}
+        <code>@copilotkit/react-core</code>, which has no such export; it ships
+        only from <code>@copilotkit/react-core/v2</code>. The 2026-09-21 sync
+        publishes the <code>/v2</code> path, so the verbatim file compiles and
+        this route mounts it instead of the private copy the demo used to carry.
+        Nothing else on the page changed, so the runtime findings below still
+        stand.
         <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
-          {TSC_OUTPUT}
+          {IMPORT_FIX}
         </pre>
       </Callout>
 

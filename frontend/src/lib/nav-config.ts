@@ -123,7 +123,7 @@ export const NAV: NavGroup[] = [
         status: "partial",
         premium: true,
         statusNote:
-          "Renders a locked view without a license key — that locked state is itself the expected result here.",
+          "Renders a locked view when the Runtime reports no Intelligence access; that locked state is itself the expected result here.",
       },
       {
         path: "/threads/headless",
@@ -348,7 +348,7 @@ export const NAV: NavGroup[] = [
           "Long-term memories per user or project, read and written from React with `useMemories`.",
         status: "broken",
         statusNote:
-          "The React snippet imports `useMemories` from the package root, which has no such export (TS2305). With the import fixed, every memory route 404s: the runtime hides them unless built with `memory: { access }`, which the page never mentions. With it, this project gets 403 MEMORY_NOT_ENTITLED and the hook reports `isAvailable: true` over an empty list.",
+          "The React snippet's import was corrected upstream on 2026-09-21 and now compiles. What it runs on still does not: every memory route 404s unless the runtime is built with `memory: { access }`, which the page never mentions. With it, this project gets 403 MEMORY_NOT_ENTITLED and the hook reports `isAvailable: true` over an empty list.",
       },
       {
         path: "/learning",

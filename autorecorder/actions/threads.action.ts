@@ -6,15 +6,18 @@ import { sendPrompt, waitForAgentResponseCompletion } from '../core/actions';
 /**
  * The three Rich Threads demos.
  *
- * Threads are a licensed feature and this repo ships no license key, so the
- * drawer renders its locked view and `useThreads` returns an empty list. That
- * is the *expected* unlicensed result, not a failure -- see the repo README's
- * status table -- and it is worth showing on video, because it proves the
- * component mounted and detected the missing key rather than silently doing
- * nothing.
+ * Threads need CopilotKit Intelligence and this repo ships no credential, so
+ * the drawer renders its locked view and `useThreads` returns an empty list.
+ * That is the *expected* unentitled result, not a failure -- see the repo
+ * README's status table -- and it is worth showing on video, because it proves
+ * the component mounted and resolved its entitlement rather than silently doing
+ * nothing. The drawer page dropped its "License" heading for "Intelligence
+ * access" on 2026-09-21; the credential it resolves through the Runtime is the
+ * same one.
  *
- * The chat beside each of them is not licensed, so every one of these still
- * drives a real agent turn and still fails honestly if the agent goes quiet.
+ * The chat beside each of them needs no entitlement, so every one of these
+ * still drives a real agent turn and still fails honestly if the agent goes
+ * quiet.
  */
 
 /** Rests the cursor on a panel for long enough to read it. */

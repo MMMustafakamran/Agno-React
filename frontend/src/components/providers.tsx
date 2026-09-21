@@ -28,10 +28,12 @@ const RUNTIME_URL = "/api/copilotkit";
 // its entitlement through the Runtime, so the credential is server-side
 // configuration rather than a prop here. See `lib/intelligence-runtime.ts`.
 //
-// Note the docs disagree with themselves: /agno/inspector still publishes
-// `publicLicenseKey={process.env.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY}` on the
-// provider and calls it the key that unlocks Threads. Following the newer page
-// so the server-side claim is the one actually under test.
+// The 2026-09-21 sync settled the disagreement that was recorded here: the
+// Inspector page used to publish
+// `publicLicenseKey={process.env.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY}` on this
+// provider, and now publishes `runtimeUrl="/api/copilotkit"` in its place. Both
+// pages now describe one server-side credential, which is what this file has
+// been doing since the drawer page changed.
 
 function CopilotProviders({ children }: { children: ReactNode }) {
   const { logError } = useHarnessState();

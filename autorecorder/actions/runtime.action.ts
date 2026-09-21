@@ -12,6 +12,12 @@ import { waitForDomSettled } from './page-ready';
  *
  * The point of the recording is that switching id starts a fresh conversation
  * against the same backend, so both turns are driven rather than one.
+ *
+ * The demo carries a third button, `my_agent`, which the runtime does not
+ * register -- the page's "Which name identifies an agent" section (2026-09-21)
+ * says asking for an unregistered name raises CopilotKitAgentDiscoveryError.
+ * It is not driven here: the take is about routing that works, and the failing
+ * id belongs to the error-evidence handlers rather than this one.
  */
 const AGENT_IDS = ['default', 'agno_agent'] as const;
 

@@ -1,6 +1,6 @@
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
-import { CodeBlock, Panel, TryIt } from "@/components/ui";
+import { Callout, CodeBlock, Panel, TryIt } from "@/components/ui";
 
 const CONTROL_SNIPPET = `// <CopilotKit> — takes enableInspector, defaults to on for localhost.
 <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
@@ -14,6 +14,15 @@ const CONTROL_SNIPPET = `// <CopilotKit> — takes enableInspector, defaults to 
  * in the page's own order: what you came to do, where a failure opens, and how
  * to get the overlay out of the way.
  */
+const CREDENTIAL_SNIPPET = `// The page's disable snippet, 2026-09-21. It used to read
+// publicLicenseKey={process.env.NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY}.
+<CopilotKit
+  runtimeUrl="/api/copilotkit"
+  enableInspector={false}
+>
+  {children}
+</CopilotKit>`;
+
 const GOALS: [string, string][] = [
   ["Confirm that CopilotKit is connected", "Home, then Agent"],
   ["Find out why a run or tool failed", "The red launcher or error pill"],
@@ -21,7 +30,7 @@ const GOALS: [string, string][] = [
   ["Reproduce a saved conversation safely", "Threads → Try from here"],
   ["Continue a saved Thread in your application", "Threads → View in your app"],
   ["Enable or repair Intelligence", "Home, or a locked Threads"],
-  ["Review what Learning found", "Learning"],
+  ["Review what Learning found", "Learning, then Open Intelligence"],
 ];
 
 const FAILURES: [string, string][] = [
@@ -104,6 +113,41 @@ export default function Page() {
             expect="The event list fills, and Frontend Tools lists sayHello, setThemeColor, addBookmark, and offerOptions with their schemas."
             fail="The inspector never appears — it is force-disabled in production builds, so confirm you are running the dev server."
           />
+        </div>
+      </Panel>
+
+      <Panel
+        title="Which credential the Inspector reads"
+        description="Rewritten 2026-09-21: a server-side project key, read by the Runtime, never a prop in the browser."
+      >
+        <CodeBlock
+          filename="The page's disable snippet"
+          language="tsx"
+          code={CREDENTIAL_SNIPPET}
+        />
+        <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+          The page now says <code>copilotkit project select</code> writes{" "}
+          <code>CPK_INTELLIGENCE_API_KEY</code> to the server-side{" "}
+          <code>.env</code>, that the Runtime uses it and reports Intelligence
+          access to the browser, and that the project key must never reach the
+          browser. Its own snippet followed: the provider example dropped{" "}
+          <code>publicLicenseKey</code> for <code>runtimeUrl</code>. That closes
+          a contradiction this repo had recorded, where this page published a
+          browser-visible key while the Threads Drawer page said the credential
+          was server-side configuration and not a prop.
+        </p>
+        <div className="mt-4">
+          <Callout tone="warn" title="The replacement points at a page this section does not have">
+            &ldquo;See [Runtime endpoints](/agno/backend/runtime-endpoints) for
+            the complete setup.&rdquo; That page is live upstream but is not in
+            this repo&apos;s snapshot and has no route here, so the complete
+            setup the sentence promises is not under test. The page&apos;s two
+            other setup links point at{" "}
+            <code>/agno/intelligence/quickstart</code>, which is live upstream
+            but untracked here since this repo dropped that route, so the
+            Inspector page sends a reader to three pages the harness does not
+            cover.
+          </Callout>
         </div>
       </Panel>
 

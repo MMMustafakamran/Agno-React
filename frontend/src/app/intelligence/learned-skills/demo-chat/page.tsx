@@ -12,6 +12,11 @@ import { DemoFrame } from "@/components/demo-frame";
  * `copilotkit-intelligence-runtime`, is not on PyPI either. So there is nothing
  * to attach to the agent, and the two tools the page reserves never exist.
  *
+ * The 2026-09-21 sync added a BuiltInAgent row, which needs no adapter package.
+ * It is not mounted here for two reasons: its `learnedSkills` option does not
+ * exist on the installed runtime 1.72.0 (see `../built-in-agent.ts`), and a
+ * BuiltInAgent would replace the Agno agent this section is about.
+ *
  * The demo shows the absence rather than faking the presence: the agent is
  * this repo's normal `agno_agent`, and the prompt asks for the exact tool
  * names the page reserves. The agent answers from its own instructions with no
@@ -49,7 +54,7 @@ function SkillToolProbe() {
         </tbody>
       </table>
       <p className="mt-2 font-mono text-[11px] text-slate-500">
-        adapter table: LangGraph · Mastra · Google ADK · Microsoft Agent Framework — no Agno row
+        adapter table: BuiltInAgent · LangGraph · Mastra · Google ADK · Microsoft Agent Framework · no Agno row
       </p>
     </div>
   );

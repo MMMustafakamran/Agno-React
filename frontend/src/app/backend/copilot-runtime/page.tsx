@@ -10,6 +10,18 @@ const myAgent = new HttpAgent({ url: "http://localhost:8000/agui" });
   <YourApp />
 </CopilotKitProvider>`;
 
+// "Which name identifies an agent", added 2026-09-21. Both blocks verbatim.
+const ROUTING_KEY_SNIPPET = `const runtime = new CopilotRuntime({
+  agents: {
+    // \`my_agent\` is the key — the one string the frontend may ask for.
+    my_agent: new HttpAgent({ url: "http://localhost:8000/" }),
+  },
+});`;
+
+const ROUTING_PROVIDER_SNIPPET = `<CopilotKit runtimeUrl="/api/copilotkit" agent="my_agent" useSingleEndpoint={false}>
+  <YourApp />
+</CopilotKit>`;
+
 const COMPARISON: [string, string, string][] = [
   ["Authentication", "Safe defaults provided", "You manage it"],
   ["AG-UI middleware", "Runs server-side", "Not available"],
@@ -53,6 +65,49 @@ export default function Page() {
           id <code>default</code> is what lets every prebuilt component work with
           no <code>agentId</code> prop.
         </p>
+      </Panel>
+
+      <Panel
+        title="Which name identifies an agent"
+        description="Added 2026-09-21: the name the frontend asks for is a key of the agents map, never the agent's own name or class."
+      >
+        <CodeBlock
+          filename='app/api/copilotkit/[[...slug]]/route.ts'
+          language="ts"
+          code={ROUTING_KEY_SNIPPET}
+        />
+        <div className="mt-4">
+          <CodeBlock
+            filename="app/providers.tsx"
+            language="tsx"
+            code={ROUTING_PROVIDER_SNIPPET}
+          />
+        </div>
+        <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
+          This runtime registers <code>default</code> and{" "}
+          <code>agno_agent</code>, so those two strings are the whole set of
+          names the frontend may ask for. The demo adds a third button for{" "}
+          <code>my_agent</code>, the page&apos;s own example key, which this
+          runtime does not register, so the discovery failure is on camera
+          beside the two that resolve. The demo also reads{" "}
+          <code>GET /api/copilotkit/info</code>, which the page names as the way
+          to see the real keys.
+        </p>
+
+        <div className="mt-4">
+          <Callout tone="warn" title="The section's snippet points an Agno reader at the wrong URL">
+            On <code>/agno</code> the example agent is{" "}
+            <code>new HttpAgent({"{ url: \"http://localhost:8000/\" }"})</code>.
+            Agno&apos;s AgentOS serves AG-UI at <code>/agui</code>, not at the
+            root, and <code>HttpAgent</code> is never imported in that block:
+            the page only imports it much further down, in the
+            direct-connection section. The landing page&apos;s own snippet for
+            the same job uses <code>AgnoAgent</code> with{" "}
+            <code>http://localhost:8000/agui</code>. Copying this section into
+            an Agno project gives a registered key that resolves to an endpoint
+            that is not the agent.
+          </Callout>
+        </div>
       </Panel>
 
       <Panel title="The demo page">

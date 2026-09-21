@@ -17,11 +17,25 @@ export default function Page() {
     <>
       <RouteHeader path="/threads/drawer" />
 
-      <Callout tone="premium" title="Locked without a license key">
-        The drawer renders a locked view in place of the thread list when no
-        license key is present. Seeing that locked panel is the correct
-        unlicensed outcome — it proves the component mounted and detected the
-        missing license, rather than failing to render.
+      <Callout tone="premium" title="Locked without Intelligence access">
+        The drawer renders a locked view in place of the thread list whenever
+        the Runtime reports no active entitlement. Seeing that locked panel is
+        the correct unentitled outcome: it proves the component mounted and
+        resolved its entitlement, rather than failing to render.
+      </Callout>
+
+      <Callout tone="info" title="The page stopped calling this a licensing question">
+        The 2026-09-21 sync renamed the section from{" "}
+        <strong>License</strong> to <strong>Intelligence access</strong>, and
+        the two calls to action followed: &ldquo;Get a free developer
+        account&rdquo; became &ldquo;Start managed onboarding&rdquo; to
+        &ldquo;create or select a project&rdquo;, and the inline CTA&apos;s
+        &ldquo;free Developer tier&rdquo; became &ldquo;Connect a managed
+        project&rdquo;. The body is unchanged: a managed project key for managed
+        deployments, <code>COPILOTKIT_LICENSE_TOKEN</code> only for self-hosted
+        and OSS. Nothing here says the free tier went away, so a reader who
+        followed the old text has no way to tell whether the offer changed or
+        only its name.
       </Callout>
 
       <Panel title="What it demonstrates">
@@ -36,8 +50,8 @@ export default function Page() {
         <div className="mt-4">
           <TryIt
             prompts={["Start a conversation, then pick another thread"]}
-            expect="With a license: selecting a row replays that conversation, and the New Conversation row resets the chat to a fresh welcome screen."
-            fail="Without a license the list area shows the locked view. A blank drawer with no locked state would mean the component failed to mount."
+            expect="With Intelligence access: selecting a row replays that conversation, and the New Conversation row resets the chat to a fresh welcome screen."
+            fail="Without it the list area shows the locked view. A blank drawer with no locked state would mean the component failed to mount."
           />
         </div>
       </Panel>

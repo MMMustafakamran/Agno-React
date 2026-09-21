@@ -2,6 +2,10 @@ import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
 import { Callout, Panel, TryIt } from "@/components/ui";
 
+// "Connect your agent", added 2026-09-21. The page's block, verbatim.
+const DELIVERY_ENV = `CPK_INTELLIGENCE_API_KEY=your-project-key
+CPK_INTELLIGENCE_LEARNING_CONTAINER_ID=expense-review`;
+
 const SERVER_LOG = `POST /api/copilotkit-learning/agent/expense-agent/run  → 404 {"error":"Failed to initialize thread"}
   Intelligence platform error 404:
   {"code":"LEARNING_CONTAINER_NOT_FOUND","message":"The Learning Container was not found in this project."}
@@ -59,20 +63,52 @@ export default function Page() {
 
       <Callout tone="warn" title="No version floor">
         <code>getLearningContainerId</code> exists on{" "}
-        <code>CopilotKitIntelligence</code> from runtime 1.70; on the 1.69.2
-        this repo&apos;s lockfile pins, the option is a type error. The page
-        names no version and never mentions the deprecated{" "}
-        <code>ɵlearning</code> option that older runtimes have instead.
+        <code>CopilotKitIntelligence</code> from runtime 1.70; on 1.69.x, which
+        this repo&apos;s lockfile pinned until the current{" "}
+        <strong>1.72.0</strong>, the option is a type error. The page names no
+        version and never mentions the deprecated <code>ɵlearning</code> option
+        that older runtimes have instead. The same gap has now repeated one page
+        over: the learned-skills <code>learnedSkills</code> option needs 1.73.0
+        and says so nowhere.
       </Callout>
 
-      <Callout tone="info" title="Automatic skill delivery is documented elsewhere">
-        The 2026-09-15 sync added a line pointing at{" "}
-        <code>/agno/intelligence/learned-skills</code> for &ldquo;automatic
-        learned skill delivery&rdquo; through a framework-native adapter, and
-        reframes the CLI workflow below as the manual/offline path. That page is
-        new, is not in this repo&apos;s snapshot, and has no route here — the
-        adapter it describes is untested, so nothing on this route exercises the
-        automatic path.
+      <Callout tone="warn" title="The new delivery steps end at an adapter Agno does not have">
+        The 2026-09-21 sync replaced the one-line pointer to learned skills with
+        three steps: enable delivery on the container, connect your agent, and
+        verify it in a new invocation. Step two hands you this environment block
+        for the agent server, then sends you to the framework adapter examples
+        &ldquo;for LangGraph Python, LangGraph TypeScript, Mastra, Google ADK, or
+        Microsoft Agent Framework&rdquo;. Agno is in none of those lists, so on
+        the Agno page the steps stop being followable at exactly the point they
+        become concrete. See{" "}
+        <a
+          href="/intelligence/learned-skills"
+          className="text-[var(--accent)] underline underline-offset-4"
+        >
+          the learned-skills route
+        </a>{" "}
+        for what that page does and does not offer this backend.
+        <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
+          {DELIVERY_ENV}
+        </pre>
+        Neither variable is read anywhere in this harness: with no adapter,
+        nothing consumes them. The container id in the block is{" "}
+        <code>expense-review</code>, the same non-existent container the runtime
+        snippet above uses, while the learned-skills page configures{" "}
+        <code>containerId: &quot;support-learning&quot;</code> for the same job.
+      </Callout>
+
+      <Callout tone="warn" title="The daily schedule and the Thread threshold are dashboard-only claims">
+        The sync also added a &ldquo;Choose the daily schedule&rdquo; step
+        (organization default <strong>02:00 UTC</strong>, per-project override,{" "}
+        <strong>15 eligible Threads</strong> before an automatic run, a{" "}
+        <em>Next scheduled run</em> countdown) and swapped &ldquo;Run
+        Learning&rdquo; for &ldquo;Start manual run now&rdquo;. All of it is
+        dashboard UI behind a login this harness does not drive, so none of it
+        is exercised or contradicted here. The page hedges its own number
+        (&ldquo;Use the count shown in your container if your deployment has a
+        different threshold&rdquo;), which leaves a reader with no way to know
+        the threshold without the dashboard open.
       </Callout>
 
       <Callout tone="premium" title="Not exercised here">

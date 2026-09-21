@@ -255,9 +255,9 @@ export const PAGES = definePages([
     ideFile: 'frontend/src/app/threads/drawer/demo-chat/page.tsx',
     startLine: 19,
     endLine: 34,
-    // Threads are licensed. Unlicensed, the drawer renders its locked view --
-    // which is the correct result, and what this recording shows. The chat
-    // beside it is not licensed and answers normally.
+    // Threads need Intelligence. Without it the drawer renders its locked view
+    // -- which is the correct result, and what this recording shows. The chat
+    // beside it needs no entitlement and answers normally.
     prompt: 'In one line, what are threads for?',
     waitAfterPromptMs: 4000,
   },
@@ -500,9 +500,12 @@ export const PAGES = definePages([
     videoName: 'CopilotRuntime',
     docPath: 'copilot-runtime',
     route: 'backend/copilot-runtime',
+    // The three ids the demo offers and the /info readout beside them: two keys
+    // this runtime registers and one the page uses as its example but nothing
+    // here registers.
     ideFile: 'frontend/src/app/backend/copilot-runtime/demo-chat/page.tsx',
-    startLine: 24,
-    endLine: 50,
+    startLine: 34,
+    endLine: 61,
     extraTabs: [
       {
         filePath: 'frontend/src/app/api/copilotkit/[[...slug]]/route.ts',
@@ -564,23 +567,32 @@ export const PAGES = definePages([
     videoName: 'LearnedSkills',
     docPath: 'intelligence/learned-skills',
     route: 'intelligence/learned-skills',
-    // There is no adapter to show, so the IDE tab is the demo itself: the two
-    // tool names the page reserves, listed as absent rather than registered.
-    ideFile: 'frontend/src/app/intelligence/learned-skills/demo-chat/page.tsx',
-    startLine: 7,
-    endLine: 28,
+    // The page's one runnable snippet as of 2026-09-21: `learnedSkills` on a
+    // BuiltInAgent, verbatim, and not an option on the installed runtime.
+    ideFile: 'frontend/src/app/intelligence/learned-skills/built-in-agent.ts',
+    startLine: 35,
+    endLine: 47,
+    extraTabs: [
+      // No adapter to show for Agno, so the demo lists the two tool names the
+      // page reserves as absent rather than registered.
+      {
+        filePath: 'frontend/src/app/intelligence/learned-skills/demo-chat/page.tsx',
+        startLine: 7,
+        endLine: 32,
+      },
+    ],
     prompt: 'List the skills you can load, then load the refund-policy skill and follow it.',
     waitAfterPromptMs: 3000,
     knownIssue: {
       area: "Agno - Intelligence - Automatic learned skill delivery",
       problem:
-        "The page is published at /agno/intelligence/learned-skills and Agno is not in its adapter table at all -- the five rows are LangGraph Python, LangGraph TypeScript, Mastra, Google ADK and Microsoft Agent Framework. The page then says \"Attach an adapter to the agents that need skills\" without acknowledging that a reader in this section has none. The base client the page says Python uses, `copilotkit-intelligence-runtime`, is not on PyPI (404 as of 2026-09-16), and neither are the two Python adapters it lists, `copilotkit-intelligence-langgraph` and `copilotkit-intelligence-adk`. The TypeScript siblings @copilotkit/intelligence-langgraph and -mastra are published at 1.71.2 (2026-09-14), so the gap is Python-side rather than the whole feature being unreleased.",
+        "The page is published at /agno/intelligence/learned-skills and Agno is not in its adapter table at all -- the six rows are BuiltInAgent (added 2026-09-21), LangGraph Python, LangGraph TypeScript, Mastra, Google ADK and Microsoft Agent Framework. The new BuiltInAgent row is the only one needing no adapter package, but its `learnedSkills` option does not exist on the installed @copilotkit/runtime 1.72.0 (TS2353), its factory context has no `learnedSkills` (TS2339), and `BuiltInAgentFactoryContext` is not exported (TS2724); all three ship in 1.73.0 and the page states no version floor. A BuiltInAgent also replaces the Agno agent rather than delivering skills to it. The page then says \"Attach an adapter to the agents that need skills\" without acknowledging that a reader in this section has none. The base client the page says Python uses, `copilotkit-intelligence-runtime`, is not on PyPI (404 as of 2026-09-16), and neither are the two Python adapters it lists, `copilotkit-intelligence-langgraph` and `copilotkit-intelligence-adk`. The TypeScript siblings @copilotkit/intelligence-langgraph and -mastra are published at 1.71.2 (2026-09-14), so the gap is Python-side rather than the whole feature being unreleased.",
       impact:
         "Nothing on the page can be followed from this backend. The two tools it reserves, `copilotkit_load_skill` and `copilotkit_read_skill_file`, are never registered, so the agent answers from its own instructions and the failure looks like an ordinary reply rather than a missing integration. Nothing marks the feature unsupported for Agno; it is simply absent.",
       likelyCause:
         "The page's own closing section says \"The server migration and v1 delivery endpoint must deploy before adapters rely on them\", i.e. the feature may not be live yet -- but that is a deployment note at the bottom, not a prerequisite at the top, and nothing earlier is marked unavailable. The same page is published byte-identically under /agno, /ms-agent-python and /deepagents; of those three, Agno has no adapter row, Microsoft Agent Framework has only a .NET 9 one, and the LangGraph Python one 404s.",
       expectsNoResponse: false,
-      note: "learned-skills - agno isnt in the adapter table, on the agno page\n\ntable lists langgraph py/ts, mastra, google adk, ms agent framework\nno agno row. page still says \"attach an adapter to the agents that need skills\"\n\nthe generic python client it names doesnt exist either:\ncopilotkit-intelligence-runtime -> 404 on pypi\n\nTS ones are real (1.71.2, 14 Sep) so its the python side thats missing\n\nso the two tools never get registered, agent just answers normally",
+      note: "learned-skills - agno isnt in the adapter table, on the agno page\n\ntable lists builtinagent (new), langgraph py/ts, mastra, google adk, ms agent framework\nno agno row. page still says \"attach an adapter to the agents that need skills\"\n\nthe generic python client it names doesnt exist either:\ncopilotkit-intelligence-runtime -> 404 on pypi\n\nTS ones are real (1.71.2, 14 Sep) so its the python side thats missing\n\nso the two tools never get registered, agent just answers normally\n\nnew builtinagent row: learnedSkills is not an option on runtime 1.72.0\nTS2353 / TS2339 / TS2724, all three land in 1.73.0, page names no floor",
     },
   },
   // -- Added 2026-09-11: three pages new upstream, identical under every
@@ -619,11 +631,11 @@ export const PAGES = definePages([
     videoName: 'Memories',
     docPath: 'intelligence/memories',
     route: 'intelligence/memories',
-    // The page's React component, verbatim -- with the two compiler errors its
-    // import produces acknowledged in place.
+    // The page's React component, verbatim. The 2026-09-21 sync moved its
+    // import to /v2, so the file compiles and the demo mounts it directly.
     ideFile: 'frontend/src/app/intelligence/memories/memory-list.tsx',
-    startLine: 22,
-    endLine: 46,
+    startLine: 19,
+    endLine: 40,
     extraTabs: [
       // The option the page never mentions, and without which every memory
       // route 404s at the runtime.

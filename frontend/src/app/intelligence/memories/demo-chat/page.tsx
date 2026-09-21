@@ -9,6 +9,8 @@ import { useState } from "react";
 
 import { DemoFrame } from "@/components/demo-frame";
 
+import { MemoryList } from "../memory-list";
+
 /**
  * Memories & Recall, against this repo's real runtime.
  *
@@ -18,36 +20,18 @@ import { DemoFrame } from "@/components/demo-frame";
  * deployment has to be entitled, and an unentitled one looks like
  * `isAvailable: false` from the client.
  *
- * Left panel: the page's `MemoryList`, with the one change it needs to load —
- * the import moved from `@copilotkit/react-core` to `/v2`. The verbatim file is
- * `../memory-list.tsx`, which does not compile; see there.
+ * Left panel: the page's `MemoryList`, imported from `../memory-list.tsx`,
+ * which is the published file verbatim. Until the 2026-09-21 sync the page
+ * imported `useMemories` from the package root, so that file could not be
+ * mounted and this one carried a private copy with the import repaired. The
+ * page now publishes the `/v2` import, so the copy is deleted and the demo runs
+ * the real file.
  *
  * Right panel: the hook's other fields, which the page names but its component
  * does not show (`realtimeStatus`, `error`), plus a save. The page teaches saving
  * over REST and MCP only; the hook's `addMemory` is the React route it does not
  * mention. The content and kind are the page's own curl example.
  */
-
-// [2] memories: the page's component, import moved to /v2
-function MemoryList() {
-  const { memories, isLoading, isAvailable, removeMemory } = useMemories();
-
-  if (!isAvailable) return <p>Memory is not available for this runtime.</p>;
-  if (isLoading) return <p>Loading memories…</p>;
-
-  return (
-    <ul>
-      {memories.map((memory) => (
-        <li key={memory.id}>
-          {memory.content}
-          <button type="button" onClick={() => void removeMemory(memory.id)}>
-            Forget
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 function MemoryProbe() {
   const { memories, isLoading, isAvailable, realtimeStatus, error, addMemory, refresh } =
@@ -133,7 +117,7 @@ function Panels({ runtime }: { runtime: RuntimeKey }) {
         <div className="grid gap-4 py-3 text-sm md:grid-cols-2">
           <section>
             <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-              The page&apos;s MemoryList (import → /v2)
+              The page&apos;s MemoryList, verbatim
             </h2>
             <div data-testid="memory-list">
               <MemoryList />

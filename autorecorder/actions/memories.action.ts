@@ -28,7 +28,7 @@ const NOTE = [
   'runtime needs memory: { access }, page never says',
   'with it: 403 MEMORY_NOT_ENTITLED, org has no memory',
   'managed platform, so no embedder config needed',
-  'useMemories only exported from /v2, not the root',
+  'import path fixed upstream 2026-09-21: page now says /v2',
 ];
 
 async function save(page: Page, ctx: ActionContext, label: string): Promise<string> {
