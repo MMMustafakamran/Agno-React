@@ -327,6 +327,30 @@
       "status": "ok",
       "age": 0,
       "date": "Mon, 21 Sep 2026 07:26:42 GMT"
+    },
+    "/agno/custom-look-and-feel/markdown": {
+      "file": "agno__custom-look-and-feel__markdown.md",
+      "sha256": "466b3d9f8221a9f2f87ad752e171ea3b950bb89371a752ed48daa0ae5ef962d2",
+      "bytes": 5824,
+      "lines": 159,
+      "routes": [
+        "/custom-look-and-feel/markdown"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 21 Sep 2026 08:10:31 GMT"
+    },
+    "/agno/cookbook/jev-generative-ui": {
+      "file": "agno__cookbook__jev-generative-ui.md",
+      "sha256": "16a3fa5ac23221eb40b773b30f4e9cacd0a8505232cd6552cecc7127073c1db7",
+      "bytes": 21886,
+      "lines": 428,
+      "routes": [
+        "/cookbook/jev-generative-ui"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Mon, 21 Sep 2026 08:10:32 GMT"
     }
   },
   "sitemap": {

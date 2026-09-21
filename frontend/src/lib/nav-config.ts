@@ -209,6 +209,17 @@ export const NAV: NavGroup[] = [
         status: "working",
         offNav: true,
       },
+      {
+        path: "/custom-look-and-feel/markdown",
+        hasDemo: true,
+        title: "Markdown Rendering",
+        docPath: "/agno/custom-look-and-feel/markdown",
+        summary:
+          "The markdownRenderer slot three ways: a Streamdown components map, a class string, and a component replacing the renderer.",
+        status: "working",
+        statusNote:
+          "New upstream, tracked 2026-09-21 — found through the link the Slots page's markdownRenderer row gained. All three snippets are verbatim and all three typecheck, including the bare component that §9 #3 says most slots reject.",
+      },
     ],
   },
   {
@@ -361,6 +372,34 @@ export const NAV: NavGroup[] = [
         status: "partial",
         statusNote:
           "The page's runtime snippet is mounted verbatim at `/api/copilotkit-learning`. Its example container `expense-review` does not exist here, and every run on `expense-agent` then fails silently (\"Failed to initialize thread\"); `default` answers. `agents` and `identifyUser` are undefined on the page; dashboard and CLI steps are not exercised.",
+      },
+      {
+        path: "/intelligence/learned-skills",
+        hasDemo: true,
+        premium: true,
+        title: "Learned Skills",
+        docPath: "/agno/intelligence/learned-skills",
+        summary:
+          "Delivering approved Skills to an agent through a framework-native adapter, including the new `BuiltInAgent` option.",
+        status: "broken",
+        statusNote:
+          "None of the new BuiltInAgent section compiles on the installed `@copilotkit/runtime` 1.72.0: `learnedSkills` is on neither config, and `BuiltInAgentFactoryContext` is not exported. All four errors land in 1.73.0, which the page states no floor for. Agno still has no adapter row, and a BuiltInAgent would replace the Agno agent rather than deliver skills to it.",
+      },
+    ],
+  },
+  {
+    title: "Cookbook",
+    routes: [
+      {
+        path: "/cookbook/jev-generative-ui",
+        hasDemo: true,
+        title: "Jev: fast generative UI",
+        docPath: "/agno/cookbook/jev-generative-ui",
+        summary:
+          "A workspace picker whose prepared controls are ordinary React and zod, and whose control choice comes from a third-party decision service.",
+        status: "partial",
+        statusNote:
+          "New upstream, tracked 2026-09-21. The schemas and the prepared controls are shipped verbatim and run. The Jev half cannot: `@typesafe-ai/sdk` is not installed, it needs a key from TypeSafe, and the recipe pins a CopilotKit stack one minor above the installed 1.72.0.",
       },
     ],
   },

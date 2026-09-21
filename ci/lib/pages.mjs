@@ -30,8 +30,11 @@ const PAGES_CONFIG = path.join(RECORDER_DIR, 'config', 'pages.config.ts');
  */
 export const PAGE_GROUPS = {
   getting_started: ['quickstart', 'prebuilt-components'],
-  custom_look: ['programmatic-control', 'inspector', 'slots', 'headless-ui'],
-  generative_ui: ['display-only', 'interactive', 'tool-rendering', 'frontend-cards'],
+  custom_look: ['programmatic-control', 'inspector', 'slots', 'headless-ui', 'markdown'],
+  // `jev-generative-ui` is a Cookbook page, not a Generative UI one, but the
+  // dispatch form is at GitHub's ten-input cap so it joins the nearest group
+  // rather than adding an eighth checkbox.
+  generative_ui: ['display-only', 'interactive', 'tool-rendering', 'frontend-cards', 'jev-generative-ui'],
   app_control: [
     'frontend-tools',
     'human-in-the-loop',

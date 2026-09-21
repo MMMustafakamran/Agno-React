@@ -676,6 +676,72 @@ export const PAGES = definePages([
     ],
     waitAfterPromptMs: 3000,
   },
+  // -- Added 2026-09-21: two pages live upstream and tracked nowhere until this
+  // pass. Appended after every existing doc page so no clip is renumbered.
+  {
+    id: 'markdown',
+    name: 'Custom Look and Feel - Markdown Rendering',
+    videoName: 'MarkdownRendering',
+    docPath: 'custom-look-and-feel/markdown',
+    route: 'custom-look-and-feel/markdown',
+    // Level 1, the components map: the only one of the three techniques whose
+    // claims are about the props your component receives, and the reason the
+    // demo carries a probe row at all.
+    ideFile: 'frontend/src/app/custom-look-and-feel/markdown/demo-chat/page.tsx',
+    startLine: 156,
+    endLine: 183,
+    extraTabs: [
+      // Level 3, the bare component. §9 #3 says most slots reject one; this
+      // slot does not, which is the finding on the route page.
+      {
+        filePath: 'frontend/src/app/custom-look-and-feel/markdown/demo-chat/page.tsx',
+        startLine: 200,
+        endLine: 210,
+      },
+    ],
+    // Three turns, one per tab, each asking for the two tags the components map
+    // overrides. A reply with no heading and no link exercises nothing.
+    prompt:
+      "Reply in markdown with an '## Overview' heading and a link to https://docs.copilotkit.ai.",
+    prompts: [
+      "Reply in markdown with an '## Overview' heading and a link to https://docs.copilotkit.ai.",
+      "Same again, short: a '## Notes' heading and a link to https://streamdown.ai.",
+      "One more, two lines: a '## Raw' heading and a link to https://docs.copilotkit.ai/agno.",
+    ],
+    waitAfterPromptMs: 2500,
+  },
+  {
+    id: 'jev-generative-ui',
+    name: 'Cookbook - Jev: fast generative UI',
+    videoName: 'JevGenerativeUI',
+    docPath: 'cookbook/jev-generative-ui',
+    route: 'cookbook/jev-generative-ui',
+    // The half that runs: the published schemas, which are plain zod.
+    ideFile: 'frontend/src/app/cookbook/jev-generative-ui/workspaces.ts',
+    startLine: 27,
+    endLine: 44,
+    extraTabs: [
+      // The half that does not: the Jev call, verbatim, with the unresolvable
+      // vendor import acknowledged in place.
+      {
+        filePath: 'frontend/src/app/cookbook/jev-generative-ui/choose-panel.ts',
+        startLine: 28,
+        endLine: 50,
+      },
+      // The published picker, against an agent id nothing here registers.
+      {
+        filePath: 'frontend/src/app/cookbook/jev-generative-ui/demo-chat/page.tsx',
+        startLine: 148,
+        endLine: 160,
+      },
+    ],
+    // There is no chat on this demo and no agent behind it -- the take is
+    // `runJevAction` driving the prepared controls and then showing the
+    // published `send` going nowhere. Kept non-empty because `prompt` is
+    // required; the handler never reads it.
+    prompt: 'N/A - the picker drives an agent id nothing here can register.',
+    waitAfterPromptMs: 3000,
+  },
   // Last, always: these take the highest order numbers so adding or removing
   // them never renumbers a doc page's video filename.
   ...DEMO_PAGES,

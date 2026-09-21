@@ -46,7 +46,9 @@ import { runHeadlessUiAction } from './headless-ui.action';
 import { runGovernedActionsAction } from './governed-actions.action';
 import { runHitlAction } from './hitl.action';
 import { runInspectorAction } from './inspector.action';
+import { runJevAction } from './jev.action';
 import { runLearningAction } from './learning.action';
+import { runMarkdownAction } from './markdown.action';
 import { runMemoriesAction } from './memories.action';
 import { runPrebuiltAction } from './prebuilt.action';
 import { runProgrammaticAction } from './programmatic.action';
@@ -69,6 +71,7 @@ export const ACTION_MAP: Record<string, PageActionHandler> = {
   'programmatic-control': runProgrammaticAction,
   inspector: runInspectorAction,
   slots: runSlotsAction,
+  markdown: runMarkdownAction,
   'headless-ui': runHeadlessUiAction,
   'display-only': runDisplayOnlyAction,
   'tool-rendering': runToolRenderingAction,
@@ -80,6 +83,7 @@ export const ACTION_MAP: Record<string, PageActionHandler> = {
   'frontend-cards': runFrontendCardsAction,
   'intelligence-memories': runMemoriesAction,
   learning: runLearningAction,
+  'jev-generative-ui': runJevAction,
 };
 
 export async function executePageAction(
