@@ -9,6 +9,168 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-09-21
+
+### 07:26 UTC — 11 pages, highest severity high · _npm run drift:sync_
+
+**High — /agno/copilot-runtime**
+
+`/agno/copilot-runtime` · route `/backend/copilot-runtime` · `agno__copilot-runtime.md`
+
+Code fence count changed. Hash 95f7ddc1 ➔ 3087e82c.
+
+````diff
+- The Copilot Runtime is the backend layer that connects your frontend application to your AI agents. It's set up during the [quickstart](/agno/quickstart) and is the recommended way to use CopilotKit.
+- ## Setting Up the Runtime
+- The runtime is a lightweight server endpoint that you add to your backend:
+- ```npm
++ The Copilot Runtime is the backend layer that connects your frontend application to your AI agents. It's set up during the [quickstart](/agno/quickstart) and is the recommended way to use CopilotKit.
++ ## Setting Up the Runtime
++ The runtime is a lightweight server endpoint that you add to your backend:
++ ```npm
+  … region truncated
+````
+
+**High — /agno**
+
+`/agno` · routes `/`, `/doc-sync` · `agno.md`
+
+Code fence count changed. Hash 5ce1dc60 ➔ 112784b1.
+
+````diff
+- frameworkIcon={<AgnoIcon className="h-10 w-10" />}
+- header="Bring your Agno agents to your users"
+- subheader="Give your Agno agents real user-interactivity using CopilotKit and AG-UI. Build rich, interactive, agent-powered applications."
+- bannerVideo="https://cdn.copilotkit.ai/docs/copilotkit/videos/coagents/overview.mp4"
++ frameworkIcon={<AgnoIcon className="h-12 w-12" />}
++ header="Bring your Agno agents to your users"
++ subheader="Agno runs your agents. CopilotKit gives them a surface your users can see, interrupt and steer."
++ guideLink="/agno/quickstart"
+  … region truncated
+````
+
+**Low — /agno/custom-look-and-feel/slots**
+
+`/agno/custom-look-and-feel/slots` · route `/custom-look-and-feel/slots` · `agno__custom-look-and-feel__slots.md`
+
+Prose / text phrasing updated. Hash 9ffcf536 ➔ 1faf23b7.
+
+````diff
+- | `markdownRenderer` | The markdown rendering component.  |
++ | `markdownRenderer` | The markdown rendering component. See [Markdown Rendering](/agno/custom-look-and-feel/markdown). |
+````
+
+**Low — /agno/inspector**
+
+`/agno/inspector` · route `/custom-look-and-feel/inspector` · `agno__inspector.md`
+
+Prose / text phrasing updated. Hash 4cd4ee59 ➔ f89ddbd9.
+
+````diff
+- `NEXT_PUBLIC_COPILOTKIT_LICENSE_KEY` is a browser-visible publishable key. It is
+- different from the server-side `CPK_INTELLIGENCE_API_KEY` that
+- `copilotkit project select` writes into your `.env`. The Runtime consumes the
+- server-side key; never expose it to the browser.
++ For managed Intelligence, `copilotkit project select` writes
++ `CPK_INTELLIGENCE_API_KEY` to your server-side `.env`. The Runtime uses that key
++ and reports Intelligence access to the browser. Never expose the project API
++ key to the browser. See [Runtime endpoints](/agno/backend/runtime-endpoints) for the
+  … region truncated
+````
+
+**Medium — /agno/prebuilt-components/copilot-threads-drawer**
+
+`/agno/prebuilt-components/copilot-threads-drawer` · route `/threads/drawer` · `agno__prebuilt-components__copilot-threads-drawer.md`
+
+Headings / Structure changed. Hash 7e71bed3 ➔ dd34f95e.
+
+````diff
+- server-side). <SignupLink surface="docs_drawer">Get a free developer account</SignupLink> to set that up.
+- For multi-user applications, configure the Runtime to
+- [scope Rich Threads to the signed-in user](/agno/threads-lifecycle#scope-rich-threads-to-the-signed-in-user).
+- <OpsPlatformCTA
++ server-side). <SignupLink surface="docs_drawer">Start managed onboarding</SignupLink> to create or select a project.
++ For multi-user applications, configure the Runtime to
++ [scope Rich Threads to the signed-in user](/agno/threads-lifecycle#scope-rich-threads-to-the-signed-in-user).
++ <OpsPlatformCTA
+  … region truncated
+````
+
+**High — /agno/quickstart**
+
+`/agno/quickstart` · route `/quickstart` · `agno__quickstart.md`
+
+Code fence count changed. Hash d7148bda ➔ 62528078.
+
+````diff
+- ### Create a free account
+- <SignupLink surface="docs_agno_quickstart_step1">Sign up for a free developer account</SignupLink> for CopilotKit Intelligence to get a license key. You'll use it later to enable persistent threads and the inspector.
+- </Step>
+- <Step>
++ ### Set up CopilotKit Intelligence
++ <SignupLink surface="docs_agno_quickstart_step1">Sign in to managed Intelligence</SignupLink>. Managed setup uses a server-side project API key and does not issue `COPILOTKIT_LICENSE_TOKEN`. You will connect the app after you create it below.
++ </Step>
++ <Step>
+  … region truncated
+````
+
+**Low — /agno/intelligence/memories**
+
+`/agno/intelligence/memories` · route `/intelligence/memories` · `agno__intelligence__memories.md`
+
+Prose / text phrasing updated. Hash 70058457 ➔ e5918dbd.
+
+````diff
+- import { useMemories } from "@copilotkit/react-core";
++ import { useMemories } from "@copilotkit/react-core/v2";
+````
+
+**High — /agno/learning**
+
+`/agno/learning` · route `/learning` · `agno__learning.md`
+
+Code fence count changed. Hash 810b6c31 ➔ c6d0a948.
+
+````diff
+- ## Start with your coding agent
+- Copy this prompt into your coding agent to inspect your existing app and configure Automatic Learning for one focused workflow. Prefer to work through the setup yourself? Follow the manual steps below.
+- #### Copy this prompt into your coding agent
+- ```text
++ Automatic Learning checks eligible containers on a daily schedule. After you approve a Skill, automatic skill delivery makes it available to connected agents. Scheduling, publication, and delivery are separate: a scheduled run does not approve Skills, and enabling delivery does not connect your agent for you.
++ ## Start with your coding agent
++ Copy this prompt into your coding agent to inspect your existing app and configure Automatic Learning for one focused workflow. Prefer to work through the setup yourself? Follow the manual steps below.
++ #### Copy this prompt into your coding agent
+  … region truncated
+````
+
+**High — /agno/intelligence/learned-skills**
+
+`/agno/intelligence/learned-skills` · route `/intelligence/learned-skills` · `agno__intelligence__learned-skills.md`
+
+Code fence count changed. Hash ee73d2f0 ➔ 1bd5ef6d.
+
+````diff
+- ## Choose an adapter
+- | Framework                 | Package                                  | Native extension                                                     |
+- | ------------------------- | ---------------------------------------- | -------------------------------------------------------------------- |
+- | LangGraph Python          | `copilotkit-intelligence-langgraph`      | `create_skill_registry_middleware`                                   |
++ <Callout type="info">
++ Start with the [Learning guide](/agno/learning) to collect Threads, configure daily runs, and review Skills. Before connecting an adapter, check that **Skill delivery** is enabled in the container's **Skills** tab. For guided setup, select **Set up skill delivery** there and copy the prompt into your coding agent.
++ </Callout>
++ ## Choose an adapter
+  … region truncated
+````
+
+**New — https://docs.copilotkit.ai/agno/cookbook/jev-generative-ui**
+
+Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
+
+**New — https://docs.copilotkit.ai/agno/custom-look-and-feel/markdown**
+
+Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
+
+---
+
 ## 2026-09-18
 
 ### 08:13 UTC — 3 pages, highest severity high · _npm run drift:sync_
@@ -62,6 +224,8 @@ Headings / Structure changed. Hash e20b1c8d ➔ 6d1c9a5e.
 + Already using framework persistence? Keep it configured. [LangGraph threads](https://docs.langchain.com/oss/python/langgraph/persistence) retain graph state and checkpoints; [Google ADK sessions](https://google.github.io/adk-docs/sessions/session/) retain conversation events and state. Intelligence adds the event history and synchronization used to restore the user's interactive conversation. Replaying that history is distinct from resuming framework execution from a checkpoint; framework-specific execution recovery remains with the framework.
   … region truncated
 ````
+
+---
 
 ---
 
@@ -159,108 +323,6 @@ Code block content changed. Hash 0b6534d7 ➔ 810b6c31.
 + #### Copy this prompt into your coding agent
 + ```text
   … region truncated
-````
-
----
-
----
-
-## 2026-09-04
-
-### 08:09 UTC — 6 pages, highest severity high
-
-**High — Headless Threads**
-
-`/agno/headless-threads` · route `/threads/headless` · under “Configure your Runtime with CopilotKit Intelligence”
-
-2 code lines, 22 prose lines changed.
-
-````diff
-- Your `CopilotRuntime` must be connected to CopilotKit Intelligence before the thread UI can list and resume conversations. That connection is the `intelligence` option below — a `CopilotKitIntelligence` instance. If your app came from a CLI starter, this Runtime configuration is generated for you. Otherwise, follow [Connect your runtime to Intelligence](/agno/premium/connect-your-runtime) for the full constructor, then return here to add the headless UI. Thread names are automatically generated by the LLM after the first message — you can disable this with `generateThreadNames: false`.
-+ Your `CopilotRuntime` must be connected to CopilotKit Intelligence before the thread UI can list and resume conversations. That connection is the `intelligence` option below — a `CopilotKitIntelligence` instance. If your app came from a CLI starter, this Runtime configuration is generated for you. Otherwise, follow [Connect your runtime to Intelligence](/agno/intelligence/connect-your-runtime) for the full constructor, then return here to add the headless UI. Thread names are automatically generated by the LLM after the first message — you can disable this with `generateThreadNames: false`.
-- apiKey: process.env.INTELLIGENCE_API_KEY!,
-+ apiKey: process.env.CPK_INTELLIGENCE_API_KEY!,
-- CLI-created starters write the cloud-hosted platform URLs and project-scoped `INTELLIGENCE_API_KEY` to `.env`; keep that key server-side. Existing Intelligence-enabled apps should keep their current server-side Runtime configuration. Production self-hosting uses the same React APIs and is deployed with CopilotKit Engineering through [Self-host CopilotKit Intelligence](/agno/premium/self-hosting).
-+ CLI `init` and its `create` alias write the cloud-hosted platform URLs,
-+ `SL_ENABLED`, project-scoped `CPK_INTELLIGENCE_API_KEY`, and optional
-+ `CPK_TELEMETRY_ID` to `.env`.
-````
-
-**Low — Inspector**
-
-`/agno/inspector` · route `/custom-look-and-feel/inspector` · under “Showing or hiding the Inspector”
-
-2 prose lines changed.
-
-````diff
-- a **different credential** from the server-side `INTELLIGENCE_API_KEY` that
-+ a **different credential** from the server-side `CPK_INTELLIGENCE_API_KEY` that
-````
-
-**High — Quickstart**
-
-`/agno/quickstart` · route `/quickstart` · under “Setup Copilot Runtime” · in a `tsx` block
-
-4 code lines, 4 prose lines changed.
-
-````diff
-- apiKey: process.env.INTELLIGENCE_API_KEY!,
-+ apiKey: process.env.CPK_INTELLIGENCE_API_KEY!,
-- The runtime reads the license key from step 1. Add it to the app that serves
-+ The runtime reads the project API key from step 1. Add it to the app that serves
-- INTELLIGENCE_API_KEY=your_license_key
-+ CPK_INTELLIGENCE_API_KEY=cpk-...
-- [Connect your runtime to Intelligence](/agno/premium/connect-your-runtime) for the
-+ [Connect your runtime to Intelligence](/agno/intelligence/connect-your-runtime) for the
-````
-
-**High — Synchronize Thread History**
-
-`/agno/threads-import` · route `/threads/import` · under “Prepare the CopilotKit Intelligence destination” · in a `bash` block
-
-2 code lines, 6 prose lines changed.
-
-````diff
-- export INTELLIGENCE_API_KEY="cpk_..."
-+ export CPK_INTELLIGENCE_API_KEY="cpk-..."
-- For the underlying persistence and replay model, see [Threads & Persistence Architecture](/agno/premium/threads-explained).
-+ For the underlying persistence and replay model, see [Threads & Persistence Architecture](/agno/intelligence/threads-explained).
-- - **Cloud-hosted CopilotKit Intelligence:** export the destination values generated in the CLI-created app's `.env`, or pass them with `--api-url` and `--api-key`. `project select` can rewrite the app's generated values, but the importer still reads only flags or the current process environment. See [Cloud-hosted CopilotKit Intelligence](/agno/premium/managed-intelligence-platform).
-- - **Self-hosted CopilotKit Intelligence:** pass the deployment's app-api URL with `--api-url` and a project-scoped `cpk` runtime key with `--api-key`. See [Self-host CopilotKit Intelligence](/agno/premium/self-hosting).
-+ - **Cloud-hosted CopilotKit Intelligence:** export the destination values generated in the CLI-created app's `.env`, or pass them with `--api-url` and `--api-key`. `project select` can rewrite the app's generated values, but the importer still reads only flags or the current process environment. See [Cloud-hosted CopilotKit Intelligence](/agno/intelligence/managed-intelligence-platform).
-+ - **Self-hosted CopilotKit Intelligence:** pass the deployment's app-api URL with `--api-url` and a project-scoped `cpk` runtime key with `--api-key`. See [Self-host CopilotKit Intelligence](/agno/intelligence/self-hosting).
-````
-
-**High — Thread & History Lifecycle**
-
-`/agno/threads-lifecycle` · route `/threads/lifecycle` · under “The lifecycle at a glance”
-
-2 code lines, 8 prose lines changed.
-
-````diff
-- 2. **Run.** Messages and tool calls stream under that `threadId`. If a server-side store is configured (CopilotKit Intelligence, or a persisting `AgentRunner`), they are persisted as they happen so the thread can be replayed later. A runtime with no persistence layer keeps nothing server-side. See [Threads & Persistence Architecture](/agno/premium/threads-explained) for the full server-side model.
-+ 2. **Run.** Messages and tool calls stream under that `threadId`. If a server-side store is configured (CopilotKit Intelligence, or a persisting `AgentRunner`), they are persisted as they happen so the thread can be replayed later. A runtime with no persistence layer keeps nothing server-side. See [Threads & Persistence Architecture](/agno/intelligence/threads-explained) for the full server-side model.
-- Replay requires a **server-side store to replay from**: CopilotKit Intelligence, or a persisting `AgentRunner` (e.g. the SQLite runner). A self-hosted runtime with no persistence layer has nothing to replay, so `connectAgent()` returns an empty stream and the conversation starts blank. If history isn't restoring, check that a store is configured, not the client code. The [Persistence Architecture](/agno/premium/threads-explained) page covers how replay works server-side.
-+ Replay requires a **server-side store to replay from**: CopilotKit Intelligence, or a persisting `AgentRunner` (e.g. the SQLite runner). A self-hosted runtime with no persistence layer has nothing to replay, so `connectAgent()` returns an empty stream and the conversation starts blank. If history isn't restoring, check that a store is configured, not the client code. The [Persistence Architecture](/agno/intelligence/threads-explained) page covers how replay works server-side.
-- apiKey: process.env.INTELLIGENCE_API_KEY!,
-+ apiKey: process.env.CPK_INTELLIGENCE_API_KEY!,
-- [Connect your runtime to Intelligence](/agno/premium/connect-your-runtime) covers the
-+ [Connect your runtime to Intelligence](/agno/intelligence/connect-your-runtime) covers the
-````
-
-**Low — Overview**
-
-`/agno/threads` · route `/threads` · under “Next steps”
-
-6 prose lines changed.
-
-````diff
-- - **Understand the architecture:** [Threads & Persistence Architecture](/agno/premium/threads-explained) — event replay, live reconnection, synchronization, locking, and lifecycle behavior
-- - **Use the hosted platform:** [Cloud-hosted CopilotKit Intelligence](/agno/premium/managed-intelligence-platform) — create and manage the project where your app stores threads and runtime credentials
-- - **Plan production self-hosting:** [Self-host CopilotKit Intelligence](/agno/premium/self-hosting) — work with CopilotKit Engineering to run the Threads platform in your Kubernetes environment
-+ - **Understand the architecture:** [Threads & Persistence Architecture](/agno/intelligence/threads-explained) — event replay, live reconnection, synchronization, locking, and lifecycle behavior
-+ - **Use the hosted platform:** [Cloud-hosted CopilotKit Intelligence](/agno/intelligence/managed-intelligence-platform) — create and manage the project where your app stores threads and runtime credentials
-+ - **Plan production self-hosting:** [Self-host CopilotKit Intelligence](/agno/intelligence/self-hosting) — work with CopilotKit Engineering to run the Threads platform in your Kubernetes environment
 ````
 
 ---
