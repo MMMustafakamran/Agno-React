@@ -182,8 +182,27 @@ const DEMO_PAGES: PageDefinition[] = [
  * Page ids that stay registered but are never recorded -- not by `npm run
  * record`, not by a named id, not in CI. The route and its demo remain.
  */
+/**
+ * Pages that stay registered but are never filmed.
+ *
+ * They keep their route, their doctor entry and their CI group, so drift and
+ * coverage still track them and the findings still hold. Only the camera is
+ * off. A page belongs here when a clip would show nothing the findings do not
+ * already say, or would film a wall rather than the feature.
+ *
+ * Intelligence and the two new upstream pages are excluded by standing
+ * instruction from the project owner, not by accident. Do not re-enable one
+ * without asking: an empty entry here is how a page silently starts recording
+ * again.
+ */
 export const SKIP_RECORDING: Record<string, string> = {
   'intelligence-memories': 'memory is not entitled on this CopilotKit org (403 MEMORY_NOT_ENTITLED)',
+  learning: 'owner instruction: Intelligence Learning is not recorded',
+  'intelligence-learned-skills': 'owner instruction: Intelligence Learned Skills is not recorded',
+  markdown:
+    'owner instruction: not reachable from the docs sidebar, so not under test yet',
+  'jev-generative-ui':
+    'owner instruction: not reachable from the docs sidebar, so not under test yet',
 };
 
 export const PAGES = definePages([
