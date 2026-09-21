@@ -182,10 +182,6 @@ const DEMO_PAGES: PageDefinition[] = [
 });
 
 /**
- * Page ids that stay registered but are never recorded -- not by `npm run
- * record`, not by a named id, not in CI. The route and its demo remain.
- */
-/**
  * Pages that stay registered but are never filmed.
  *
  * They keep their route, their doctor entry and their CI group, so drift and
