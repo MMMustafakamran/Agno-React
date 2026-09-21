@@ -14,7 +14,7 @@
   "cli/terminal.ts": "532709e429bb55b7",
   "cli/versions.ts": "4b3d923ba368e10f",
   "console-capture.ts": "669fd3b8c3a6ef0b",
-  "diagnostics.ts": "a8ab7c634dfdb025",
+  "diagnostics.ts": "e511f6151e51184b",
   "doctor.ts": "acfc82f8162d2f16",
   "engine.ts": "7d224ce94e8592a3",
   "failure-evidence.ts": "c7778c541eda201d",
