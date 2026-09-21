@@ -213,7 +213,7 @@ The minimum viable path: provider, runtime route, one chat. **Try:** `Can you te
 
 **`/threads/headless` — Headless Threads.** A thread list built by hand on `useThreads`, including **rename**, which the prebuilt drawer doesn't expose. **Pass (licensed):** threads list, and rename/archive/delete take effect. **Pass (unlicensed):** an empty list with an explanatory note.
 
-**`/threads/lifecycle` — Thread & History Lifecycle.** _Partly testable without a license._ **Try:** send a message, press "Remount chat". **Pass:** the conversation clears — a new `threadId` was minted. Pin an explicit id and remount: the id survives. **Fail:** a pinned id changes on remount.
+**`/threads/lifecycle` — Thread & History Lifecycle.** One button per lifecycle claim on the page, with the chat's resolved state read back from its `CopilotChatConfigurationProvider`, so the readouts are the chat's own. **Try:** send a message, press "Remount chat", then "Open conversation", "New chat", "Pin a threadId prop" and "New chat" again. **Pass:** the remount gives a new id and an empty chat; "Open conversation" returns to the first id with its messages replayed from the runtime's `InMemoryAgentRunner`; with the id pinned, "New chat" changes nothing and the amber line shows the `Ignoring startNewThread()` warning; the pinned id survives a remount. **Fail:** the re-opened thread shows 0 messages (nothing replayed). The ledger lists every id the chat has been on. See §9 #28.
 
 **`/threads/import` — Synchronize Thread History.** Reference. Import targets ADK and LangGraph history; Agno isn't a documented source.
 
@@ -298,7 +298,7 @@ Verified 2026-08-05 against a live stack (real OpenAI key, no license key, no MC
 | `/agno/threads`                                    | `/threads`                                    | ⚠️ Partial     | Premium.                                                                               |
 | `/agno/prebuilt-components/copilot-threads-drawer` | `/threads/drawer`                             | ⚠️ Partial     | Premium; renders the locked view, which is the expected unlicensed result.             |
 | `/agno/headless-threads`                           | `/threads/headless`                           | ⚠️ Partial     | Premium; `useThreads` returns empty. UI incl. rename fully implemented.                |
-| `/agno/threads-lifecycle`                          | `/threads/lifecycle`                          | ⚠️ Partial     | Mint/switch testable now; replay needs a store.                                        |
+| `/agno/threads-lifecycle`                          | `/threads/lifecycle`                          | ⚠️ Partial     | Mint, remount, replay, switch, pin all observed; `existingId` undefined — §9 #28.      |
 | `/agno/threads-import`                             | `/threads/import`                             | 📖 Reference   | Premium; Agno is not a documented import source.                                       |
 | `/agno/intelligence/threads-explained`             | `/threads/architecture`                       | 📖 Reference   | Premium.                                                                               |
 | `/agno/programmatic-control`                       | `/custom-look-and-feel/programmatic-control`  | ✅ Working     | run/stop/state/messages.                                                               |
@@ -467,6 +467,12 @@ Not exercised: the page's claim that everything works the same on `CopilotSideba
 **The demo's bench is not a Jev decision and is labelled as such.** Above the published picker are three buttons that write a state object into the agent so the published panel markup has something to draw. The two panel objects are the literals `choose-panel.ts` builds, put through the published `PanelSchema.parse`. What is missing is `control.choice`, which selects between them, and `ranked`, which orders the comparison — both Jev answers — so the comparison renders in catalog order and the panel says so on screen. Nothing registers a `picker` agent, `useAgent({ agentId: "picker" })` reports `isReady: false`, and the published `send` returns early; the recorder handler **fails the take** if `isReady` ever comes back `true`, because on this stack that could only mean something was standing in for the vendor.
 
 ---
+
+**28. Thread & History Lifecycle: the switch snippet's `existingId` is never defined**
+
+[Thread & History Lifecycle](https://docs.copilotkit.ai/agno/threads-lifecycle) publishes `ThreadControls` calling `config?.setActiveThreadId(existingId, { explicit: true })`. `existingId` appears nowhere else on the page, and nothing says where an app gets the id of a conversation worth re-opening. The demo supplies the first thread that held a conversation, as a prop, with `!` because the button stays disabled until one exists; both handler calls are otherwise the page's text, and the published lines are quoted above them in `frontend/src/app/threads/lifecycle/demo-chat/page.tsx`.
+
+The rest of the client lifecycle was observed by the recorder on CI-resolved `@copilotkit/react-core` 1.73.0 (declared `^1.69.2`), with the runtime on `InMemoryAgentRunner`: an auto id with `hasExplicitThreadId` false; a remount re-minting the id and clearing the chat; `setActiveThreadId(id, { explicit: true })` returning to the first thread and replaying both of its messages from the runner's `connect()`; `startNewThread()` minting a fresh non-explicit id; and, with a `threadId` prop pinned, `startNewThread()` changing nothing and logging `[CopilotKit] Ignoring startNewThread(): threadId is controlled via the threadId prop on CopilotChatConfigurationProvider.`, with the pinned id surviving a remount. Not exercised: `identifyUser` and Intelligence scoping, the headless first-message path, and the framework checkpointer layer.
 
 ## 10. Troubleshooting
 

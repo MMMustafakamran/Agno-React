@@ -144,6 +144,8 @@ export const NAV: NavGroup[] = [
         summary:
           "How a thread id flows through a run, and how threads get scoped to a signed-in user.",
         status: "partial",
+        statusNote:
+          "Mint, remount, replay, switch and the prop-controlled no-op are each driven and read back; replay comes from the runtime's InMemoryAgentRunner. The switch snippet's `existingId` is never defined. identifyUser and Intelligence scoping are not exercised.",
         premium: true,
       },
       {
