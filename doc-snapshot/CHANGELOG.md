@@ -9,6 +9,147 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-09-22
+
+### 09:20 UTC — 1 page, highest severity high · _npm run drift:sync_
+
+**High — /agno/backend/message-history**
+
+`/agno/backend/message-history` · route `/backend/message-history` · `agno__backend__message-history.md`
+
+Code fence count changed. Hash  ➔ 04032b1b.
+
+````diff
++ # Message history
++ > Trim the conversation history CopilotKit forwards to an agent that already stores its own.
++ CopilotKit forwards the whole conversation on every run. The frontend holds the
++ transcript, and each run carries it to your agent as `input.messages`. A
++ stateless agent needs that, because the transcript is the only record of the
++ conversation.
++ An agent that stores its own history does not need it. If your backend keeps a
++ LangGraph checkpointer, Mastra memory, an AWS Strands `SessionManager`, or a
+  … region truncated
+````
+
+### 08:52 UTC — 9 pages, highest severity high · _npm run drift:sync_
+
+**Low — /agno/inspector**
+
+`/agno/inspector` · route `/custom-look-and-feel/inspector` · `agno__inspector.md`
+
+Prose / text phrasing updated. Hash f89ddbd9 ➔ 1b54d3fe.
+
+````diff
+- choose **Copy setup prompt**. See [Learning](/agno/learning) for the complete workflow.
++ choose **Copy setup prompt**. See [Automatic Learning](/agno/learning) for the complete workflow.
+````
+
+**High — /agno/prebuilt-components/copilot-threads-drawer**
+
+`/agno/prebuilt-components/copilot-threads-drawer` · route `/threads/drawer` · `agno__prebuilt-components__copilot-threads-drawer.md`
+
+Code fence count changed. Hash dd34f95e ➔ a9ef18bd.
+
+````diff
+- ```tsx title="app/page.tsx"
+- import {
+- CopilotKitProvider,
+- CopilotChatConfigurationProvider,
++ <Callout type="warn">
++ **The Drawer ships only in `@copilotkit/react-core/v2`.** There is no v1
++ Drawer, so take the Drawer, the chat and the provider from that one package.
++ Watch the import path: `@copilotkit/react-ui` is the [deprecated v1
+  … region truncated
+````
+
+**Low — /agno/quickstart**
+
+`/agno/quickstart` · route `/quickstart` · `agno__quickstart.md`
+
+Prose / text phrasing updated. Hash 62528078 ➔ 0cac5777.
+
+````diff
+- 3. Open **Threads**. The list is unlocked (Intelligence is on), or locked with Enable Intelligence (Intelligence is off).
++ 3. Open **Rich Threads**. The list is unlocked (Intelligence is on), or locked with Enable Intelligence (Intelligence is off).
+````
+
+**High — /agno/threads**
+
+`/agno/threads` · route `/threads` · `agno__threads.md`
+
+Code block content changed. Hash 071567f5 ➔ 5cb0dbeb.
+
+````diff
+- Open Inspector on localhost. Stay on **Threads** (it is the default).
++ Open Inspector on localhost. Stay on **Rich Threads** (it is the default).
+````
+
+**Medium — /agno/intelligence/memories**
+
+`/agno/intelligence/memories` · route `/intelligence/memories` · `agno__intelligence__memories.md`
+
+Headings / Structure changed. Hash e5918dbd ➔ 0c8af2f2.
+
+````diff
+- # Memories & Recall
+- > Give your agents long-term memory across conversations.
+- Threads remember a conversation. Memories remember a person. This page explains
+- what a memory is, how recall selects them, and what has to be true of your
++ # User Memories
++ > Give your agents long-term memory across conversations.
++ Rich Threads remember a conversation. User Memories remember a person. This page explains
++ what a memory is, how recall selects them, and what has to be true of your
+  … region truncated
+````
+
+**High — /agno/learning**
+
+`/agno/learning` · route `/learning` · `agno__learning.md`
+
+Code block content changed. Hash c6d0a948 ➔ 5debfb83.
+
+````diff
+- # Learning
+- > Turn real application use into evidence-backed Insights and reviewed, reusable Skills.
+- ## Overview
+- Learning turns patterns from real agent runs into reusable Skills. It looks at completed conversations and application interactions in [Rich Threads](/agno/threads), produces evidence-backed Insights, and proposes instructions you can review before publishing.
++ # Automatic Learning
++ > Turn real application use into evidence-backed Insights and reviewed, reusable Skills.
++ ## Overview
++ Automatic Learning turns patterns from real agent runs into reusable Skills. It looks at completed conversations and application interactions in [Rich Threads](/agno/threads), produces evidence-backed Insights, and proposes instructions you can review before publishing.
+  … region truncated
+````
+
+**Low — /agno/intelligence/learned-skills**
+
+`/agno/intelligence/learned-skills` · route `/intelligence/learned-skills` · `agno__intelligence__learned-skills.md`
+
+Prose / text phrasing updated. Hash 1bd5ef6d ➔ 771ee282.
+
+````diff
+- Start with the [Learning guide](/agno/learning) to collect Threads, configure daily runs, and review Skills. Before connecting an adapter, check that **Skill delivery** is enabled in the container's **Skills** tab. For guided setup, select **Set up skill delivery** there and copy the prompt into your coding agent.
+- </Callout>
+- ## Choose an adapter
+- | Framework                 | Package                                  | Native extension                                                     |
++ Start with the [Automatic Learning guide](/agno/learning) to collect Threads, configure daily runs, and review Skills. Before connecting an adapter, check that **Skill delivery** is enabled in the container's **Skills** tab. For guided setup, select **Set up skill delivery** there and copy the prompt into your coding agent.
++ </Callout>
++ ## Choose an adapter
++ | Framework                 | Package                                  | Native extension                                                     |
+  … region truncated
+````
+
+**New — https://docs.copilotkit.ai/agno/backend/message-history**
+
+Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
+
+**New — https://docs.copilotkit.ai/agno/intelligence/self-hosting-ecs**
+
+Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
+
+---
+
+---
+
 ## 2026-09-21
 
 ### 07:26 UTC — 11 pages, highest severity high · _npm run drift:sync_
@@ -171,6 +312,10 @@ Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
 
 ---
 
+---
+
+---
+
 ## 2026-09-18
 
 ### 08:13 UTC — 3 pages, highest severity high · _npm run drift:sync_
@@ -222,106 +367,6 @@ Headings / Structure changed. Hash e20b1c8d ➔ 6d1c9a5e.
 + ## How Rich Threads complement framework persistence
 + Starting fresh? CopilotKit Intelligence provides conversation persistence: it stores interaction events so users can reopen rich conversations across sessions and devices, reconnect to active runs, and manage their threads.
 + Already using framework persistence? Keep it configured. [LangGraph threads](https://docs.langchain.com/oss/python/langgraph/persistence) retain graph state and checkpoints; [Google ADK sessions](https://google.github.io/adk-docs/sessions/session/) retain conversation events and state. Intelligence adds the event history and synchronization used to restore the user's interactive conversation. Replaying that history is distinct from resuming framework execution from a checkpoint; framework-specific execution recovery remains with the framework.
-  … region truncated
-````
-
----
-
----
-
-## 2026-09-17
-
-### 07:24 UTC — 6 pages, highest severity high · _npm run drift:sync_
-
-**Low — /agno/intelligence/quickstart**
-
-`/agno/intelligence/quickstart` · route `/intelligence/quickstart` · `agno__intelligence__quickstart.md`
-
-Prose / text phrasing updated. Hash 732692b3 ➔ 2457a82b.
-
-````diff
-- If it requires a CopilotKit CLI session check, you have permission to run it. Never reveal credentials or send optional diagnostic feedback reports.
-+ If it requires a CopilotKit CLI session check, you have permission to run it. Never reveal credentials.
-````
-
-**Medium — /agno/quickstart**
-
-`/agno/quickstart` · route `/quickstart` · `agno__quickstart.md`
-
-Headings / Structure changed. Hash fab9dd5d ➔ d7148bda.
-
-````diff
-- <IntelligenceOnboardingPrompt
-- feature="learning"
-- surface="docs_agno_quickstart"
-- />
-+ ## Start with your coding agent
-+ Use this prompt to connect your Agno agent to CopilotKit and verify a working conversation. Your coding agent will follow this guide in your project, or you can work through the manual steps below.
-+ Ask your coding agent to follow the setup steps on this page for your selected framework and frontend.
-````
-
-**High — /agno/threads**
-
-`/agno/threads` · route `/threads` · `agno__threads.md`
-
-Code block content changed. Hash de3afbf5 ➔ a857ea89.
-
-````diff
-- <IntelligenceOnboardingPrompt
-- feature="threads"
-- surface="docs_threads_overview"
-- />
-+ <div
-+ aria-label="A support workspace using Threads Drawer to move between customer conversations while CopilotChat renders the selected case details."
-+ className="shell-docs-radius-surface relative mb-4 overflow-hidden border border-[var(--border)] bg-[var(--bg-surface)] shadow-[0px_16px_24px_-8px_rgba(1,5,7,0.12)] ring-1 ring-inset ring-white/70 dark:shadow-[0px_16px_32px_-10px_rgba(0,0,0,0.45)] dark:ring-white/10"
-+ >
-  … region truncated
-````
-
-**High — /agno/webmcp**
-
-`/agno/webmcp` · route `/webmcp` · `agno__webmcp.md`
-
-Code block content changed. Hash 9848d337 ➔ 598c6a70.
-
-````diff
-- ## Setup with a coding agent
-+ ## Start with your coding agent
-````
-
-**High — /agno/intelligence/memories**
-
-`/agno/intelligence/memories` · route `/intelligence/memories` · `agno__intelligence__memories.md`
-
-Code fence count changed. Hash ec7aa0a8 ➔ 70058457.
-
-````diff
-- > How long-term memory works in CopilotKit Intelligence: what a memory is, the three kinds, user and project scope, how activation is entitled, and how to read and write memories from React, Angular, REST, or MCP.
-- <IntelligenceOnboardingPrompt
-- feature="learning"
-- surface="docs_learn_memories"
-+ > Give your agents long-term memory across conversations.
-+ Threads remember a conversation. Memories remember a person. This page explains
-+ what a memory is, how recall selects them, and what has to be true of your
-+ deployment before the memory surfaces exist at all.
-  … region truncated
-````
-
-**High — /agno/learning**
-
-`/agno/learning` · route `/learning` · `agno__learning.md`
-
-Code block content changed. Hash 0b6534d7 ➔ 810b6c31.
-
-````diff
-- ## Set up Learning
-- When you are done, your Runtime will send selected Threads to a Learning container, ready to be analyzed and turned into reviewed Skills.
-- <Steps>
-- <Step>
-+ ## Start with your coding agent
-+ Copy this prompt into your coding agent to inspect your existing app and configure Automatic Learning for one focused workflow. Prefer to work through the setup yourself? Follow the manual steps below.
-+ #### Copy this prompt into your coding agent
-+ ```text
   … region truncated
 ````
 

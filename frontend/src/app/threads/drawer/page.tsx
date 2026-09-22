@@ -38,6 +38,19 @@ export default function Page() {
         only its name.
       </Callout>
 
+      <Callout tone="info" title="Two hosts for the same drawer">
+        The 2026-09-22 sync added &ldquo;Use the Drawer with a sidebar
+        chat&rdquo;: <code>&lt;CopilotSidebar defaultOpen&gt;</code> hosts the
+        drawer on the same terms as <code>&lt;CopilotChat&gt;</code>, because
+        it renders a <code>CopilotChat</code> inside itself and reads the same
+        configuration. The demo has a tab for each host. The snippet renders{" "}
+        <code>&lt;YourMainContent /&gt;</code> without defining it, so the demo
+        supplies a placeholder. The page also now warns that the drawer ships
+        only in <code>@copilotkit/react-core/v2</code>, and that its launcher
+        button appears on mobile viewports only; on desktop the drawer is always
+        visible, so no launcher is the intended result.
+      </Callout>
+
       <Panel title="What it demonstrates">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           A drop-in conversation sidebar. The notable part is how little you

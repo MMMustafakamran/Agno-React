@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-21T07:26:42.301Z",
+  "syncedAt": "2026-09-22T09:20:55.732Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -150,15 +150,15 @@
     },
     "/agno/inspector": {
       "file": "agno__inspector.md",
-      "sha256": "f89ddbd9188633dc0108d68a0ea4af84e6ed795d1e413731c7e9c84aa97fef8d",
-      "bytes": 9634,
+      "sha256": "1b54d3fe6717856c981757b6b972a4f3530d161c7a8977eb375e8a7100ebb963",
+      "bytes": 9644,
       "lines": 190,
       "routes": [
         "/custom-look-and-feel/inspector"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 21 Sep 2026 07:26:42 GMT"
+      "date": "Tue, 22 Sep 2026 08:52:29 GMT"
     },
     "/agno/intelligence/threads-explained": {
       "file": "agno__intelligence__threads-explained.md",
@@ -186,15 +186,15 @@
     },
     "/agno/prebuilt-components/copilot-threads-drawer": {
       "file": "agno__prebuilt-components__copilot-threads-drawer.md",
-      "sha256": "dd34f95e8e136c17c35fb26973e5b2ca0c2e1a7854bfcdb56e1ece488093b91f",
-      "bytes": 7287,
-      "lines": 160,
+      "sha256": "a9ef18bd64d979b5ccc7a99bcd273c8a01a4056243beb70c9c1af6e43286824d",
+      "bytes": 9033,
+      "lines": 210,
       "routes": [
         "/threads/drawer"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 21 Sep 2026 07:26:42 GMT"
+      "date": "Tue, 22 Sep 2026 08:52:29 GMT"
     },
     "/agno/programmatic-control": {
       "file": "agno__programmatic-control.md",
@@ -210,27 +210,27 @@
     },
     "/agno/quickstart": {
       "file": "agno__quickstart.md",
-      "sha256": "62528078cccf73463f7503d57afcb8f66e130b7dc771c6ac96f4960ee0ff633a",
-      "bytes": 15615,
+      "sha256": "0cac5777cdd0fcdd39123774b3438aa12b72e93651a8e1b2f5bc5209cbb03525",
+      "bytes": 15620,
       "lines": 441,
       "routes": [
         "/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 21 Sep 2026 07:26:42 GMT"
+      "date": "Tue, 22 Sep 2026 08:52:29 GMT"
     },
     "/agno/threads": {
       "file": "agno__threads.md",
-      "sha256": "071567f5a06316bb27fc79380aca8db1e911b609a76cac1926352ccb854ca110",
-      "bytes": 12381,
+      "sha256": "5cb0dbeb753fc60e9ef952830b276b4c2f58510bd5ab620b6f00fa5f688263a0",
+      "bytes": 12386,
       "lines": 213,
       "routes": [
         "/threads"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 18 Sep 2026 08:13:38 GMT"
+      "date": "Tue, 22 Sep 2026 08:52:29 GMT"
     },
     "/agno/threads-import": {
       "file": "agno__threads-import.md",
@@ -294,39 +294,39 @@
     },
     "/agno/intelligence/memories": {
       "file": "agno__intelligence__memories.md",
-      "sha256": "e5918dbdd6ec5a73f29a7b6a05673e33f26ddaba1d8417f0c5047a9f6bc3fe5f",
-      "bytes": 12463,
+      "sha256": "0c8af2f29ac9e3ad73de9161c6cfbdd8e2dcefd6d575d6eec3dcf0062fa7a120",
+      "bytes": 12472,
       "lines": 314,
       "routes": [
         "/intelligence/memories"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 21 Sep 2026 07:26:42 GMT"
+      "date": "Tue, 22 Sep 2026 08:52:29 GMT"
     },
     "/agno/learning": {
       "file": "agno__learning.md",
-      "sha256": "c6d0a9480c975ed5e76acc4d5d44c3ba99721e9e710d2892d1883f5130818eb9",
-      "bytes": 12464,
+      "sha256": "5debfb832b94ef243e60bc7c8f3033be654cdfe0ed79c1783b7e33050dd4ff88",
+      "bytes": 12538,
       "lines": 212,
       "routes": [
         "/learning"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 21 Sep 2026 07:26:42 GMT"
+      "date": "Tue, 22 Sep 2026 08:52:29 GMT"
     },
     "/agno/intelligence/learned-skills": {
       "file": "agno__intelligence__learned-skills.md",
-      "sha256": "1bd5ef6d4be95051a9295e63d6fa1f145b7e1cb261e9a0e6f82388238ff05535",
-      "bytes": 17717,
+      "sha256": "771ee28299f48c3212d72e7b06e86dff699951fc34633aa595b239db48cd78cf",
+      "bytes": 17737,
       "lines": 287,
       "routes": [
         "/intelligence/learned-skills"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Mon, 21 Sep 2026 07:26:42 GMT"
+      "date": "Tue, 22 Sep 2026 08:52:29 GMT"
     },
     "/agno/custom-look-and-feel/markdown": {
       "file": "agno__custom-look-and-feel__markdown.md",
@@ -351,6 +351,18 @@
       "status": "ok",
       "age": 0,
       "date": "Mon, 21 Sep 2026 08:10:32 GMT"
+    },
+    "/agno/backend/message-history": {
+      "file": "agno__backend__message-history.md",
+      "sha256": "04032b1b3c048e204dad330dbdedb469c2274b3786dacf7cd332e0919f988aae",
+      "bytes": 15208,
+      "lines": 368,
+      "routes": [
+        "/backend/message-history"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Tue, 22 Sep 2026 09:20:55 GMT"
     }
   },
   "sitemap": {
@@ -425,6 +437,7 @@
       "https://docs.copilotkit.ai/agno/intelligence/overview",
       "https://docs.copilotkit.ai/agno/intelligence/quickstart",
       "https://docs.copilotkit.ai/agno/intelligence/self-hosting",
+      "https://docs.copilotkit.ai/agno/intelligence/self-hosting-ecs",
       "https://docs.copilotkit.ai/agno/migrate/1.10.X",
       "https://docs.copilotkit.ai/agno/migrate/1.8.2",
       "https://docs.copilotkit.ai/agno/migrate/v2",

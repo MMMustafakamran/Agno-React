@@ -48,7 +48,7 @@ export const PAGE_GROUPS = {
     'intelligence-memories',
     'learning',
   ],
-  backend: ['copilot-runtime', 'ag-ui', 'error-debugging'],
+  backend: ['copilot-runtime', 'ag-ui', 'error-debugging', 'message-history'],
   // The generated CLI demo pages. No dispatch checkbox (the form is at
   // GitHub's ten-input cap) and CI excludes them anyway -- they boot their
   // own dev server -- but every id must belong to a group, and these are ids.

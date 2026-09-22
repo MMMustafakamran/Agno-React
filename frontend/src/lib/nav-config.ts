@@ -332,6 +332,17 @@ export const NAV: NavGroup[] = [
           "A live capture of the raw AG-UI event stream flowing between the runtime and this page.",
         status: "working",
       },
+      {
+        path: "/backend/message-history",
+        hasDemo: true,
+        title: "Message history",
+        docPath: "/agno/backend/message-history",
+        summary:
+          "Trimming the transcript forwarded to the agent: the page's middleware inside a second runtime, and its messageFilter prop.",
+        status: "partial",
+        statusNote:
+          "The middleware and its check work as published. `messageFilter`, the page's recommended recipe, is not a prop on any published @copilotkit/react-core (1.72.0 installed, 1.73.0 latest), so it is a type error and does nothing.",
+      },
     ],
   },
   {
@@ -355,7 +366,7 @@ export const NAV: NavGroup[] = [
         path: "/intelligence/memories",
         hasDemo: true,
         premium: true,
-        title: "Memories & Recall",
+        title: "User Memories",
         docPath: "/agno/intelligence/memories",
         summary:
           "Long-term memories per user or project, read and written from React with `useMemories`.",
@@ -367,7 +378,7 @@ export const NAV: NavGroup[] = [
         path: "/learning",
         hasDemo: true,
         premium: true,
-        title: "Learning",
+        title: "Automatic Learning",
         docPath: "/agno/learning",
         summary:
           "Routing selected Threads into a Learning container from the runtime, for Insights and reviewed Skills.",

@@ -202,6 +202,7 @@ export const SKIP_RECORDING: Record<string, string> = {
     'owner instruction: not reachable from the docs sidebar, so not under test yet',
   'jev-generative-ui':
     'owner instruction: not reachable from the docs sidebar, so not under test yet',
+  'message-history': 'owner instruction: tracked and built 2026-09-22, not recorded yet',
 };
 
 export const PAGES = definePages([
@@ -481,8 +482,17 @@ export const PAGES = definePages([
     docPath: 'prebuilt-components/copilot-threads-drawer',
     route: 'threads/drawer',
     ideFile: 'frontend/src/app/threads/drawer/demo-chat/page.tsx',
-    startLine: 19,
-    endLine: 34,
+    startLine: 87,
+    endLine: 94,
+    extraTabs: [
+      {
+        // "Use the Drawer with a sidebar chat": the same drawer hosted by
+        // <CopilotSidebar>, one tab over on the demo.
+        filePath: 'frontend/src/app/threads/drawer/demo-chat/page.tsx',
+        startLine: 96,
+        endLine: 104,
+      },
+    ],
     // Threads need Intelligence. Without it the drawer renders its locked view
     // -- which is the correct result, and what this recording shows. The chat
     // beside it needs no entitlement and answers normally.
@@ -656,7 +666,7 @@ export const PAGES = definePages([
   },
   {
     id: 'intelligence-memories',
-    name: 'Intelligence - Memories & Recall',
+    name: 'Intelligence - User Memories',
     videoName: 'Memories',
     docPath: 'intelligence/memories',
     route: 'intelligence/memories',
@@ -679,7 +689,7 @@ export const PAGES = definePages([
   },
   {
     id: 'learning',
-    name: 'Intelligence - Learning',
+    name: 'Intelligence - Automatic Learning',
     videoName: 'Learning',
     docPath: 'learning',
     route: 'learning',
@@ -770,6 +780,29 @@ export const PAGES = definePages([
     // required; the handler never reads it.
     prompt: 'N/A - the picker drives an agent id nothing here can register.',
     waitAfterPromptMs: 3000,
+  },
+  {
+    // Tracked 2026-09-22. Registered so coverage and the doctor see it, but in
+    // SKIP_RECORDING until the owner turns it on.
+    id: 'message-history',
+    name: 'Backend - Message History',
+    videoName: 'MessageHistory',
+    docPath: 'backend/message-history',
+    route: 'backend/message-history',
+    ideFile: 'frontend/src/app/api/copilotkit-trimmed/[[...slug]]/route.ts',
+    startLine: 18,
+    endLine: 25,
+    extraTabs: [
+      {
+        // The browser recipe, verbatim, over a prop no release declares.
+        filePath: 'frontend/src/app/backend/message-history/demo-chat/page.tsx',
+        startLine: 80,
+        endLine: 90,
+      },
+    ],
+    prompts: ['My name is Sam.', 'What is my name?'],
+    prompt: 'My name is Sam.',
+    waitAfterPromptMs: 4000,
   },
   // Last, always: these take the highest order numbers so adding or removing
   // them never renumbers a doc page's video filename.
