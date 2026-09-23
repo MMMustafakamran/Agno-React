@@ -10,7 +10,8 @@ the page publishes:
   error TS2353: Object literal may only specify known properties,
   and '"reference-chip"' does not exist in type 'Components'.
 
-installed @copilotkit/react-core 1.72.0 (declared ^1.72.0), streamdown 1.6.11`;
+installed @copilotkit/react-core 1.72.0 (declared ^1.69.2), streamdown 1.6.11
+still an error on 1.73.3 (declared ^1.73.3): the directive stays used`;
 
 const SLOT_TYPING = `markdownRenderer: SlotValue<typeof CopilotChatAssistantMessage.MarkdownRenderer>
 
@@ -85,7 +86,8 @@ export default function Page() {
         so the assignment is ordinary contravariance. Checked with{" "}
         <code>npx tsc --noEmit</code> on the installed{" "}
         <strong>@copilotkit/react-core 1.72.0</strong> (declared{" "}
-        <code>^1.72.0</code>). So #3 is about which slots, not about slots in
+        <code>^1.69.2</code>), and again on 1.73.3 (declared{" "}
+        <code>^1.73.3</code>). So #3 is about which slots, not about slots in
         general, and this page happens to land on the safe side.
         <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
           {SLOT_TYPING}

@@ -13,7 +13,7 @@ const ADAPTER_TABLE = `| Framework                 | Package                    
 
                       ← still no Agno row, on the /agno page`;
 
-const TSC_OUTPUT = `$ npx tsc --noEmit      # built-in-agent.ts, suppressions removed
+const TSC_OUTPUT = `$ npx tsc --noEmit      # on @copilotkit/runtime 1.72.0, suppressions removed
 built-in-agent.ts(40,3): error TS2353: Object literal may only specify known
   properties, and 'learnedSkills' does not exist in type
   'BuiltInAgentConfiguration'.
@@ -28,8 +28,11 @@ probe.ts(1,15): error TS2724: '"@copilotkit/runtime/v2"' has no exported
   member named 'BuiltInAgentFactoryContext'. Did you mean
   'AgentFactoryContext'?
 
-installed @copilotkit/runtime 1.72.0 (declared ^1.72.0)
-learnedSkills and BuiltInAgentFactoryContext first ship in 1.73.0`;
+$ # 2026-09-23, after upgrading to @copilotkit/runtime 1.73.3 (declared ^1.73.3):
+built-in-agent.ts(40,3): error TS2578: Unused '@ts-expect-error' directive.
+built-in-agent.ts(54,3): error TS2578: Unused '@ts-expect-error' directive.
+built-in-agent.ts(56,3): error TS2578: Unused '@ts-expect-error' directive.
+  -> directives removed; the file now typechecks as published`;
 
 const PYPI = `$ curl -o /dev/null -w '%{http_code}' https://pypi.org/pypi/copilotkit-intelligence-runtime/json
 404
@@ -45,7 +48,7 @@ export default function Page() {
 
       <Panel title="What it demonstrates">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-          Automatic learned skill delivery is meant to put one Learning
+          Skill delivery is meant to put one Learning
           container&apos;s published skills in front of an agent without a CLI
           download or a restart. A framework adapter adds an alphabetical
           catalog and two tools —{" "}
@@ -65,24 +68,47 @@ export default function Page() {
         </div>
       </Panel>
 
-      <Callout tone="warn" title="The new BuiltInAgent option does not exist on the installed runtime">
+      <Callout tone="info" title="The BuiltInAgent option compiles on 1.73.3, and failed on 1.72.0">
         The 2026-09-21 sync added a <code>BuiltInAgent</code> row at the top of
         the adapter table and a section for it: set{" "}
         <code>learnedSkills</code> on the agent, no adapter package required,
         just <code>@copilotkit/runtime/v2</code>. That is the first code on this
-        page a reader in the Agno section can reach for. It does not compile
-        here: <code>learnedSkills</code> is not an option on any{" "}
-        <code>BuiltInAgent</code> config in the installed runtime{" "}
-        <strong>1.72.0</strong>, the factory context has no such field, and{" "}
-        <code>BuiltInAgentFactoryContext</code>, which the page tells you to
-        import to annotate one, is not exported. All three land in{" "}
-        <strong>1.73.0</strong>, published after this text; the page states no
-        version floor. Both snippets are in{" "}
-        <code>built-in-agent.ts</code> verbatim, errors acknowledged in place,
+        page a reader in the Agno section can reach for. On runtime{" "}
+        <strong>1.72.0</strong> it did not compile: <code>learnedSkills</code>{" "}
+        was on no <code>BuiltInAgent</code> config, the factory context had no
+        such field, and <code>BuiltInAgentFactoryContext</code> was not
+        exported. On the installed <strong>1.73.3</strong> (declared{" "}
+        <code>^1.73.3</code>) all three exist and both snippets typecheck
+        verbatim. Resolved at 1.73.3; failed at 1.72.0; the page still states
+        no minimum version. Both snippets are in <code>built-in-agent.ts</code>,
         imported by nothing.
         <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
           {TSC_OUTPUT}
         </pre>
+      </Callout>
+
+      <Callout tone="warn" title="Every snippet now pins a placeholder revision">
+        The 2026-09-23 sync un-commented{" "}
+        <code>revision: &quot;exact-revision-id&quot;, // Optional: pin a published revision.</code>{" "}
+        in both BuiltInAgent snippets and in every adapter example. That is not
+        a revision ID. The page says to &ldquo;Replace{" "}
+        <code>&quot;exact-revision-id&quot;</code> with a published revision ID,
+        or remove that parameter&rdquo;, and its own &ldquo;Make sure delivery
+        works&rdquo; check says &ldquo;Remove <code>revision</code> (or{" "}
+        <code>Revision</code> in .NET) from the example&rdquo;. A reader who
+        copies a snippet as published pins delivery to a revision that cannot
+        exist.
+      </Callout>
+
+      <Callout tone="warn" title="“Omit them to use environment variables” vs “Omitting the configuration disables all skill requests”">
+        Each snippet now says &ldquo;Set these here, or omit them to use
+        environment variables (linked above).&rdquo; A few lines below the
+        factory snippet the page says &ldquo;Omitting the configuration disables
+        all skill requests, even when delivery environment variables
+        exist.&rdquo; The first speaks of the fields inside{" "}
+        <code>learnedSkills</code>, the second of <code>learnedSkills</code>{" "}
+        itself, but the page never draws that line: a reader who omits the
+        block to rely on the environment gets no skills and no error.
       </Callout>
 
       <Callout tone="warn" title="A BuiltInAgent is not an Agno agent">
@@ -109,12 +135,16 @@ export default function Page() {
         </pre>
       </Callout>
 
-      <Callout tone="warn" title="The generic Python client it falls back to does not exist either">
-        The page says &ldquo;Python uses{" "}
-        <code>copilotkit-intelligence-runtime</code>&rdquo;, which would be the
-        obvious thing to reach for without a framework adapter. That package is
-        not on PyPI, and neither are the two Python adapters listed for other
-        frameworks. Checked 2026-09-16. The TypeScript packages{" "}
+      <Callout tone="warn" title="Two Python packages are now flagged “pending release”; the third is not">
+        The 2026-09-23 sync added a &ldquo;Python adapter pending release&rdquo;
+        callout to the LangGraph Python and Google ADK sections:{" "}
+        &ldquo;<code>copilotkit-intelligence-langgraph</code> is not yet
+        published on PyPI&rdquo;, and the same for{" "}
+        <code>copilotkit-intelligence-adk</code>. The base client is still
+        stated with no flag: &ldquo;Python uses{" "}
+        <code>copilotkit-intelligence-runtime</code>.&rdquo; That is the obvious
+        thing to reach for without a framework adapter, and it is not on PyPI
+        either. All three rechecked 2026-09-23. The TypeScript packages{" "}
         <em>are</em> published (both 1.71.2, 2026-09-14), so the Python side is
         the gap rather than the feature being unreleased.
         <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">

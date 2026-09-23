@@ -5,7 +5,7 @@ import { CopilotChat } from "@copilotkit/react-core/v2";
 import { DemoFrame } from "@/components/demo-frame";
 
 /**
- * Automatic learned skill delivery, against this repo's Agno agent.
+ * Skill delivery, against this repo's Agno agent.
  *
  * There is no adapter to mount. The page is published under /agno and Agno is
  * not in its adapter table at all; the generic Python client it names,
@@ -13,9 +13,9 @@ import { DemoFrame } from "@/components/demo-frame";
  * to attach to the agent, and the two tools the page reserves never exist.
  *
  * The 2026-09-21 sync added a BuiltInAgent row, which needs no adapter package.
- * It is not mounted here for two reasons: its `learnedSkills` option does not
- * exist on the installed runtime 1.72.0 (see `../built-in-agent.ts`), and a
- * BuiltInAgent would replace the Agno agent this section is about.
+ * Its `learnedSkills` option typechecks on runtime 1.73.3 (it failed on 1.72.0;
+ * see `../built-in-agent.ts`), but it is not mounted here: a BuiltInAgent
+ * would replace the Agno agent this section is about.
  *
  * The demo shows the absence rather than faking the presence: the agent is
  * this repo's normal `agno_agent`, and the prompt asks for the exact tool

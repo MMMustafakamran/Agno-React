@@ -632,15 +632,16 @@ export const PAGES = definePages([
   },
   {
     id: 'intelligence-learned-skills',
-    name: 'Intelligence - Automatic learned skill delivery',
+    name: 'Intelligence - Skill delivery',
     videoName: 'LearnedSkills',
     docPath: 'intelligence/learned-skills',
     route: 'intelligence/learned-skills',
-    // The page's one runnable snippet as of 2026-09-21: `learnedSkills` on a
-    // BuiltInAgent, verbatim, and not an option on the installed runtime.
+    // The page's one runnable snippet: `learnedSkills` on a BuiltInAgent,
+    // verbatim. Typechecks on runtime 1.73.3 (it did not on 1.72.0); since the
+    // 2026-09-23 sync it carries the uncommented placeholder revision.
     ideFile: 'frontend/src/app/intelligence/learned-skills/built-in-agent.ts',
-    startLine: 35,
-    endLine: 47,
+    startLine: 41,
+    endLine: 50,
     extraTabs: [
       // No adapter to show for Agno, so the demo lists the two tool names the
       // page reserves as absent rather than registered.
@@ -653,15 +654,15 @@ export const PAGES = definePages([
     prompt: 'List the skills you can load, then load the refund-policy skill and follow it.',
     waitAfterPromptMs: 3000,
     knownIssue: {
-      area: "Agno - Intelligence - Automatic learned skill delivery",
+      area: "Agno - Intelligence - Skill delivery",
       problem:
-        "The page is published at /agno/intelligence/learned-skills and Agno is not in its adapter table at all -- the six rows are BuiltInAgent (added 2026-09-21), LangGraph Python, LangGraph TypeScript, Mastra, Google ADK and Microsoft Agent Framework. The new BuiltInAgent row is the only one needing no adapter package, but its `learnedSkills` option does not exist on the installed @copilotkit/runtime 1.72.0 (TS2353), its factory context has no `learnedSkills` (TS2339), and `BuiltInAgentFactoryContext` is not exported (TS2724); all three ship in 1.73.0 and the page states no version floor. A BuiltInAgent also replaces the Agno agent rather than delivering skills to it. The page then says \"Attach an adapter to the agents that need skills\" without acknowledging that a reader in this section has none. The base client the page says Python uses, `copilotkit-intelligence-runtime`, is not on PyPI (404 as of 2026-09-16), and neither are the two Python adapters it lists, `copilotkit-intelligence-langgraph` and `copilotkit-intelligence-adk`. The TypeScript siblings @copilotkit/intelligence-langgraph and -mastra are published at 1.71.2 (2026-09-14), so the gap is Python-side rather than the whole feature being unreleased.",
+        "The page is published at /agno/intelligence/learned-skills and Agno is not in its adapter table at all -- the six rows are BuiltInAgent (added 2026-09-21), LangGraph Python, LangGraph TypeScript, Mastra, Google ADK and Microsoft Agent Framework. The new BuiltInAgent row is the only one needing no adapter package. Its `learnedSkills` option, the factory context's `learnedSkills` and `BuiltInAgentFactoryContext` typecheck on the installed @copilotkit/runtime 1.73.3 (declared ^1.73.3) but failed on 1.72.0 (TS2353 / TS2339 / TS2724); the page states no minimum version. Both BuiltInAgent snippets now set `revision: \"exact-revision-id\"`, a placeholder the page later says to remove. A BuiltInAgent also replaces the Agno agent rather than delivering skills to it. The page then says \"Attach an adapter to the agents that need skills\" without acknowledging that a reader in this section has none. The base client the page says Python uses, `copilotkit-intelligence-runtime`, is not on PyPI (404, rechecked 2026-09-23) and is still stated with no flag; the two Python adapters, `copilotkit-intelligence-langgraph` and `copilotkit-intelligence-adk`, are also 404 and are now marked \"pending release\" on the page. The TypeScript siblings @copilotkit/intelligence-langgraph and -mastra are published at 1.71.2 (2026-09-14), so the gap is Python-side rather than the whole feature being unreleased.",
       impact:
         "Nothing on the page can be followed from this backend. The two tools it reserves, `copilotkit_load_skill` and `copilotkit_read_skill_file`, are never registered, so the agent answers from its own instructions and the failure looks like an ordinary reply rather than a missing integration. Nothing marks the feature unsupported for Agno; it is simply absent.",
       likelyCause:
         "The page's own closing section says \"The server migration and v1 delivery endpoint must deploy before adapters rely on them\", i.e. the feature may not be live yet -- but that is a deployment note at the bottom, not a prerequisite at the top, and nothing earlier is marked unavailable. The same page is published byte-identically under /agno, /ms-agent-python and /deepagents; of those three, Agno has no adapter row, Microsoft Agent Framework has only a .NET 9 one, and the LangGraph Python one 404s.",
       expectsNoResponse: false,
-      note: "learned-skills - agno isnt in the adapter table, on the agno page\n\ntable lists builtinagent (new), langgraph py/ts, mastra, google adk, ms agent framework\nno agno row. page still says \"attach an adapter to the agents that need skills\"\n\nthe generic python client it names doesnt exist either:\ncopilotkit-intelligence-runtime -> 404 on pypi\n\nTS ones are real (1.71.2, 14 Sep) so its the python side thats missing\n\nso the two tools never get registered, agent just answers normally\n\nnew builtinagent row: learnedSkills is not an option on runtime 1.72.0\nTS2353 / TS2339 / TS2724, all three land in 1.73.0, page names no floor",
+      note: "learned-skills - agno isnt in the adapter table, on the agno page\n\ntable lists builtinagent (new), langgraph py/ts, mastra, google adk, ms agent framework\nno agno row. page still says \"attach an adapter to the agents that need skills\"\n\nthe generic python client it names doesnt exist either:\ncopilotkit-intelligence-runtime -> 404 on pypi\n\nTS ones are real (1.71.2, 14 Sep) so its the python side thats missing\n\nso the two tools never get registered, agent just answers normally\n\nbuiltinagent row: learnedSkills compiles on runtime 1.73.3, failed on 1.72.0\n(TS2353 / TS2339 / TS2724), page names no floor\n\nrevision: \"exact-revision-id\" now uncommented in every snippet, page later says remove it",
     },
   },
   {
@@ -794,10 +795,10 @@ export const PAGES = definePages([
     endLine: 25,
     extraTabs: [
       {
-        // The browser recipe, verbatim, over a prop no release declares.
+        // The browser recipe, verbatim. Typechecks on 1.73.3; absent in 1.72.0.
         filePath: 'frontend/src/app/backend/message-history/demo-chat/page.tsx',
-        startLine: 80,
-        endLine: 90,
+        startLine: 81,
+        endLine: 88,
       },
     ],
     prompts: ['My name is Sam.', 'What is my name?'],

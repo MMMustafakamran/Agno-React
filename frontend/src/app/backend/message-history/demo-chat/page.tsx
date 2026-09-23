@@ -12,9 +12,10 @@ import { DemoFrame } from "@/components/demo-frame";
  *   `TrimHistoryMiddleware(lastTurnOnly)` is attached to the agent. Each run
  *   reaches Agno with the final turn only; the transcript here stays whole.
  * - **Browser messageFilter** is the page's first recipe, verbatim, on the main
- *   runtime. No published `@copilotkit/react-core` declares `messageFilter`
- *   (checked on the installed 1.72.0 and the latest, 1.73.0), so it is a type
- *   error and, at runtime, an ignored prop: the full transcript goes out.
+ *   runtime. It was not a prop on 1.72.0 (type error, ignored at runtime), and
+ *   was mounted under `@ts-expect-error`. On the installed 1.73.3 (declared
+ *   ^1.73.3) the prop exists and the directive went unused, so it was removed
+ *   on 2026-09-23. Its runtime effect has not been observed on 1.73.3.
  *
  * On this Agno backend the answers do not tell the tabs apart: its AG-UI
  * endpoint answers from the last user message alone, full transcript or not
@@ -81,9 +82,6 @@ export default function Page() {
             // [!code highlight]
             <CopilotKit
               runtimeUrl="/api/copilotkit"
-              // @ts-expect-error `messageFilter` is not a prop on any published
-              // release (1.72.0 installed, 1.73.0 latest). If one ships it, this
-              // suppression goes unused and the typecheck says so.
               messageFilter={(messages) => messages.slice(-1)}
             >
               <YourApp />

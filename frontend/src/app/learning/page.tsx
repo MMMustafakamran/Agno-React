@@ -2,9 +2,18 @@ import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
 import { Callout, Panel, TryIt } from "@/components/ui";
 
-// "Connect your agent", added 2026-09-21. The page's block, verbatim.
-const DELIVERY_ENV = `CPK_INTELLIGENCE_API_KEY=your-project-key
+// "Connect your agent", added 2026-09-21. The page's blocks, verbatim as of
+// the 2026-09-23 sync (the key placeholder changed from `your-project-key`).
+const DELIVERY_LOGIN = `npx copilotkit@latest login
+npx copilotkit@latest project select`;
+
+const DELIVERY_ENV = `CPK_INTELLIGENCE_API_KEY=cpk-...
 CPK_INTELLIGENCE_LEARNING_CONTAINER_ID=expense-review`;
+
+// "Use downloaded Skills", verbatim as of the 2026-09-23 sync.
+const DOWNLOAD = `npx copilotkit@latest login
+npx copilotkit@latest project select
+npx copilotkit@latest skills download expense-review --output ./learned-skills`;
 
 const SERVER_LOG = `POST /api/copilotkit-learning/agent/expense-agent/run  → 404 {"error":"Failed to initialize thread"}
   Intelligence platform error 404:
@@ -64,30 +73,35 @@ export default function Page() {
       <Callout tone="warn" title="No version floor">
         <code>getLearningContainerId</code> exists on{" "}
         <code>CopilotKitIntelligence</code> from runtime 1.70; on 1.69.x, which
-        this repo&apos;s lockfile pinned until the current{" "}
-        <strong>1.72.0</strong>, the option is a type error. The page names no
-        version and never mentions the deprecated <code>ɵlearning</code> option
-        that older runtimes have instead. The same gap has now repeated one page
-        over: the learned-skills <code>learnedSkills</code> option needs 1.73.0
-        and says so nowhere.
+        this repo&apos;s lockfile pinned before 1.72.0, the option is a type
+        error. It typechecks on the installed <strong>1.73.3</strong> (declared{" "}
+        <code>^1.73.3</code>). The page names no version and never mentions the
+        deprecated <code>ɵlearning</code> option that older runtimes have
+        instead. The same gap repeats one page over: the learned-skills{" "}
+        <code>learnedSkills</code> option failed on 1.72.0, compiles on 1.73.3,
+        and the page states no minimum version.
       </Callout>
 
       <Callout tone="warn" title="The new delivery steps end at an adapter Agno does not have">
         The 2026-09-21 sync replaced the one-line pointer to learned skills with
         three steps: enable delivery on the container, connect your agent, and
-        verify it in a new invocation. Step two hands you this environment block
-        for the agent server, then sends you to the framework adapter examples
-        &ldquo;for LangGraph Python, LangGraph TypeScript, Mastra, Google ADK, or
-        Microsoft Agent Framework&rdquo;. Agno is in none of those lists, so on
-        the Agno page the steps stop being followable at exactly the point they
-        become concrete. See{" "}
+        verify it in a new invocation. The 2026-09-23 sync dropped the list of
+        frameworks from step two. It now says &ldquo;Pick the adapter for the
+        agent you already run.&rdquo; Agno is not in the adapter table that link
+        leads to, so on the Agno page the steps stop being followable at exactly
+        the point they become concrete. If the agent server has no key yet, the
+        step now signs in and selects the project first, then gives the
+        environment block. See{" "}
         <a
           href="/intelligence/learned-skills"
           className="text-[var(--accent)] underline underline-offset-4"
         >
-          the learned-skills route
+          the Skill delivery route
         </a>{" "}
         for what that page does and does not offer this backend.
+        <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
+          {DELIVERY_LOGIN}
+        </pre>
         <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
           {DELIVERY_ENV}
         </pre>
@@ -96,6 +110,17 @@ export default function Page() {
         <code>expense-review</code>, the same non-existent container the runtime
         snippet above uses, while the learned-skills page configures{" "}
         <code>containerId: &quot;support-learning&quot;</code> for the same job.
+      </Callout>
+
+      <Callout tone="warn" title="The new “Collect runs and deliver Skills” section leads with an unpublished Python adapter">
+        The 2026-09-23 sync added a section that tells the reader: &ldquo;For
+        agent setup, use the Mastra, LangGraph TypeScript, or LangGraph Python
+        example.&rdquo; LangGraph Python is one of the three headline options,
+        and its package, <code>copilotkit-intelligence-langgraph</code>, is not
+        on PyPI (404, checked 2026-09-23). The Skill delivery page it links to
+        now marks that package &ldquo;pending release&rdquo;; this page does
+        not. Agno is not among the headline options or in the second list of
+        Google ADK, BuiltInAgent and Microsoft Agent Framework.
       </Callout>
 
       <Callout tone="warn" title="The daily schedule and the Thread threshold are dashboard-only claims">
@@ -113,9 +138,13 @@ export default function Page() {
 
       <Callout tone="premium" title="Not exercised here">
         Creating a container, Run Learning, reviewing Insights, approving a
-        Skill, and <code>copilotkit skills download</code> are dashboard and CLI
-        steps behind a login this harness does not drive. They are not on the
-        clip, and nothing here says whether they work.
+        Skill, and <code>npx copilotkit@latest skills download</code> are
+        dashboard and CLI steps behind a login this harness does not drive. They
+        are not on the clip, and nothing here says whether they work. The
+        page&apos;s download block, verbatim:
+        <pre className="mt-3 overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
+          {DOWNLOAD}
+        </pre>
       </Callout>
 
       <Panel title="Source">

@@ -59,7 +59,7 @@ export default function Page() {
           <Callout tone="warn" title="The key now arrives by CLI, and the file it lands in changed">
             The 2026-09-21 sync stopped telling you to write the key by hand.
             Step 1 became &ldquo;Set up CopilotKit Intelligence&rdquo; and says
-            managed setup &ldquo;does not issue{" "}
+            cloud-hosted setup &ldquo;does not issue{" "}
             <code>COPILOTKIT_LICENSE_TOKEN</code>&rdquo;; the runtime step now
             runs <code>npx copilotkit@latest project select</code> from the
             frontend app directory, which &ldquo;writes the server-side project

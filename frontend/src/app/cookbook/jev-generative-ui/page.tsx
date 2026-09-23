@@ -9,11 +9,11 @@ const INSTALL_LINE = `the page's install line:
     @typesafe-ai/sdk@0.6.0 rxjs@7.8.1 zod@4.6.5 \\
     @langchain/openai@1.5.13 @langchain/core@1.2.11
 
-package                        pinned     installed here  declared here
+package                        pinned     installed here  declared here   (as recorded 2026-09-21)
 -----------------------------  ---------  --------------  -----------------
 @copilotkit/core               1.73.0     1.72.0          (not declared)
-@copilotkit/react-core         1.73.0     1.72.0          ^1.72.0
-@copilotkit/runtime            1.73.0     1.72.0          ^1.72.0
+@copilotkit/react-core         1.73.0     1.72.0          ^1.69.2
+@copilotkit/runtime            1.73.0     1.72.0          ^1.69.2
 @ag-ui/client                  0.0.59     0.0.59          0.0.x
 @ag-ui/core                    0.0.59     0.0.59          (not declared)
 @typesafe-ai/sdk               0.6.0      ABSENT          (not declared)
@@ -22,8 +22,10 @@ zod                            4.6.5      4.4.3           ^4.4.3
 @langchain/openai              1.5.13     ABSENT          (not declared)
 @langchain/core                1.2.11     1.2.11          (not declared)
 
-declared = frontend/package.json in the working tree; the committed file at
-353ccb9 still says ^1.69.2 for react-core and runtime.`;
+declared = frontend/package.json. An earlier revision of this table said
+^1.72.0, a working-tree edit that was never committed; the committed file
+said ^1.69.2. Since 2026-09-23 all three @copilotkit packages are installed
+at 1.73.3, react-core and runtime declared ^1.73.3.`;
 
 const TSC_OUTPUT = `$ npx tsc --noEmit     # every module suppression removed
 

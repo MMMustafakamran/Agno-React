@@ -10,8 +10,9 @@ import "server-only";
  * want of a vendor SDK and a Jev key. So it is kept outside the route tree: the
  * point of the file is that it compiles, not that it serves.
  *
- * And it does compile, on the installed `@copilotkit/runtime` 1.72.0 (declared
- * `^1.72.0`), against the page's pinned `@copilotkit/runtime@1.73.0`. Together
+ * And it does compile, on the then-installed `@copilotkit/runtime` 1.72.0
+ * (declared `^1.69.2`), against the page's pinned `@copilotkit/runtime@1.73.0`;
+ * it still does on 1.73.3 (declared `^1.73.3`, 2026-09-23). Together
  * with `picker-agent.ts` and the React page, that is the whole published stack
  * typechecking one minor version below the pin, with the page giving no reason
  * for it.

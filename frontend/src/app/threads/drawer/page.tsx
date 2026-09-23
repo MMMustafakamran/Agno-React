@@ -28,14 +28,18 @@ export default function Page() {
         The 2026-09-21 sync renamed the section from{" "}
         <strong>License</strong> to <strong>Intelligence access</strong>, and
         the two calls to action followed: &ldquo;Get a free developer
-        account&rdquo; became &ldquo;Start managed onboarding&rdquo; to
-        &ldquo;create or select a project&rdquo;, and the inline CTA&apos;s
-        &ldquo;free Developer tier&rdquo; became &ldquo;Connect a managed
-        project&rdquo;. The body is unchanged: a managed project key for managed
-        deployments, <code>COPILOTKIT_LICENSE_TOKEN</code> only for self-hosted
-        and OSS. Nothing here says the free tier went away, so a reader who
-        followed the old text has no way to tell whether the offer changed or
-        only its name.
+        account&rdquo; became, as of the 2026-09-23 sync, &ldquo;Start
+        cloud-hosted setup&rdquo; to &ldquo;create or select a project&rdquo;,
+        and the inline CTA&apos;s &ldquo;free Developer tier&rdquo; became
+        &ldquo;Connect a cloud-hosted project&rdquo;. The body is unchanged in
+        substance: a cloud-hosted project key for cloud-hosted deployments,{" "}
+        <code>COPILOTKIT_LICENSE_TOKEN</code> only for self-hosted and open
+        source. This page still never says whether the free tier survived the
+        rename. The new Plans page (<code>/agno/intelligence/plans</code>,
+        reference-only here) answers it: &ldquo;Every organization starts on{" "}
+        <strong>Developer</strong>, which is free&rdquo;. So the offer did not
+        go away, but a reader of the Drawer page has to find another page to
+        learn that.
       </Callout>
 
       <Callout tone="info" title="Two hosts for the same drawer">

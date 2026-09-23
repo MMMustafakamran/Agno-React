@@ -8,8 +8,8 @@ import { openai } from "@ai-sdk/openai";
 import { stepCountIs, streamText } from "ai";
 
 /**
- * Automatic learned skill delivery, "Native setup / BuiltInAgent" — both of the
- * section's snippets, verbatim. NOTHING IMPORTS THIS FILE, on purpose.
+ * Skill delivery, "BuiltInAgent" — both of the section's snippets, verbatim.
+ * NOTHING IMPORTS THIS FILE, on purpose.
  *
  * The 2026-09-21 sync added BuiltInAgent as the first row of the adapter table,
  * and it is the first row on this page an Agno reader could reach: it needs no
@@ -18,12 +18,17 @@ import { stepCountIs, streamText } from "ai";
  * CopilotKit's own — but it is runnable code on a page that previously had none
  * for this section.
  *
- * It does not compile on the installed runtime. `learnedSkills` does not exist
- * on any BuiltInAgent config in 1.72.0; it appears first in 1.73.0, published
- * after this doc text. The page states no version floor anywhere. The errors are
- * acknowledged in place so the file stays the evidence without taking the
- * typecheck down, exactly as `intelligence/memories/memory-list.tsx` did while
- * its own import was wrong.
+ * It typechecks on the installed @copilotkit/runtime 1.73.3 (declared ^1.73.3).
+ * It did not on 1.72.0: `learnedSkills` was on no BuiltInAgent config (TS2353)
+ * and not on the factory context (TS2339). Those errors were acknowledged here
+ * with `@ts-expect-error` until the 2026-09-23 upgrade made the directives
+ * unused, and they were removed then. The page still states no minimum version.
+ * See README §9 #19.
+ *
+ * The 2026-09-23 sync un-commented `revision: "exact-revision-id"` in both
+ * snippets. That is a placeholder, not a revision: the page says to replace it
+ * or remove it, and its own "Make sure delivery works" check says to remove it.
+ * Kept verbatim; see README §9 #32.
  *
  * The two `import` lines are hoisted to the top of the file, which is the one
  * difference from the page: the second snippet repeats the `BuiltInAgent`
@@ -37,12 +42,10 @@ import { stepCountIs, streamText } from "ai";
 const agent = new BuiltInAgent({
   model: "openai/gpt-4o",
   prompt: "Follow the application's support policy.",
-  // @ts-expect-error — `learnedSkills` is not a BuiltInAgent option on the
-  // installed @copilotkit/runtime 1.72.0. It ships in 1.73.0; the page names
-  // no version.
   learnedSkills: {
+    // Set these here, or omit them to use environment variables (linked above).
     containerId: "support-learning",
-    // revision: "exact-revision-id", // Optional: pin a published revision.
+    revision: "exact-revision-id", // Optional: pin a published revision.
   },
 });
 
@@ -51,12 +54,11 @@ const agent = new BuiltInAgent({
 // [2] learned-skills: the factory receives catalog and tools
 const factoryAgent = new BuiltInAgent({
   type: "aisdk",
-  // @ts-expect-error — same option, same version gap.
-  learnedSkills: { containerId: "support-learning" },
-  // @ts-expect-error — TS2339: Property 'learnedSkills' does not exist on type
-  // 'AgentFactoryContext'. 1.72.0's factory context has no such field, and the
-  // `BuiltInAgentFactoryContext` the page says to import for this is TS2724:
-  // no exported member of that name. Both land in 1.73.0.
+  learnedSkills: {
+    // Set these here, or omit them to use environment variables (linked above).
+    containerId: "support-learning",
+    revision: "exact-revision-id", // Optional: pin a published revision.
+  },
   factory: ({ input, abortSignal, learnedSkills }) =>
     streamText({
       model: openai("gpt-4o"),

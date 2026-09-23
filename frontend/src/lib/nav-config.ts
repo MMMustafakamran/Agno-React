@@ -341,7 +341,7 @@ export const NAV: NavGroup[] = [
           "Trimming the transcript forwarded to the agent: the page's middleware inside a second runtime, and its messageFilter prop.",
         status: "partial",
         statusNote:
-          "The middleware and its check work as published. `messageFilter`, the page's recommended recipe, is not a prop on any published @copilotkit/react-core (1.72.0 installed, 1.73.0 latest), so it is a type error and does nothing.",
+          "The middleware and its check work as published. `messageFilter`, the page's recommended recipe, typechecks on the installed @copilotkit/react-core 1.73.3 (declared ^1.73.3); it was absent in 1.72.0 and the page states no minimum version. Its runtime trimming has not been observed on 1.73.3.",
       },
     ],
   },
@@ -390,13 +390,13 @@ export const NAV: NavGroup[] = [
         path: "/intelligence/learned-skills",
         hasDemo: true,
         premium: true,
-        title: "Learned Skills",
+        title: "Skill delivery",
         docPath: "/agno/intelligence/learned-skills",
         summary:
           "Delivering approved Skills to an agent through a framework-native adapter, including the new `BuiltInAgent` option.",
         status: "broken",
         statusNote:
-          "None of the new BuiltInAgent section compiles on the installed `@copilotkit/runtime` 1.72.0: `learnedSkills` is on neither config, and `BuiltInAgentFactoryContext` is not exported. All four errors land in 1.73.0, which the page states no floor for. Agno still has no adapter row, and a BuiltInAgent would replace the Agno agent rather than deliver skills to it.",
+          "Agno still has no adapter row, and a BuiltInAgent would replace the Agno agent rather than deliver skills to it. The BuiltInAgent snippets typecheck on the installed `@copilotkit/runtime` 1.73.3 (declared ^1.73.3); they failed on 1.72.0 and the page states no minimum version. Both now pin the placeholder `revision: \"exact-revision-id\"`.",
       },
     ],
   },
@@ -412,7 +412,7 @@ export const NAV: NavGroup[] = [
           "A workspace picker whose prepared controls are ordinary React and zod, and whose control choice comes from a third-party decision service.",
         status: "partial",
         statusNote:
-          "New upstream, tracked 2026-09-21. The schemas and the prepared controls are shipped verbatim and run. The Jev half cannot: `@typesafe-ai/sdk` is not installed, it needs a key from TypeSafe, and the recipe pins a CopilotKit stack one minor above the installed 1.72.0.",
+          "New upstream, tracked 2026-09-21. The schemas and the prepared controls are shipped verbatim and run. The Jev half cannot: `@typesafe-ai/sdk` is not installed, it needs a key from TypeSafe, and the recipe pins CopilotKit 1.73.0 exactly (installed 1.73.3, declared ^1.73.3).",
       },
     ],
   },

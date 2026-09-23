@@ -14,11 +14,12 @@ export default function Page() {
         the UI, the wiring, the chat binding — is real and unchanged.
       </Callout>
 
-      <Callout tone="warn" title="A managed project is now said to never get a license token">
-        The page gained a paragraph this sync: &ldquo;Managed project setup does
-        not issue <code>COPILOTKIT_LICENSE_TOKEN</code>. That token is only for
-        offline or self-hosted licensing and does not replace the managed
-        project API key.&rdquo; It does not then say what a managed-only project
+      <Callout tone="warn" title="A cloud-hosted project is now said to never get a license token">
+        The page gained a paragraph (reworded 2026-09-23): &ldquo;Cloud-hosted
+        setup does not issue <code>COPILOTKIT_LICENSE_TOKEN</code>. That token
+        is only for offline or self-hosted licensing and does not replace the
+        cloud-hosted project API key.&rdquo; It does not then say what a
+        cloud-hosted-only project
         should do about the drawer, which gates on a license status and stays
         locked without one. Follow the current pages from scratch and you get a
         locked drawer with no explanation; the only reason it unlocks anywhere
