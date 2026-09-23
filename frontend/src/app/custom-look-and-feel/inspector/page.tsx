@@ -30,7 +30,7 @@ const GOALS: [string, string][] = [
   ["Reproduce a saved conversation safely", "Rich Threads → Try from here"],
   ["Continue a saved Thread in your application", "Rich Threads → View in your app"],
   ["Enable or repair Intelligence", "Home, or a locked Rich Threads"],
-  ["Review what Learning found", "Automatic Learning, then Open Intelligence"],
+  ["Review what Learning found", "Automatic Learning"],
 ];
 
 const FAILURES: [string, string][] = [
