@@ -23,12 +23,12 @@ import { stepCountIs, streamText } from "ai";
  * and not on the factory context (TS2339). Those errors were acknowledged here
  * with `@ts-expect-error` until the 2026-09-23 upgrade made the directives
  * unused, and they were removed then. The page still states no minimum version.
- * See README §9 #19.
+ * See FINDINGS.md #19.
  *
  * The 2026-09-23 sync un-commented `revision: "exact-revision-id"` in both
  * snippets. That is a placeholder, not a revision: the page says to replace it
  * or remove it, and its own "Make sure delivery works" check says to remove it.
- * Kept verbatim; see README §9 #32.
+ * Kept verbatim; see FINDINGS.md #32.
  *
  * The two `import` lines are hoisted to the top of the file, which is the one
  * difference from the page: the second snippet repeats the `BuiltInAgent`

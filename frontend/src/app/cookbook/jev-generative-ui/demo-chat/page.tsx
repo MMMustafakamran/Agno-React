@@ -44,7 +44,7 @@ import {
  *
  * This app already mounts exactly one `CopilotKitProvider runtimeUrl="/api/copilotkit"`
  * at the root (`src/components/providers.tsx`), so `<Picker />` is rendered
- * directly rather than inside a second one. Recorded in the README's §9.
+ * directly rather than inside a second one. Recorded in FINDINGS.md.
  */
 
 /** The two panel objects `choose-panel.ts` parses, minus Jev's choice. */

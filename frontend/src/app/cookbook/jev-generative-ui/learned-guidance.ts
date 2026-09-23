@@ -16,12 +16,12 @@
  *
  * The three TS7006s are knock-on, not separate defects: with the module
  * unresolved `SkillRegistry` is `any`, so every callback parameter below it is
- * implicitly `any` under `strict`. Same shape as the README's §9 #16, where a
+ * implicitly `any` under `strict`. Same shape as FINDINGS.md #16, where a
  * wrong import path produced TS2305 plus a knock-on TS7006 on this same stack.
  *
  * The page says to install `@copilotkit/intelligence-langgraph@1.71.2`
  * "alongside the pinned stack above" — a stack pinned at 1.73.0. That package
- * is published (1.71.2, 2026-09-14, see the README's §9 #19) but is not
+ * is published (1.71.2, 2026-09-14, see FINDINGS.md #19) but is not
  * installed here, and this repo installs nothing for a doc page.
  *
  * Even installed it would do nothing: it reads a Learning container's published
