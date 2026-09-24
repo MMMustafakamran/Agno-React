@@ -30,12 +30,12 @@ Browser (React 19)
   │  @copilotkit/react-core/v2 — CopilotKitProvider, CopilotChat, hooks
   │  POST /api/copilotkit
   ▼
-Next.js 16 App Router  ·  localhost:3000
+Next.js 16 App Router  ·  localhost:3010
   │  Copilot Runtime  (@copilotkit/runtime)
   │  agents: { default, agno_agent } → new AgnoAgent({ url })
-  │  POST http://localhost:8000/agui   ← AG-UI over SSE
+  │  POST http://localhost:8010/agui   ← AG-UI over SSE
   ▼
-Agno AgentOS  ·  localhost:8000        ← Python / FastAPI
+Agno AgentOS  ·  localhost:8010        ← Python / FastAPI
   │  AgentOS(agents=[agent], interfaces=[AGUI(agent=agent)])
   ▼
 OpenAI  (gpt-4o by default)
@@ -96,15 +96,15 @@ Then edit `backend/.env`:
 | ------------------------------------ | --------------------- | ---------------------------------------------------------------------------- |
 | `OPENAI_API_KEY`                     | `backend/.env`        | **Required.** The model key. The backend refuses to start without it.        |
 | `OPENAI_MODEL`                       | `backend/.env`        | Model id. Defaults to `gpt-4o`.                                              |
-| `AGENT_PORT`                         | `backend/.env`        | Agno's port. Defaults to `8000`.                                             |
+| `AGENT_PORT`                         | `backend/.env`        | Agno's port. Defaults to `8000` in code; set to `8010` in `backend/.env`.                                             |
 | `AGENT_CORS_ORIGINS`                 | `backend/.env`        | Origins allowed to hit the agent directly. Not needed on the normal path.    |
-| `AGNO_AGENT_URL`                     | `frontend/.env.local` | Where the runtime finds the agent. Defaults to `http://localhost:8000/agui`. |
+| `AGNO_AGENT_URL`                     | `frontend/.env.local` | Where the runtime finds the agent. Defaults to `http://localhost:8010/agui`. |
 | `CPK_INTELLIGENCE_API_KEY`           | `frontend/.env.local` | Server-side managed-project key. Unlocks Rich Threads. Optional.             |
 | `COPILOTKIT_LICENSE_TOKEN`           | `frontend/.env.local` | Self-hosted/OSS license token only. Not issued for managed projects.         |
 
 > Next.js does not read the repo-root `.env`. Frontend variables belong in `frontend/.env.local`. The defaults are correct for a standard local run, so in practice you only need `OPENAI_API_KEY`.
 
-**Default ports:** frontend **3000**, backend **8000**.
+**Default ports:** frontend **3010**, backend **8010**.
 
 **5. Updating packages to latest versions (optional)**
 
@@ -147,7 +147,7 @@ uv run main.py
 Success looks like:
 
 ```
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
 INFO:     Application startup complete.
 ```
 
@@ -164,11 +164,11 @@ Success looks like:
 
 ```
 ▲ Next.js 16.3.0 (Turbopack)
-- Local:   http://localhost:3000
+- Local:   http://localhost:3010
 ✓ Ready in 1.2s
 ```
 
-Open **<http://localhost:3000>**. The home page probes the agent server-side and shows a connection panel — check it first if anything misbehaves.
+Open **<http://localhost:3010>**. The home page probes the agent server-side and shows a connection panel — check it first if anything misbehaves.
 
 ---
 
@@ -195,7 +195,7 @@ Two consequences worth knowing:
 ### Getting Started
 
 **`/` — Introduction**
-Orientation plus a live connection check. **Try:** load the page. **Pass:** "Agno agent" shows a green dot and `200 from http://localhost:8000/status`. **Fail:** a red dot and "unreachable" — the agent isn't running.
+Orientation plus a live connection check. **Try:** load the page. **Pass:** "Agno agent" shows a green dot and `200 from http://localhost:8010/status`. **Fail:** a red dot and "unreachable" — the agent isn't running.
 
 **`/quickstart` — Quickstart**
 The minimum viable path: provider, runtime route, one chat. **Try:** `Can you tell me a joke?` **Pass:** tokens stream in one at a time and render as markdown. **Fail:** nothing streams, or an error banner appears.
@@ -420,7 +420,7 @@ agno/
 │
 └── backend/                   # Python agent — Agno AgentOS over AG-UI
     ├── pyproject.toml
-    ├── main.py                # ★ AgentOS + AGUI interface → POST /agui on :8000
+    ├── main.py                # ★ AgentOS + AGUI interface → POST /agui on :8010
     ├── agent.py               # model, instructions, tool registration
     └── tools/
         ├── backend_tools.py   # executed server-side (get_weather, …)

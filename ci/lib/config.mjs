@@ -26,8 +26,8 @@ export const isWindows = process.platform === 'win32';
  */
 export const PROJECT_SLUG = 'Agno-react';
 
-export const BACKEND_PORT = Number(process.env.AGENT_PORT || 8000);
-export const FRONTEND_PORT = Number(process.env.FRONTEND_PORT || 3000);
+export const BACKEND_PORT = Number(process.env.AGENT_PORT || 8010);
+export const FRONTEND_PORT = Number(process.env.FRONTEND_PORT || 3010);
 
 /**
  * Agno's AgentOS has no dedicated /health route. `/status` is the real check;

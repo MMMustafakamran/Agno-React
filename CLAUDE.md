@@ -121,7 +121,7 @@ This README is the front door of the repo — someone should be able to clone it
 
 ### 6. Running the project
 - The exact command(s) to start frontend and backend (single command if the CLI starts both, separate commands if not)
-- What a successful startup looks like in the terminal (e.g. "you should see `Uvicorn running on http://localhost:8000`")
+- What a successful startup looks like in the terminal (e.g. "you should see `Uvicorn running on http://localhost:8010`")
 - The URL to open
 
 ### 7. What to expect — walkthrough per section

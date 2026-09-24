@@ -87,8 +87,8 @@ export const PROJECT: ProjectConfig = {
 
   docBaseUrl: 'https://docs.copilotkit.ai/agno',
 
-  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
-  backendUrl: process.env.BACKEND_URL || 'http://localhost:8000',
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3010',
+  backendUrl: process.env.BACKEND_URL || 'http://localhost:8010',
   // Agno's AgentOS exposes /status, not /health. The repo README's troubleshooting
   // notes call this out: the doc's suggested /copilotkit/info does not exist here.
   backendHealthPath: '/status',

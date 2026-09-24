@@ -22,8 +22,8 @@ Both services must be up first — the recorder refuses to start otherwise, beca
 a video of a dead page is worse than no video.
 
 ```bash
-cd backend  && uv run main.py                        # :8000
-cd frontend && npm run dev                           # :3000
+cd backend  && uv run main.py                        # :8010
+cd frontend && npm run dev                           # :3010
 ```
 
 Then:

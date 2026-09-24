@@ -72,13 +72,13 @@ const demoResult = {
   ],
 };
 
-const where = { appDir: '1-cli-testing/pnpm/app', url: 'http://localhost:3132' };
+const where = { appDir: '1-cli-testing/pnpm/app', url: 'http://localhost:3012' };
 
 test('buildDemoFindingNote leads with the app that installed and then would not serve', () => {
   const note = buildDemoFindingNote(demoResult, where, undefined);
   assert.match(note, /^demo-pnpm failed/);
   assert.match(note, /1-cli-testing\/pnpm\/app/);
-  assert.match(note, /http:\/\/localhost:3132/);
+  assert.match(note, /http:\/\/localhost:3012/);
   assert.match(note, /433s/);
 });
 

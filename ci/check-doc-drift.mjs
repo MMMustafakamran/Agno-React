@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { mergeChangelog, renderRun } from './lib/changelog.mjs';
 import { checkLinkedPageGaps } from './lib/linked-pages.mjs';
+import { FRONTEND_URL } from './lib/config.mjs';
 import { checkPageCoverage, formatCoverageTable } from './check-page-coverage.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -352,7 +353,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       // also evidence that this section is missing from the sitemap.
       console.log(` • ${u}  ${fromSitemap.has(u) ? '(sitemap)' : '(linked from a tracked page)'}`);
     }
-    console.log('   Snapshot them from http://localhost:3000/doc-sync, or add them to\n' +
+    console.log('   Snapshot them from ' + FRONTEND_URL + '/doc-sync, or add them to\n' +
       '   sitemap.knownUnmapped in doc-snapshot/manifest.json to acknowledge them.\n');
   }
   if (result.linked?.broken?.length > 0) {
@@ -405,7 +406,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       }
     }
 
-    console.log('\n👉 Local markdown files NOT modified. Pass `--update` or visit http://localhost:3000/doc-sync to sync.');
+    console.log('\n👉 Local markdown files NOT modified. Pass `--update` or visit ' + FRONTEND_URL + '/doc-sync to sync.');
     process.exit(2);
   } else {
     // No hash drift, but a page that appeared upstream is still drift.

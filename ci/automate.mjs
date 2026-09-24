@@ -25,6 +25,8 @@ import {
   BACKEND_HEALTH_URLS,
   FRONTEND_DIR,
   FRONTEND_URL,
+  FRONTEND_PORT,
+  BACKEND_PORT,
   LOGS_DIR,
   RECORDER_DIR,
   ROOT_DIR,
@@ -256,6 +258,17 @@ function spawnServer(command, cwd, logName) {
     stdio: ['ignore', fd, fd],
     shell: true,
     detached: !isWindows,
+    // Single source of truth for ports: ci/lib/config.mjs. Explicit values win
+    // over backend/.env (load_dotenv does not override) so both halves agree.
+    env: {
+      ...process.env,
+      PORT: String(FRONTEND_PORT),
+      AGENT_PORT: String(BACKEND_PORT),
+      AGNO_AGENT_URL: process.env.AGNO_AGENT_URL || `http://localhost:${BACKEND_PORT}/agui`,
+      AGENT_CORS_ORIGINS:
+        process.env.AGENT_CORS_ORIGINS ||
+        `http://localhost:${FRONTEND_PORT},http://127.0.0.1:${FRONTEND_PORT}`,
+    },
   });
   return { proc, logPath };
 }
@@ -331,7 +344,7 @@ async function main() {
 
       if (!ignoreDocDrift) {
         console.log('⚠️ Halting so you can review the doc changes first.');
-        console.log('👉 Review in browser: http://localhost:3000/doc-sync');
+        console.log(`👉 Review in browser: ${FRONTEND_URL}/doc-sync`);
         console.log('👉 To run anyway, pass `--ignore-doc-drift` or `--force`.');
         generateReport(reportData);
         process.exit(2);

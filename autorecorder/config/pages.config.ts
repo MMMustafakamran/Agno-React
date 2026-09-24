@@ -74,9 +74,9 @@ import { definePages, type PageDefinition } from '../core/types';
  * moves when they are added or removed.
  *
  * ── Ports ─────────────────────────────────────────────────────────────────
- * 3131–3134, and neither 3000 nor 3121–3124.
+ * 3011–3014, and neither 3000/3010 nor 3121–3124.
  *
- * Not 3000, because this repo's own frontend holds it, and a recording that
+ * Not 3010 (this repo's own frontend) or 3000 (other apps), and a recording that
  * quietly used *that* would look like a pass while proving nothing about the
  * scaffold. Not 3121–3124 either, and that is not superstition: this block
  * ships to every framework repo, so every copy that keeps the reference's
@@ -105,13 +105,13 @@ import { definePages, type PageDefinition } from '../core/types';
  * config recognises.
  */
 const DEMO_PAGES: PageDefinition[] = [
-  { pm: 'npm', command: 'npm', args: ['run', 'dev'], lockfile: 'package-lock.json', port: 3131 },
-  { pm: 'pnpm', command: 'pnpm', args: ['run', 'dev'], lockfile: 'pnpm-lock.yaml', port: 3132 },
-  { pm: 'yarn', command: 'yarn', args: ['run', 'dev'], lockfile: 'yarn.lock', port: 3133 },
+  { pm: 'npm', command: 'npm', args: ['run', 'dev'], lockfile: 'package-lock.json', port: 3011 },
+  { pm: 'pnpm', command: 'pnpm', args: ['run', 'dev'], lockfile: 'pnpm-lock.yaml', port: 3012 },
+  { pm: 'yarn', command: 'yarn', args: ['run', 'dev'], lockfile: 'yarn.lock', port: 3013 },
   // bun 1.2 writes a text `bun.lock`; older bun wrote the binary `bun.lockb`,
   // which has nothing readable to put on screen. The doctor names this file if
   // the installed bun produced the other one.
-  { pm: 'bun', command: 'bun', args: ['run', 'dev'], lockfile: 'bun.lock', port: 3134 },
+  { pm: 'bun', command: 'bun', args: ['run', 'dev'], lockfile: 'bun.lock', port: 3014 },
 ].map(({ pm, command, args, lockfile, port }) => {
   const app = `1-cli-testing/${pm}/app`;
   return {

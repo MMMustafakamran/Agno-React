@@ -16,7 +16,7 @@ export interface HealthReport {
   licenseKeySet: boolean;
 }
 
-export const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8000/agui";
+export const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8010/agui";
 
 export async function getHealth(): Promise<HealthReport> {
   // AgentOS serves /status alongside the /agui interface.

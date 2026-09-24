@@ -17,7 +17,7 @@ import { AgnoAgent } from "@ag-ui/agno";
  * stays its own.
  */
 
-const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8000/agui";
+const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8010/agui";
 
 // Treat empty/whitespace values as absent. A GitHub Actions `${{ secrets.X }}`
 // reference to a secret that does not exist expands to an empty string, which

@@ -484,7 +484,7 @@ export const CLI_FLOWS = defineCliFlows([
   // not evidence the app runs, and this is the flow that asks.
   //
   // PORT matches demo-pnpm in pages.config.ts so this and the demo recording
-  // cannot collide, and so neither lands on 3000, which a sibling repo squats.
+  // cannot collide, and so neither lands on 3000/3010, which other apps and this repo squats.
   {
     id: 'dev-pnpm',
     name: 'pnpm — starting the app',
@@ -492,14 +492,14 @@ export const CLI_FLOWS = defineCliFlows([
     cwd: `${SCAFFOLD_DIR}/pnpm/${APP_NAME}`,
     command: 'pnpm',
     args: ['run', 'dev'],
-    env: { PORT: '3132', BROWSER: 'none' },
+    env: { PORT: '3012', BROWSER: 'none' },
     // The agent is a Python process behind a venv; first boot is not instant.
     timeoutMs: 4 * 60_000,
     // Matches the AGENT's readiness line, never the UI's.
     //
     // `npm run dev` runs both halves under concurrently. The UI compiles and
     // prints its banner whether or not the Python agent came up, so keying on
-    // "Local: http://localhost:3132" stops the capture on a green-looking
+    // "Local: http://localhost:3012" stops the capture on a green-looking
     // screen while the agent is already dead — and concurrently --kill-others
     // then takes the UI down a second later, off camera. Waiting for uvicorn
     // means a dead agent never matches: the run exits non-zero and reports the

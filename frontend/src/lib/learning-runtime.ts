@@ -27,7 +27,7 @@ import {
  * belongs where a failure takes down one route and not every chat in the app.
  */
 
-const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8000/agui";
+const AGNO_URL = process.env.AGNO_AGENT_URL ?? "http://localhost:8010/agui";
 
 const agents = {
   default: new AgnoAgent({ url: AGNO_URL }),
