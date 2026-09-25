@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/agno",
-  "syncedAt": "2026-09-24T07:28:01.325Z",
+  "syncedAt": "2026-09-25T07:48:55.724Z",
   "pages": {
     "/agno": {
       "file": "agno.md",
@@ -318,15 +318,15 @@
     },
     "/agno/intelligence/learned-skills": {
       "file": "agno__intelligence__learned-skills.md",
-      "sha256": "e459e3d5d73a78afef7b044deedfb9e6b82abd41021d5016cf4f5c4360c8fa46",
-      "bytes": 27387,
-      "lines": 465,
+      "sha256": "98291e253d7642a913c91c7d9ef8afdef61c28ff1afe01a257931cfa1fedcc9b",
+      "bytes": 31575,
+      "lines": 580,
       "routes": [
         "/intelligence/learned-skills"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 23 Sep 2026 07:50:28 GMT"
+      "date": "Fri, 25 Sep 2026 07:48:55 GMT"
     },
     "/agno/custom-look-and-feel/markdown": {
       "file": "agno__custom-look-and-feel__markdown.md",

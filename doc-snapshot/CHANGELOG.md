@@ -9,6 +9,30 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-09-25
+
+### 07:48 UTC — 1 page, highest severity high · _npm run drift:sync_
+
+**High — /agno/intelligence/learned-skills**
+
+`/agno/intelligence/learned-skills` · route `/intelligence/learned-skills` · `agno__intelligence__learned-skills.md`
+
+Code fence count changed. Hash e459e3d5 ➔ 98291e25.
+
+````diff
+- Skill delivery makes one Learning container's published skills available to an agent without another CLI download or process restart. A framework adapter adds an alphabetical catalog and two tools.
+- <Image
+- src="/images/cloud-hosted/cloud-hosted-skill-delivery.png"
+- alt="The Skills tab of a Learning container in cloud-hosted Intelligence. The Skill delivery toggle is on, and skill candidates wait for review."
++ Skill delivery makes published skills from one or more Learning containers available to an agent without another CLI download or process restart. A framework adapter adds an alphabetical catalog and two tools.
++ <Image
++ src="/images/cloud-hosted/cloud-hosted-skill-delivery.png"
++ alt="The Skills tab of a Learning container in cloud-hosted Intelligence. The Skill delivery toggle is on, and skill candidates wait for review."
+  … region truncated
+````
+
+---
+
 ## 2026-09-24
 
 ### 07:28 UTC — 2 pages, highest severity medium · _npm run drift:sync_
@@ -48,6 +72,8 @@ Headings / Structure changed. Hash 3d8ccd83 ➔ 73ebc660.
 + ```text
   … region truncated
 ````
+
+---
 
 ---
 
@@ -294,149 +320,6 @@ Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
 **New — https://docs.copilotkit.ai/agno/intelligence/plans**
 
 Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
-
----
-
----
-
-## 2026-09-22
-
-### 09:20 UTC — 1 page, highest severity high · _npm run drift:sync_
-
-**High — /agno/backend/message-history**
-
-`/agno/backend/message-history` · route `/backend/message-history` · `agno__backend__message-history.md`
-
-Code fence count changed. Hash  ➔ 04032b1b.
-
-````diff
-+ # Message history
-+ > Trim the conversation history CopilotKit forwards to an agent that already stores its own.
-+ CopilotKit forwards the whole conversation on every run. The frontend holds the
-+ transcript, and each run carries it to your agent as `input.messages`. A
-+ stateless agent needs that, because the transcript is the only record of the
-+ conversation.
-+ An agent that stores its own history does not need it. If your backend keeps a
-+ LangGraph checkpointer, Mastra memory, an AWS Strands `SessionManager`, or a
-  … region truncated
-````
-
-### 08:52 UTC — 9 pages, highest severity high · _npm run drift:sync_
-
-**Low — /agno/inspector**
-
-`/agno/inspector` · route `/custom-look-and-feel/inspector` · `agno__inspector.md`
-
-Prose / text phrasing updated. Hash f89ddbd9 ➔ 1b54d3fe.
-
-````diff
-- choose **Copy setup prompt**. See [Learning](/agno/learning) for the complete workflow.
-+ choose **Copy setup prompt**. See [Automatic Learning](/agno/learning) for the complete workflow.
-````
-
-**High — /agno/prebuilt-components/copilot-threads-drawer**
-
-`/agno/prebuilt-components/copilot-threads-drawer` · route `/threads/drawer` · `agno__prebuilt-components__copilot-threads-drawer.md`
-
-Code fence count changed. Hash dd34f95e ➔ a9ef18bd.
-
-````diff
-- ```tsx title="app/page.tsx"
-- import {
-- CopilotKitProvider,
-- CopilotChatConfigurationProvider,
-+ <Callout type="warn">
-+ **The Drawer ships only in `@copilotkit/react-core/v2`.** There is no v1
-+ Drawer, so take the Drawer, the chat and the provider from that one package.
-+ Watch the import path: `@copilotkit/react-ui` is the [deprecated v1
-  … region truncated
-````
-
-**Low — /agno/quickstart**
-
-`/agno/quickstart` · route `/quickstart` · `agno__quickstart.md`
-
-Prose / text phrasing updated. Hash 62528078 ➔ 0cac5777.
-
-````diff
-- 3. Open **Threads**. The list is unlocked (Intelligence is on), or locked with Enable Intelligence (Intelligence is off).
-+ 3. Open **Rich Threads**. The list is unlocked (Intelligence is on), or locked with Enable Intelligence (Intelligence is off).
-````
-
-**High — /agno/threads**
-
-`/agno/threads` · route `/threads` · `agno__threads.md`
-
-Code block content changed. Hash 071567f5 ➔ 5cb0dbeb.
-
-````diff
-- Open Inspector on localhost. Stay on **Threads** (it is the default).
-+ Open Inspector on localhost. Stay on **Rich Threads** (it is the default).
-````
-
-**Medium — /agno/intelligence/memories**
-
-`/agno/intelligence/memories` · route `/intelligence/memories` · `agno__intelligence__memories.md`
-
-Headings / Structure changed. Hash e5918dbd ➔ 0c8af2f2.
-
-````diff
-- # Memories & Recall
-- > Give your agents long-term memory across conversations.
-- Threads remember a conversation. Memories remember a person. This page explains
-- what a memory is, how recall selects them, and what has to be true of your
-+ # User Memories
-+ > Give your agents long-term memory across conversations.
-+ Rich Threads remember a conversation. User Memories remember a person. This page explains
-+ what a memory is, how recall selects them, and what has to be true of your
-  … region truncated
-````
-
-**High — /agno/learning**
-
-`/agno/learning` · route `/learning` · `agno__learning.md`
-
-Code block content changed. Hash c6d0a948 ➔ 5debfb83.
-
-````diff
-- # Learning
-- > Turn real application use into evidence-backed Insights and reviewed, reusable Skills.
-- ## Overview
-- Learning turns patterns from real agent runs into reusable Skills. It looks at completed conversations and application interactions in [Rich Threads](/agno/threads), produces evidence-backed Insights, and proposes instructions you can review before publishing.
-+ # Automatic Learning
-+ > Turn real application use into evidence-backed Insights and reviewed, reusable Skills.
-+ ## Overview
-+ Automatic Learning turns patterns from real agent runs into reusable Skills. It looks at completed conversations and application interactions in [Rich Threads](/agno/threads), produces evidence-backed Insights, and proposes instructions you can review before publishing.
-  … region truncated
-````
-
-**Low — /agno/intelligence/learned-skills**
-
-`/agno/intelligence/learned-skills` · route `/intelligence/learned-skills` · `agno__intelligence__learned-skills.md`
-
-Prose / text phrasing updated. Hash 1bd5ef6d ➔ 771ee282.
-
-````diff
-- Start with the [Learning guide](/agno/learning) to collect Threads, configure daily runs, and review Skills. Before connecting an adapter, check that **Skill delivery** is enabled in the container's **Skills** tab. For guided setup, select **Set up skill delivery** there and copy the prompt into your coding agent.
-- </Callout>
-- ## Choose an adapter
-- | Framework                 | Package                                  | Native extension                                                     |
-+ Start with the [Automatic Learning guide](/agno/learning) to collect Threads, configure daily runs, and review Skills. Before connecting an adapter, check that **Skill delivery** is enabled in the container's **Skills** tab. For guided setup, select **Set up skill delivery** there and copy the prompt into your coding agent.
-+ </Callout>
-+ ## Choose an adapter
-+ | Framework                 | Package                                  | Native extension                                                     |
-  … region truncated
-````
-
-**New — https://docs.copilotkit.ai/agno/backend/message-history**
-
-Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
-
-**New — https://docs.copilotkit.ai/agno/intelligence/self-hosting-ecs**
-
-Listed upstream, tracked nowhere in this repo. Not snapshotted by this run.
-
----
 
 ---
 
